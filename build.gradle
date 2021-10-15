@@ -1,19 +1,31 @@
 plugins {
     id 'java'
     id 'org.flywaydb.flyway' version '7.4.0'
+    id 'application'
 }
 
 group 'com.itrex.java.lab'
 version '1.0-SNAPSHOT'
+
+ext {
+    javaMainClass = "com.itrex.java.lab.Runner"
+}
+
+application {
+    mainClassName = javaMainClass;
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.26'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
+    implementation group: 'org.flywaydb', name: 'flyway-core', version: '8.0.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
 }
 
 test {
-    useJUnitPlatform()
+    useJUnit()
 }
