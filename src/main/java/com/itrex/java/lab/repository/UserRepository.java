@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserRepository {
 
-    List<User> getAllUser() throws RepositoryException;
+    List<User> getAllUsers() throws RepositoryException;
 
     List<User> getAllUserByRole(String role) throws RepositoryException;
 
@@ -16,7 +16,7 @@ public interface UserRepository {
 
     User getUserByEmail(String email) throws RepositoryException;
 
-    void deleteUserByID(int userId) throws RepositoryException;
+    boolean deleteUserById(int userId) throws RepositoryException;
 
     void add(User user) throws RepositoryException;
 

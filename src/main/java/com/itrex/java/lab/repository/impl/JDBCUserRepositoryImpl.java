@@ -30,10 +30,11 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     private static final String INSERT_USER_QUERY = "INSERT INTO user(first_name, last_name, age, email, password, gender, phone_num) VALUES (?, ?, ?, ?, ?, ?, ?)";
     private static final String INSERT_USER_ROLE_QUERY = "INSERT INTO user_role(user_id, role_id) VALUES (?, ?)";
     private static final String DELETE_USER_ID_FROM_USER_QUERY = "DELETE FROM user WHERE user_id = ?";
+    private static final String DELETE_USER_ID_FROM_USER_ROLE_QUERY = "DELETE FROM user_role WHERE user_id = ?";
     private static final String SELECT_USER_BY_ROLE_QUERY =
             "SELECT u.* FROM USER AS u " +
-                    "JOIN user_role AS ur ON u.user_id = ur.user_id " +
-                    "JOIN role r on ur.role_id = r.role_id WHERE r.name = ?";
+                        "JOIN user_role AS ur ON u.user_id = ur.user_id " +
+                        "JOIN role r on ur.role_id = r.role_id WHERE r.name = ?";
 
     private final DataSource dataSource;
 
@@ -42,24 +43,12 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteUserByID(int userId) throws RepositoryException {
-        int effectiveRows = 0;
-        try(Connection con = dataSource.getConnection();
-            PreparedStatement pstm = con.prepareStatement(DELETE_USER_ID_FROM_USER_QUERY)) {
-            pstm.setInt(1, userId);
-            effectiveRows = pstm.executeUpdate();
-        }  catch (SQLException ex) {
-            throw new RepositoryException("Can't delete user with id " + userId);
-        }
-    }
-
-    @Override
     public boolean assignRole(User user, Role role) throws RepositoryException {
         int effectiveRows = 0;
         try(Connection con = dataSource.getConnection();
             PreparedStatement pstm = con.prepareStatement(INSERT_USER_ROLE_QUERY)) {
             pstm.setInt(1, user.getUserId());
-            pstm.setInt(1, role.getRoleId());
+            pstm.setInt(2, role.getRoleId());
             effectiveRows = pstm.executeUpdate();
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -67,6 +56,37 @@ public class JDBCUserRepositoryImpl implements UserRepository {
         }
 
         return effectiveRows > 0;
+    }
+
+    @Override
+    public boolean deleteUserById(int userId) throws RepositoryException {
+        boolean success;
+        try(Connection con = dataSource.getConnection()) {
+            try {
+                con.setAutoCommit(false);
+                PreparedStatement pstm1 = con.prepareStatement(DELETE_USER_ID_FROM_USER_ROLE_QUERY);
+                PreparedStatement pstm2 = con.prepareStatement(DELETE_USER_ID_FROM_USER_QUERY);
+
+                pstm1.setInt(1, userId);
+                pstm2.setInt(1, userId);
+
+                success = pstm1.executeUpdate() == 1;
+                success = pstm2.executeUpdate() == 1;
+
+                con.commit();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                con.rollback();
+                throw new RepositoryException("Failed to delete user with id " + userId);
+            } finally {
+                con.setAutoCommit(true);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw new RepositoryException("Can't delete user with id " + userId);
+        }
+
+        return success;
     }
 
     @Override
@@ -108,17 +128,18 @@ public class JDBCUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAllUser() throws RepositoryException {
+    public List<User> getAllUsers() throws RepositoryException {
         List<User> users = new ArrayList<>();
         try(Connection con = dataSource.getConnection();
             Statement stm = con.createStatement();
             ResultSet resultSet = stm.executeQuery(SELECT_ALL_QUERY)) {
             while (resultSet.next()) {
                 User user = buildUser(resultSet);
+
                 users.add(user);
             }
         } catch (SQLException ex) {
-            throw new RepositoryException("User table is empty");
+            throw new RepositoryException("Failed to get all users!");
         }
 
         return users;
@@ -144,7 +165,6 @@ public class JDBCUserRepositoryImpl implements UserRepository {
 
         return users;
     }
-
 
     @Override
     public void add(User user) throws RepositoryException {

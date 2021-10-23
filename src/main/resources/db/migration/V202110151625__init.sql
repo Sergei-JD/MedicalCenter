@@ -27,22 +27,8 @@ CREATE TABLE IF NOT EXISTS user_role (
      user_id INT NOT NULL,
      role_id INT NOT NULL,
      PRIMARY KEY (user_id, role_id),
-     FOREIGN KEY (user_id) REFERENCES user (user_id) ON DELETE CASCADE,
+     FOREIGN KEY (user_id) REFERENCES user (user_id),
      FOREIGN KEY (role_id) REFERENCES role (role_id)
-);
-
--- -----------------------------------------------------
--- Table visit
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS visit (
-     visit_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-     doctor_id INT NOT NULL,
-     patient_id INT NOT NULL,
-     timeslot_id INT NOT NULL,
-     comment VARCHAR(255),
-     FOREIGN KEY (doctor_id) REFERENCES user (user_id),
-     FOREIGN KEY (patient_id) REFERENCES user (user_id),
-     FOREIGN KEY (timeslot_id) REFERENCES (timeslot_id)
 );
 
 -- -----------------------------------------------------
@@ -55,6 +41,21 @@ CREATE TABLE IF NOT EXISTS timeslot (
     office INT NOT NULL,
     CONSTRAINT UNIQUE_TIMESLOT UNIQUE (start_time, date, office)
 );
+
+-- -----------------------------------------------------
+-- Table visit
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS visit (
+     visit_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+     doctor_id INT NOT NULL,
+     patient_id INT NOT NULL,
+     timeslot_id INT,
+     comment VARCHAR(255),
+     FOREIGN KEY (doctor_id) REFERENCES user (user_id),
+     FOREIGN KEY (patient_id) REFERENCES user (user_id),
+     FOREIGN KEY (timeslot_id) REFERENCES timeslot (timeslot_id)
+);
+
 
 INSERT INTO user (user_id, first_name, last_name, age, email, password, gender, phone_num)
             VALUES (1, 'Ivan', 'Ivanov', 46, 'ivan@email.com', '12345678', 'M', 9379992);
@@ -79,6 +80,17 @@ INSERT INTO user_role (user_id, role_id) VALUES ('3', '2');
 INSERT INTO user_role (user_id, role_id) VALUES ('4', '2');
 INSERT INTO user_role (user_id, role_id) VALUES ('5', '1');
 INSERT INTO user_role (user_id, role_id) VALUES ('6', '2');
+
+INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('1', '12:20', '2021-10-10', '308');
+INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('2', '13:40', '2021-10-11', '208');
+INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('3', '14:00', '2021-10-12', '108');
+
+INSERT INTO visit (visit_id, doctor_id, patient_id, timeslot_id, comment)
+VALUES ('1', '2', '3', '1', 'the patient is recovering');
+INSERT INTO visit (visit_id, doctor_id, patient_id, timeslot_id, comment)
+VALUES ('2', '5', '3', '2', 'the patient is healthy');
+INSERT INTO visit (visit_id, doctor_id, patient_id, timeslot_id, comment)
+VALUES ('3', '5', '6', '3', 'the patient is prescribed procedures');
 
 COMMIT;
 

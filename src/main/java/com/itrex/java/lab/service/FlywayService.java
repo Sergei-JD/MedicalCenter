@@ -1,33 +1,30 @@
 package com.itrex.java.lab.service;
 
 import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.Location;
-import org.flywaydb.core.api.configuration.ClassicConfiguration;
+
+import static com.itrex.java.lab.properties.Properties.*;
 
 public class FlywayService {
 
-    private final String migrationsLocation;
-    private final String url;
-    private final String user;
-    private final String password;
+    private Flyway flyway;
 
-    public FlywayService(String migrationsLocation, String url, String user, String password) {
-        this.migrationsLocation = migrationsLocation;
-        this.url = url;
-        this.user = user;
-        this.password = password;
+    public FlywayService() {
+        inti();
     }
 
     public void migrate() {
-        Location location = new Location(migrationsLocation);
-        ClassicConfiguration configuration = new ClassicConfiguration();
-        configuration.setUrl(url);
-        configuration.setUser(user);
-        configuration.setPassword(password);
-        configuration.setLocations(location);
-        configuration.setDataSource(url, user, password);
-        Flyway flyway = new Flyway(configuration);
         flyway.migrate();
+    }
+
+    public void clean() {
+        flyway.clean();
+    }
+
+    private void inti() {
+        flyway = Flyway.configure()
+                .dataSource(H2_URL, H2_USER, H2_PASSWORD)
+                .locations(MIGRATIONS_LOCATION)
+                .load();
     }
 
 }

@@ -1,27 +1,25 @@
 package com.itrex.java.lab;
 
 import com.itrex.java.lab.entity.Role;
+import com.itrex.java.lab.entity.Timeslot;
 import com.itrex.java.lab.entity.User;
+import com.itrex.java.lab.entity.Visit;
 import com.itrex.java.lab.repository.RoleRepository;
+import com.itrex.java.lab.repository.TimeslotRepository;
 import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.impl.JDBCUserRepositoryImpl;
-import com.itrex.java.lab.repository.impl.RepositoryException;
+import com.itrex.java.lab.repository.VisitRepository;
+import com.itrex.java.lab.repository.impl.*;
 import com.itrex.java.lab.service.FlywayService;
 import org.h2.jdbcx.JdbcConnectionPool;
 
-import java.util.List;
+import static com.itrex.java.lab.properties.Properties.*;
 
 public class MedicalCenterApp {
-
-    private static final String MIGRATIONS_LOCATION = "db/migration";
-    private static final String H2_URL = "jdbc:h2:mem:PUBLIC;DB_CLOSE_DELAY=-1";
-    private static final String H2_USER = "sa";
-    private static final String H2_PASSWORD = "";
 
     public static void main(String[] args) throws RepositoryException {
         System.out.println("===================START APP======================");
         System.out.println("================START MIGRATION===================");
-        FlywayService flywayService = new FlywayService(MIGRATIONS_LOCATION, H2_URL, H2_USER, H2_PASSWORD);
+        FlywayService flywayService = new FlywayService();
         flywayService.migrate();
 
         System.out.println("============CREATE CONNECTION POOL================");
@@ -29,11 +27,32 @@ public class MedicalCenterApp {
 
         System.out.println("=============CREATE UserRepository================");
         UserRepository userRepository = new JDBCUserRepositoryImpl(jdbcConnectionPool);
+        RoleRepository roleRepository = new JDBCRoleRepositoryImpl(jdbcConnectionPool);
+        TimeslotRepository timeslotRepository = new JDBCTimeslotRepositoryImpl(jdbcConnectionPool);
+        VisitRepository visitRepository = new JDBCVisitRepositoryImpl(jdbcConnectionPool);
         System.out.println("==================================================\n");
 
         System.out.println("=============SELECT ALL USERS=====================");
-        for (User user : userRepository.getAllUser()) {
+        for (User user : userRepository.getAllUsers()) {
             System.out.println(user);
+        }
+        System.out.println("==================================================\n");
+
+        System.out.println("=============SELECT ALL ROLES=====================");
+        for (Role role : roleRepository.getAllRole()) {
+            System.out.println(role);
+        }
+        System.out.println("==================================================\n");
+
+        System.out.println("=============SELECT ALL TIMESLOT=====================");
+        for (Timeslot timeslot : timeslotRepository.getAllTimeslot()) {
+            System.out.println(timeslot);
+        }
+        System.out.println("==================================================\n");
+
+        System.out.println("=============SELECT ALL VISITS=====================");
+        for (Visit visit : visitRepository.getAllVisit()) {
+            System.out.println(visit);
         }
         System.out.println("==================================================\n");
 
@@ -47,9 +66,24 @@ public class MedicalCenterApp {
         System.out.println(selectedUserByEmail);
         System.out.println("==================================================\n");
 
+        System.out.println("======SELECT ROLE BY NAME = Doctor======");
+        Role selectedRoleByName = roleRepository.getRoleByName("Doctor");
+        System.out.println(selectedRoleByName);
+        System.out.println("==================================================\n");
+
+        System.out.println("=============SELECT TIMESLOT BY ID = 1==================");
+        Timeslot selectedTimeslotById = timeslotRepository.getTimeslotByID(1);
+        System.out.println(selectedTimeslotById);
+        System.out.println("==================================================\n");
+
+        System.out.println("=============SELECT VISIT BY ID = 1==================");
+        Visit selectedVisitById = visitRepository.getVisitById(1);
+        System.out.println(selectedVisitById);
+        System.out.println("==================================================\n");
+
         System.out.println("================DELETE USER BY ID = 1================");
-        userRepository.deleteUserByID(1);
-        for (User user : userRepository.getAllUser()) {
+        userRepository.deleteUserById(1);
+        for (User user : userRepository.getAllUsers()) {
             System.out.println(user);
         }
         System.out.println("==================================================\n");
@@ -70,21 +104,14 @@ public class MedicalCenterApp {
         addUser.setGender("M");
         addUser.setPhoneNum(333333333);
         userRepository.add(addUser);
-        for (User user : userRepository.getAllUser()) {
+        for (User user : userRepository.getAllUsers()) {
             System.out.println(user);
         }
         System.out.println("==================================================\n");
 
-//        System.out.println("=============SELECT ALL ROLES=====================");
-//        for (Role role : userRepository.getAllRole()) {
-//            System.out.println(role);
-//        }
-//        System.out.println("==================================================\n");
-
         System.out.println("=========CLOSE ALL UNUSED CONNECTIONS=============");
         jdbcConnectionPool.dispose();
         System.out.println("=================SHUT DOWN APP====================");
-
     }
 
 }
