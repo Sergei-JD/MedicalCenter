@@ -4,11 +4,11 @@ import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.Timeslot;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.entity.Visit;
-import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.TimeslotRepository;
-import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.VisitRepository;
-import com.itrex.java.lab.repository.impl.*;
+import com.itrex.java.lab.repository.*;
+import com.itrex.java.lab.repository.jdbcimpl.JDBCRoleRepositoryImpl;
+import com.itrex.java.lab.repository.jdbcimpl.JDBCTimeslotRepositoryImpl;
+import com.itrex.java.lab.repository.jdbcimpl.JDBCUserRepositoryImpl;
+import com.itrex.java.lab.repository.jdbcimpl.JDBCVisitRepositoryImpl;
 import com.itrex.java.lab.service.FlywayService;
 import org.h2.jdbcx.JdbcConnectionPool;
 

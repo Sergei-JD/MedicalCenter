@@ -1,7 +1,6 @@
 package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Visit;
-import com.itrex.java.lab.repository.impl.RepositoryException;
 
 import java.util.List;
 
