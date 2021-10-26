@@ -1,7 +1,8 @@
-package com.itrex.java.lab.repository.impl;
+package com.itrex.java.lab.repository.jdbcimpl;
 
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
+import com.itrex.java.lab.repository.RepositoryException;
 import com.itrex.java.lab.repository.UserRepository;
 
 import java.sql.Connection;

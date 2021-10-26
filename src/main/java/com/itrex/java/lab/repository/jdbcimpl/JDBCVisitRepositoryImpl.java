@@ -1,6 +1,7 @@
-package com.itrex.java.lab.repository.impl;
+package com.itrex.java.lab.repository.jdbcimpl;
 
 import com.itrex.java.lab.entity.Visit;
+import com.itrex.java.lab.repository.RepositoryException;
 import com.itrex.java.lab.repository.VisitRepository;
 
 import java.sql.Connection;

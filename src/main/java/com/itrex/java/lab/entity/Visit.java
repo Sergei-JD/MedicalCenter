@@ -1,66 +1,38 @@
 package com.itrex.java.lab.entity;
 
-import java.util.Objects;
+import javax.persistence.*;
 
+import lombok.*;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@Entity
+@Table(name = "visit", schema = "public")
 public class Visit {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "visit_id")
     private Integer visitId;
+
+    @Column(name = "doctor_id")
     private Integer doctorId;
+
+    @Column(name = "patient_id")
     private Integer patientId;
+
+    @Column(name = "timeslot_id")
     private Integer timeslotId;
 
-    public Integer getVisitId() {
-        return visitId;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
 
-    public void setVisitId(Integer visitId) {
-        this.visitId = visitId;
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "timeslot_id", referencedColumnName = "timeslot_id")
+    private Timeslot timeslot;
 
-    public Integer getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(Integer doctorId) {
-        this.doctorId = doctorId;
-    }
-
-    public Integer getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(Integer patientId) {
-        this.patientId = patientId;
-    }
-
-    public Integer getTimeslotId() {
-        return timeslotId;
-    }
-
-    public void setTimeslotId(Integer timeslotId) {
-        this.timeslotId = timeslotId;
-    }
-
-    @Override
-    public String toString() {
-        return "Visit{" +
-                "visitId=" + visitId +
-                ", doctorId=" + doctorId +
-                ", patientId=" + patientId +
-                ", timeslotId=" + timeslotId +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Visit visit = (Visit) o;
-        return visitId.equals(visit.visitId) && doctorId.equals(visit.doctorId) && patientId.equals(visit.patientId) && timeslotId.equals(visit.timeslotId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(visitId, doctorId, patientId, timeslotId);
-    }
 }

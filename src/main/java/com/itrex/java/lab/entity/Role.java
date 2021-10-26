@@ -1,46 +1,30 @@
 package com.itrex.java.lab.entity;
 
-import java.util.Objects;
+import javax.persistence.*;
 
+import lombok.*;
+
+import java.util.List;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@Entity
+@Table(name = "role", schema = "public")
 public class Role {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "role_id")
     private Integer roleId;
+
+    @Column(name = "name")
     private String name;
 
-    public Integer getRoleId() {
-        return roleId;
-    }
+    @ManyToMany (mappedBy = "roles")
+    private List<User> users;
 
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" +
-                "roleId=" + roleId +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return roleId.equals(role.roleId) && name.equals(role.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(roleId, name);
-    }
 }
