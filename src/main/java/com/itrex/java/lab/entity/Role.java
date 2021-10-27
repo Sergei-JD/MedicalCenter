@@ -4,7 +4,6 @@ import javax.persistence.*;
 
 import lombok.*;
 
-import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,13 +17,11 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
+    @Column(name = "role_id", nullable = false)
     private Integer roleId;
 
     @Column(name = "name")
     private String name;
 
-    @ManyToMany (mappedBy = "roles")
-    private List<User> users;
 
 }

@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'org.flywaydb.flyway' version '7.4.0'
     id 'application'
 }
 
@@ -8,7 +7,7 @@ group 'com.itrex.java.lab'
 version '1.0-SNAPSHOT'
 
 ext {
-    javaMainClass = "com.itrex.java.lab.Runner"
+    javaMainClass = "com.itrex.java.lab.MedicalCenterApp"
 }
 
 application {

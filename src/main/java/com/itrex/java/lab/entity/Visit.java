@@ -16,22 +16,18 @@ public class Visit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "visit_id")
+    @Column(name = "visit_id", nullable = false)
     private Integer visitId;
 
-    @Column(name = "doctor_id")
-    private Integer doctorId;
-
-    @Column(name = "patient_id")
-    private Integer patientId;
-
-    @Column(name = "timeslot_id")
-    private Integer timeslotId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="patient_id", nullable=false)
+    private User patient;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @JoinColumn(name="doctor_id", nullable=false)
+    private User doctor;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timeslot_id", referencedColumnName = "timeslot_id")
     private Timeslot timeslot;
 

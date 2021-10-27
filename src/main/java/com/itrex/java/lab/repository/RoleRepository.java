@@ -13,6 +13,5 @@ public interface RoleRepository {
 
     void addRole(Role role) throws RepositoryException;
 
-    void deleteRole(int roleId) throws RepositoryException;
 
 }

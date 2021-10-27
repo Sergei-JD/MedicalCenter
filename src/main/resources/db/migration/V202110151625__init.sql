@@ -26,9 +26,7 @@ CREATE TABLE IF NOT EXISTS role (
 CREATE TABLE IF NOT EXISTS user_role (
      user_id INT NOT NULL,
      role_id INT NOT NULL,
-     PRIMARY KEY (user_id, role_id),
-     FOREIGN KEY (user_id) REFERENCES user (user_id),
-     FOREIGN KEY (role_id) REFERENCES role (role_id)
+     PRIMARY KEY (user_id, role_id)
 );
 
 -- -----------------------------------------------------
@@ -50,10 +48,7 @@ CREATE TABLE IF NOT EXISTS visit (
      doctor_id INT NOT NULL,
      patient_id INT NOT NULL,
      timeslot_id INT,
-     comment VARCHAR(255),
-     FOREIGN KEY (doctor_id) REFERENCES user (user_id),
-     FOREIGN KEY (patient_id) REFERENCES user (user_id),
-     FOREIGN KEY (timeslot_id) REFERENCES timeslot (timeslot_id)
+     comment VARCHAR(255)
 );
 
 

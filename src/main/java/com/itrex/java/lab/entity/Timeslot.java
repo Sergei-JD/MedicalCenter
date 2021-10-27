@@ -19,7 +19,7 @@ public class Timeslot {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "timeslot_id")
+    @Column(name = "timeslot_id", nullable = false)
     private Integer timeslotId;
 
     @Column(name = "start_time")
@@ -30,8 +30,5 @@ public class Timeslot {
 
     @Column(name = "office")
     private Integer office;
-
-    @OneToOne(mappedBy = "timeslot")
-    private Visit visit;
 
 }
