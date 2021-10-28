@@ -10,8 +10,8 @@ public interface VisitRepository {
 
     Visit getVisitById(int timeslotId) throws RepositoryException;
 
-    void addVisit(Visit visit) throws RepositoryException;
+    void add(Visit visit) throws RepositoryException;
 
-    void deleteVisit(int visitId) throws RepositoryException;
+    boolean deleteVisitById(int visitId) throws RepositoryException;
 
 }

@@ -81,27 +81,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         }
 
         return user;
-//        try {
-//            transaction = session.beginTransaction();
-//            CriteriaBuilder cb = session.getCriteriaBuilder();
-//
-//            CriteriaQuery<User> cr = cb.createQuery(User.class);
-//            Root<User> root = cr.from(User.class);
-//            cr.select(root).where(cb.equal(root.get("email"), email));
-//
-//            Query query = session.createQuery(cr);
-//            query.setMaxResults(1);
-//            List<User> result = query.getResultList();
-//
-//            transaction.commit();
-//        } catch (Exception ex) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            throw new RepositoryException("Can't find user by email " + email);
-//        }
-//
-//        return ;
     }
 
     @Override

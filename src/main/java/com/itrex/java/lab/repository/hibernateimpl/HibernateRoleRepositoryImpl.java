@@ -50,10 +50,11 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public void addRole(Role role) throws RepositoryException {
+    public void add(Role role) throws RepositoryException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
+
             int newRoleId = (Integer) session.save("Role", role);
             session.find(Role.class, newRoleId);
 
@@ -66,6 +67,5 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
             throw new RepositoryException(ex.getMessage());
         }
     }
-
 
 }

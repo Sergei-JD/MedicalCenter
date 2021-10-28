@@ -5,13 +5,11 @@ import javax.persistence.*;
 import lombok.*;
 
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "role", schema = "public")
 public class Role {
 

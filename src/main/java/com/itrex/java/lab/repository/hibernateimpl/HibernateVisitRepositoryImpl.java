@@ -45,7 +45,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
-    public void addVisit(Visit visit) throws RepositoryException {
+    public void add(Visit visit) throws RepositoryException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -63,7 +63,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
-    public void deleteVisit(int visitId) throws RepositoryException {
+    public boolean deleteVisitById(int visitId) throws RepositoryException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -80,6 +80,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
             ex.printStackTrace();
             throw new RepositoryException(ex.getMessage());
         }
+        return false;
     }
 
 }

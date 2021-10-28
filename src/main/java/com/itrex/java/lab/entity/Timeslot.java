@@ -7,13 +7,11 @@ import lombok.*;
 import java.sql.Time;
 import java.util.Date;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "timeslot", schema = "public")
 public class Timeslot {
 

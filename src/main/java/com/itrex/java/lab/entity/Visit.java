@@ -4,13 +4,11 @@ import javax.persistence.*;
 
 import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode
+@Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "visit", schema = "public")
 public class Visit {
 
@@ -30,5 +28,8 @@ public class Visit {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timeslot_id", referencedColumnName = "timeslot_id")
     private Timeslot timeslot;
+
+    @Column(name = "comment", nullable = true)
+    private String comment;
 
 }

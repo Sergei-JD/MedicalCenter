@@ -10,8 +10,8 @@ public interface TimeslotRepository {
 
     Timeslot getTimeslotByID(int timeslotId) throws RepositoryException;
 
-    void addTimeslot(Timeslot timeslot) throws RepositoryException;
+    void add(Timeslot timeslot) throws RepositoryException;
 
-    void deleteTimeslot(int timeslotId) throws RepositoryException;
+    boolean deleteTimeslotById(int timeslotId) throws RepositoryException;
 
 }

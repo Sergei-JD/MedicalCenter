@@ -46,7 +46,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     }
 
     @Override
-    public void addTimeslot(Timeslot timeslot) throws RepositoryException {
+    public void add(Timeslot timeslot) throws RepositoryException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -64,7 +64,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     }
 
     @Override
-    public void deleteTimeslot(int timeslotId) throws RepositoryException {
+    public boolean deleteTimeslotById(int timeslotId) throws RepositoryException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
@@ -81,6 +81,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
             ex.printStackTrace();
             throw new RepositoryException(ex.getMessage());
         }
+        return false;
     }
 
 }

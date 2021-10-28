@@ -11,7 +11,7 @@ public interface RoleRepository {
 
     Role getRoleByName(String name) throws RepositoryException;
 
-    void addRole(Role role) throws RepositoryException;
+    void add(Role role) throws RepositoryException;
 
 
 }
