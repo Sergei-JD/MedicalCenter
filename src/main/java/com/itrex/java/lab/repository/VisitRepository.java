@@ -1,16 +1,18 @@
 package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Visit;
+import com.itrex.java.lab.exception_handler.RepositoryException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface VisitRepository {
 
-    List<Visit> getAllVisit() throws RepositoryException;
+    List<Visit> getAllVisits() throws RepositoryException;
 
-    Visit getVisitById(int timeslotId) throws RepositoryException;
+    Optional<Visit> getVisitById(int timeslotId) throws RepositoryException;
 
-    void add(Visit visit) throws RepositoryException;
+    Visit add(Visit visit) throws RepositoryException;
 
     boolean deleteVisitById(int visitId) throws RepositoryException;
 

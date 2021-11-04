@@ -3,17 +3,16 @@ package com.itrex.java.lab.repository.hibernateimpl;
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.RepositoryException;
+import com.itrex.java.lab.exception_handler.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Repository;
 
-import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 
+@Repository
 public class HibernateUserRepositoryImpl implements UserRepository {
 
     private final Session session;
@@ -22,7 +21,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         this.session = session;
     }
 
-    private static final String FIND_ALL_USERS_QUERY = "select u from User u ";
+    private static final String FIND_ALL_USERS_QUERY = "select u from User u";
     private static final String DELETE_USER_ID_FROM_USER_QUERY = "DELETE FROM user WHERE user_id = ?";
     private static final String DELETE_USER_ID_FROM_USER_ROLE_QUERY = "DELETE FROM user_role WHERE user_id = ?";
     private static final String SELECT_USER_BY_EMAIL_QUERY = "FROM User u where u.email = :email";
@@ -35,14 +34,14 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try {
             users = session.createQuery(FIND_ALL_USERS_QUERY, User.class).list();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get all users!");
+            throw new RepositoryException("Request to get all users failed" + ex);
         }
 
         return users;
     }
 
     @Override
-    public List<User> getAllUserByRole(String role) throws RepositoryException {
+    public List<User> getAllUsersByRole(String role) throws RepositoryException {
         List<User> users;
         try {
             users = session.createQuery(SELECT_USER_BY_ROLE_QUERY, User.class).setParameter("name", role).list();
@@ -54,21 +53,19 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User getUserById(int userId) throws RepositoryException {
+    public Optional<User> getUserById(int userId) throws RepositoryException {
         User user;
         try {
             user = session.find(User.class, userId);
-            Role next = user.getRoles().iterator().next();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RepositoryException("User does not exist by id = " + userId);
+            throw new RepositoryException("Request to get user by id = " + userId + " = failed" + ex);
         }
 
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
-    public User getUserByEmail(String email) throws RepositoryException {
+    public Optional<User> getUserByEmail(String email) throws RepositoryException {
         User user;
         try {
             user = (User) session.createQuery(SELECT_USER_BY_EMAIL_QUERY)
@@ -76,29 +73,25 @@ public class HibernateUserRepositoryImpl implements UserRepository {
                     .uniqueResult();
 
         } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new RepositoryException("User does not exist by email = " + email);
+            throw new RepositoryException("Request to get user by email = " + email + " = failed" + ex);
         }
 
-        return user;
+        return Optional.ofNullable(user);
     }
 
     @Override
     public boolean deleteUserById(int userId) throws RepositoryException {
-        boolean flag;
         Transaction transaction = null;
+        boolean isDeleted = false;
         try {
             transaction = session.beginTransaction();
 
             session.createSQLQuery(DELETE_USER_ID_FROM_USER_ROLE_QUERY).setParameter(1, userId).executeUpdate();
-            session.createSQLQuery(DELETE_USER_ID_FROM_USER_QUERY).setParameter(1, userId).executeUpdate();
 
             User user = session.find(User.class, userId);
             if (user != null) {
                 session.delete(user);
-                flag = (null == session.find(User.class, userId));
-            } else {
-                flag = false;
+                isDeleted = true;
             }
 
             transaction.commit();
@@ -106,31 +99,32 @@ public class HibernateUserRepositoryImpl implements UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RepositoryException("Can't delete user with id " + userId);
+            throw new RepositoryException("Request to delete user by id " + userId + " failed" + ex);
         }
 
-        return flag;
+        return isDeleted;
     }
 
     @Override
-    public void add(User user) throws RepositoryException {
+    public User add(User user) throws RepositoryException {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
 
             int newUserId = (Integer) session.save("User", user);
-            session.find(User.class, newUserId);
+            User addedUser = session.find(User.class, newUserId);
 
             transaction.commit();
+
+            return addedUser;
         } catch (Exception ex) {
             if (transaction != null) {
                 transaction.rollback();
             }
-            ex.printStackTrace();
-            throw new RepositoryException(ex.getMessage());
+            throw new RepositoryException("Request to add user failed" + ex);
         }
     }
-    //!!!!!!!!!
+
     @Override
     public void addAll(List<User> users) throws RepositoryException {
         Transaction transaction = null;
@@ -147,8 +141,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            ex.printStackTrace();
-            throw new RepositoryException(ex.getMessage());
+            throw new RepositoryException("Request to add all users failed" + ex);
         }
     }
 
@@ -157,9 +150,15 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         Transaction transaction = null;
         try {
             transaction = session.beginTransaction();
+
             user = session.find(User.class, user.getUserId());
             role = session.find(Role.class, role.getRoleId());
-            user.getRoles().add(role);
+
+            if (user.getRoles() != null) {
+                user.getRoles().add(role);
+            } else {
+                user.setRoles(Set.of(role));
+            }
 
             transaction.commit();
 
@@ -168,7 +167,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RepositoryException(ex.getMessage());
+            throw new RepositoryException("request to add role to user failed" + ex);
         }
     }
 

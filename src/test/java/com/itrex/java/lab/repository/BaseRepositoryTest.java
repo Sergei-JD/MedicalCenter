@@ -1,27 +1,22 @@
 package com.itrex.java.lab.repository;
 
+import com.itrex.java.lab.config.ApplicationContextConfiguration;
+import com.itrex.java.lab.repository.config_test.ApplicationContextConfigurationTest;
 import com.itrex.java.lab.service.FlywayService;
-import com.itrex.java.lab.util.HibernateUtil;
-import org.h2.jdbcx.JdbcConnectionPool;
-import org.hibernate.SessionFactory;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-
-import static com.itrex.java.lab.properties.Properties.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public abstract class BaseRepositoryTest {
 
+    private static final String MIGRATIONS_LOCATION = "db/test/migration";
     private final FlywayService flywayService;
-    private final JdbcConnectionPool connectionPool;
-    private final SessionFactory sessionFactory;
+    private final ApplicationContext applicationContext;
 
     public BaseRepositoryTest () {
-        flywayService = new FlywayService();
-        connectionPool = JdbcConnectionPool.create(H2_URL, H2_USER, H2_PASSWORD);
-        sessionFactory = HibernateUtil.getSessionFactory();
-
+        applicationContext = new AnnotationConfigApplicationContext(ApplicationContextConfiguration.class);
+        flywayService = applicationContext.getBean(FlywayService.class);
     }
 
     @BeforeEach
@@ -34,12 +29,8 @@ public abstract class BaseRepositoryTest {
         flywayService.clean();
     }
 
-    public JdbcConnectionPool getConnectionPool() {
-        return connectionPool;
-    }
-
-    public SessionFactory getSessionFactory() {
-        return sessionFactory;
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
     }
 
 }

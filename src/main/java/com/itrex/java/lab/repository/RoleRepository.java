@@ -1,17 +1,18 @@
 package com.itrex.java.lab.repository;
 
-
 import com.itrex.java.lab.entity.Role;
+import com.itrex.java.lab.exception_handler.RepositoryException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface RoleRepository {
 
-    List<Role> getAllRole() throws RepositoryException;
+    List<Role> getAllRoles() throws RepositoryException;
 
-    Role getRoleByName(String name) throws RepositoryException;
+    Optional<Role> getRoleByName(String name) throws RepositoryException;
 
-    void add(Role role) throws RepositoryException;
+    Role add(Role role) throws RepositoryException;
 
 
 }

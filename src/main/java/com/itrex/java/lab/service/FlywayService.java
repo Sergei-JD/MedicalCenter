@@ -8,8 +8,8 @@ public class FlywayService {
 
     private Flyway flyway;
 
-    public FlywayService() {
-        inti();
+    public FlywayService(String migrationLocation) {
+        inti(migrationLocation);
     }
 
     public void migrate() {
@@ -20,10 +20,10 @@ public class FlywayService {
         flyway.clean();
     }
 
-    private void inti() {
+    private void inti(String migrationLocation) {
         flyway = Flyway.configure()
                 .dataSource(H2_URL, H2_USER, H2_PASSWORD)
-                .locations(MIGRATIONS_LOCATION)
+                .locations(migrationLocation)
                 .load();
     }
 
