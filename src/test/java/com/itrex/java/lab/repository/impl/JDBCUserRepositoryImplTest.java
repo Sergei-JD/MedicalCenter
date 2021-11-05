@@ -1,14 +1,5 @@
 package com.itrex.java.lab.repository.impl;
 
-import com.itrex.java.lab.entity.User;
-import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.repository.RepositoryException;
-import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 /*class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
 
     private final JDBCUserRepositoryImpl userRepository;

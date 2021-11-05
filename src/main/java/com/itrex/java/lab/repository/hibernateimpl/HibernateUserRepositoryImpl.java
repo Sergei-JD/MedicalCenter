@@ -3,9 +3,10 @@ package com.itrex.java.lab.repository.hibernateimpl;
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,11 +16,8 @@ import java.util.Set;
 @Repository
 public class HibernateUserRepositoryImpl implements UserRepository {
 
+    @Autowired
     private final Session session;
-
-    public HibernateUserRepositoryImpl(Session session) {
-        this.session = session;
-    }
 
     private static final String FIND_ALL_USERS_QUERY = "select u from User u";
     private static final String DELETE_USER_ID_FROM_USER_QUERY = "DELETE FROM user WHERE user_id = ?";
@@ -27,6 +25,10 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     private static final String SELECT_USER_BY_EMAIL_QUERY = "FROM User u where u.email = :email";
     private static final String SELECT_USER_BY_ROLE_QUERY =
             "SELECT u FROM User u JOIN FETCH u.roles r WHERE r.name = :name";
+
+    public HibernateUserRepositoryImpl(Session session) {
+        this.session = session;
+    }
 
     @Override
     public List<User> getAllUsers() throws RepositoryException {

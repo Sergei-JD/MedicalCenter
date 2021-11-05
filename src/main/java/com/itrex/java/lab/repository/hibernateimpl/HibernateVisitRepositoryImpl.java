@@ -2,9 +2,10 @@ package com.itrex.java.lab.repository.hibernateimpl;
 
 import com.itrex.java.lab.entity.Visit;
 import com.itrex.java.lab.repository.VisitRepository;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,13 +14,14 @@ import java.util.Optional;
 @Repository
 public class HibernateVisitRepositoryImpl implements VisitRepository {
 
+    @Autowired
     private final Session session;
+
+    private static final String FIND_ALL_VISIT_QUERY = "select v from Visit v";
 
     public HibernateVisitRepositoryImpl(Session session) {
         this.session = session;
     }
-
-    private static final String FIND_ALL_VISIT_QUERY = "select v from Visit v";
 
     @Override
     public List<Visit> getAllVisits() throws RepositoryException {

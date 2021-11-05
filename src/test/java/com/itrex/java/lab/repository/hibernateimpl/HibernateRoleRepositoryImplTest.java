@@ -2,10 +2,12 @@ package com.itrex.java.lab.repository.hibernateimpl;
 
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.config_test.ApplicationContextConfigurationTest;
+import com.itrex.java.lab.repository.config.TestRepositoryConfiguration;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
@@ -14,15 +16,12 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringJUnitConfig
-@ContextConfiguration(classes = ApplicationContextConfigurationTest.class)
+@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 
-    private final RoleRepository roleRepository;
-
-    HibernateRoleRepositoryImplTest() {
-        super();
-        this.roleRepository = getApplicationContext().getBean(HibernateRoleRepositoryImpl.class);
-    }
+    @Qualifier("hibernateRoleRepositoryImpl")
+    @Autowired
+    private RoleRepository roleRepository;
 
     @Test
     void getAllRole_shouldReturnTheRolesByName() throws RepositoryException {

@@ -1,34 +1,50 @@
 package com.itrex.java.lab.repository.config;
 
-import com.itrex.java.lab.service.FlywayService;
-import com.itrex.java.lab.util.HibernateUtil;
-import com.itrex.java.lab.util.JDBCConnectionPool;
+import org.flywaydb.core.Flyway;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
+import org.springframework.core.env.Environment;
 
-import javax.sql.DataSource;
+@Configuration
+@ComponentScan("com.itrex.java.lab.repository")
+@PropertySource("classpath:/application.properties")
+public class TestRepositoryConfiguration {
 
-/*public class TestRepositoryConfiguration {
+    @Autowired
+    Environment env;
 
-    @Bean
-    public DataSource dataSource() {
-        return JDBCConnectionPool.INSTANCE.getConnectionPool();
+    @Bean(initMethod = "migrate")
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    public Flyway flyway() {
+        return Flyway.configure()
+                .dataSource(env.getProperty("database.url"),
+                        env.getProperty("database.login"),
+                        env.getProperty("database.password"))
+                .locations(env.getProperty("database.migration.location"))
+                .load();
     }
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    @DependsOn("flyway")
+    public JdbcConnectionPool jdbcConnectionPool() {
+        return JdbcConnectionPool.create(env.getProperty("database.url"),
+                env.getProperty("database.login"),
+                env.getProperty("database.password"));
+    }
+
+    @Bean
+    @DependsOn("flyway")
+    public SessionFactory sessionFactory() {
+        return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
+    }
+
+    @Bean
+    @Scope
     public Session session() {
-        return HibernateUtil.getSessionFactory().openSession();
+        return sessionFactory().openSession();
     }
-
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public FlywayService flywayService() {
-        FlywayService flywayService = new FlywayService("db/test/migration");
-        flywayService.migrate();
-        return flywayService;
-    }
-
-}*/
+}

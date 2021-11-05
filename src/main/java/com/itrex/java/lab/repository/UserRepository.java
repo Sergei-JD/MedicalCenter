@@ -2,7 +2,7 @@ package com.itrex.java.lab.repository;
 
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 
 import java.util.List;
 import java.util.Optional;

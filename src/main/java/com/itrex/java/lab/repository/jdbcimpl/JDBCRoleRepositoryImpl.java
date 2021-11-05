@@ -1,20 +1,5 @@
 package com.itrex.java.lab.repository.jdbcimpl;
 
-import com.itrex.java.lab.entity.Role;
-import com.itrex.java.lab.exception_handler.RepositoryException;
-import com.itrex.java.lab.repository.RoleRepository;
-import org.springframework.stereotype.Repository;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import javax.sql.DataSource;
-
 /*@Repository
 public class JDBCRoleRepositoryImpl implements RoleRepository {
 
@@ -25,11 +10,8 @@ public class JDBCRoleRepositoryImpl implements RoleRepository {
     private static final String SELECT_ROLE_BY_NAME_QUERY = "SELECT * FROM role WHERE name = ?";
     private static final String INSERT_ROLE_QUERY = "INSERT INTO role(name) VALUES (?)";
 
+    @Autowired
     private final DataSource dataSource;
-
-    public JDBCRoleRepositoryImpl(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     @Override
     public List<Role> getAllRoles() throws RepositoryException {

@@ -2,9 +2,14 @@ package com.itrex.java.lab.repository.hibernateimpl;
 
 import com.itrex.java.lab.entity.Timeslot;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.repository.TimeslotRepository;
+import com.itrex.java.lab.repository.config.TestRepositoryConfiguration;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -13,13 +18,13 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringJUnitConfig
+@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
 
-    private final TimeslotRepository timeslotRepository;
-
-    HibernateTimeslotRepositoryImplTest() {
-        this.timeslotRepository = getApplicationContext().getBean(HibernateTimeslotRepositoryImpl.class);
-    }
+    @Qualifier("hibernateTimeslotRepositoryImpl")
+    @Autowired
+    private TimeslotRepository timeslotRepository;
 
     @Test
     void getAllTimeslot_shouldReturnTheNumberOfAllTimeslots() throws RepositoryException {

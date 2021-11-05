@@ -1,4 +1,4 @@
-package com.itrex.java.lab.repository;
+package com.itrex.java.lab.exception;
 
 public class RepositoryException extends Exception {
 

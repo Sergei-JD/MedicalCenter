@@ -2,9 +2,10 @@ package com.itrex.java.lab.repository.hibernateimpl;
 
 import com.itrex.java.lab.entity.Timeslot;
 import com.itrex.java.lab.repository.TimeslotRepository;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,13 +14,14 @@ import java.util.Optional;
 @Repository
 public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
+    @Autowired
     private final Session session;
+
+    private static final String FIND_ALL_TIMESLOT_QUERY = "select t from Timeslot t";
 
     public HibernateTimeslotRepositoryImpl(Session session) {
         this.session = session;
     }
-
-    private static final String FIND_ALL_TIMESLOT_QUERY = "select t from Timeslot t";
 
     @Override
     public List<Timeslot> getAllTimeslots() throws RepositoryException {

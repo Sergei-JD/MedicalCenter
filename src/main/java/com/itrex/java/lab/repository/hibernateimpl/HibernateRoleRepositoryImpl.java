@@ -2,9 +2,10 @@ package com.itrex.java.lab.repository.hibernateimpl;
 
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,14 +14,15 @@ import java.util.Optional;
 @Repository
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
+    @Autowired
     private final Session session;
+
+    private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
+    private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
 
     public HibernateRoleRepositoryImpl(Session session) {
         this.session = session;
     }
-
-    private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
-    private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
 
     @Override
     public List<Role> getAllRoles() throws RepositoryException {

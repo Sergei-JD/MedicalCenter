@@ -3,26 +3,30 @@ package com.itrex.java.lab.repository.hibernateimpl;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.entity.Visit;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
-import com.itrex.java.lab.exception_handler.RepositoryException;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.repository.VisitRepository;
+import com.itrex.java.lab.repository.config.TestRepositoryConfiguration;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SpringJUnitConfig
+@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
 
-    private final VisitRepository visitRepository;
-    private final UserRepository userRepository;
-
-    HibernateVisitRepositoryImplTest() {
-        super();
-        this.visitRepository = getApplicationContext().getBean(HibernateVisitRepositoryImpl.class);
-        this.userRepository = getApplicationContext().getBean(HibernateUserRepositoryImpl.class);
-    }
+    @Qualifier("hibernateVisitRepositoryImpl")
+    @Autowired
+    private VisitRepository visitRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     void getAllVisit_shouldReturnTheNumberOfAllVisits() throws RepositoryException {
