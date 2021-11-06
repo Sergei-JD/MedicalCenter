@@ -18,8 +18,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig
-@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
 
     @Qualifier("hibernateVisitRepositoryImpl")

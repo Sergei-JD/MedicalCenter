@@ -18,8 +18,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig
-@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
 
     @Qualifier("hibernateTimeslotRepositoryImpl")

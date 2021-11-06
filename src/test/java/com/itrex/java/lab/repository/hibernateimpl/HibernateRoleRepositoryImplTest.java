@@ -15,8 +15,6 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig
-@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 
     @Qualifier("hibernateRoleRepositoryImpl")
