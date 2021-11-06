@@ -5,8 +5,9 @@ import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,31 +15,32 @@ import java.util.Optional;
 @Repository
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
-    @Autowired
-    private final Session session;
+    private final SessionFactory sessionFactory;
 
     private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
     private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
 
-    public HibernateRoleRepositoryImpl(Session session) {
-        this.session = session;
+    @Autowired
+    public HibernateRoleRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Role> getAllRoles() throws RepositoryException {
         List<Role> roles;
-        try {
+        try(Session session = sessionFactory.openSession()) {
             roles = session.createQuery(FIND_ALL_ROLES_QUERY, Role.class).list();
         } catch (Exception ex) {
             throw new RepositoryException("Request to get all roles failed" + ex);
         }
+
         return roles;
     }
 
     @Override
     public Optional<Role> getRoleByName(String name) throws RepositoryException {
         Role role;
-        try {
+        try(Session session = sessionFactory.openSession()) {
             role = (Role) session.createQuery(FIND_ROLE_BY_NAME_QUERY)
                     .setParameter("name", name)
                     .uniqueResult();
@@ -52,21 +54,21 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     @Override
     public Role add(Role role) throws RepositoryException {
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
+        try(Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
+            try {
+                int newRoleId = (Integer) session.save("Role", role);
+                Role addedRole = session.find(Role.class, newRoleId);
 
-            int newRoleId = (Integer) session.save("Role", role);
-            Role addedRole = session.find(Role.class, newRoleId);
+                transaction.commit();
 
-            transaction.commit();
-
-            return addedRole;
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
+                return addedRole;
+            } catch (Exception ex) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                throw new RepositoryException("Request to add role failed " + ex);
             }
-            throw new RepositoryException("Request to add role failed " + ex);
         }
     }
 

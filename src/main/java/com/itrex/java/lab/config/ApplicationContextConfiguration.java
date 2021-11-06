@@ -1,11 +1,9 @@
 package com.itrex.java.lab.config;
 
-import org.hibernate.Session;
 import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 
@@ -15,7 +13,7 @@ import org.springframework.core.env.Environment;
 public class ApplicationContextConfiguration {
 
     @Autowired
-    Environment environment;
+    private Environment environment;
 
     @Bean
     @DependsOn("flyway")
@@ -33,13 +31,6 @@ public class ApplicationContextConfiguration {
         return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
     }
 
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    @DependsOn("sessionFactory")
-    public Session session() {
-        return sessionFactory().openSession();
-    }
-
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
         return Flyway.configure()
@@ -50,4 +41,5 @@ public class ApplicationContextConfiguration {
                 .load();
 
     }
+
 }

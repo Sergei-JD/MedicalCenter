@@ -4,12 +4,9 @@ import com.itrex.java.lab.entity.Timeslot;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.repository.TimeslotRepository;
-import com.itrex.java.lab.repository.config.TestRepositoryConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -20,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
 
-    @Qualifier("hibernateTimeslotRepositoryImpl")
     @Autowired
+    @Qualifier("hibernateTimeslotRepositoryImpl")
     private TimeslotRepository timeslotRepository;
 
     @Test
@@ -57,11 +54,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
         Optional<Timeslot> result = timeslotRepository.getTimeslotById(newTimeslot.getTimeslotId());
 
         //then
-        assertAll(
-                () -> assertEquals(new Time(16-20), result.get().getStartTime()),
-                () -> assertEquals(new Date(2021-10-10), result.get().getDate()),
-                () -> assertEquals(505, result.get().getOffice())
-        );
+        assertEquals(505, result.get().getOffice());
     }
 
     @Test
@@ -104,7 +97,6 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
         newTimeslot.setStartTime(new Time(12-20));
         newTimeslot.setDate(new Date(2021-10-10));
         newTimeslot.setOffice(505);
-        timeslotRepository.add(newTimeslot);
 
         //when
         Timeslot result = timeslotRepository.add(newTimeslot);

@@ -6,12 +6,9 @@ import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.repository.UserRepository;
 import com.itrex.java.lab.repository.VisitRepository;
-import com.itrex.java.lab.repository.config.TestRepositoryConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
 
-    @Qualifier("hibernateVisitRepositoryImpl")
     @Autowired
+    @Qualifier("hibernateVisitRepositoryImpl")
     private VisitRepository visitRepository;
     @Autowired
     private UserRepository userRepository;

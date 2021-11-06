@@ -1,21 +1,18 @@
 package com.itrex.java.lab.repository.config;
 
 import org.flywaydb.core.Flyway;
-import org.h2.jdbcx.JdbcConnectionPool;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Configuration
 @ComponentScan("com.itrex.java.lab.repository")
 @PropertySource("classpath:/test.properties")
 public class TestRepositoryConfiguration {
 
     @Autowired
-    Environment environment;
+    private Environment environment;
 
     @Bean
     @DependsOn("flyway")
@@ -30,13 +27,6 @@ public class TestRepositoryConfiguration {
     @DependsOn("flyway")
     public SessionFactory sessionFactory() {
         return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
-    }
-
-    @Bean
-//    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    @DependsOn("sessionFactory")
-    public Session session() {
-        return sessionFactory().openSession();
     }
 
     @Bean(initMethod = "migrate")

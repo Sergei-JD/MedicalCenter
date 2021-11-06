@@ -1,11 +1,11 @@
 package com.itrex.java.lab;
 
-import com.itrex.java.lab.config.ApplicationContextConfiguration;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.repository.hibernateimpl.HibernateRoleRepositoryImpl;
-import com.itrex.java.lab.repository.hibernateimpl.HibernateTimeslotRepositoryImpl;
+import com.itrex.java.lab.config.ApplicationContextConfiguration;
 import com.itrex.java.lab.repository.hibernateimpl.HibernateUserRepositoryImpl;
+import com.itrex.java.lab.repository.hibernateimpl.HibernateRoleRepositoryImpl;
 import com.itrex.java.lab.repository.hibernateimpl.HibernateVisitRepositoryImpl;
+import com.itrex.java.lab.repository.hibernateimpl.HibernateTimeslotRepositoryImpl;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
