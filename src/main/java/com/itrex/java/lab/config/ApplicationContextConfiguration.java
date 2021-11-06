@@ -1,17 +1,10 @@
 package com.itrex.java.lab.config;
 
-import org.hibernate.Session;
 import org.flywaydb.core.Flyway;
 import org.hibernate.SessionFactory;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 
 @Configuration
@@ -20,15 +13,15 @@ import org.springframework.core.env.Environment;
 public class ApplicationContextConfiguration {
 
     @Autowired
-    Environment env;
+    private Environment environment;
 
     @Bean
     @DependsOn("flyway")
-    public JdbcConnectionPool dataSource() {
+    public JdbcConnectionPool jdbcConnectionPool() {
         return JdbcConnectionPool.create(
-                env.getProperty("database.url"),
-                env.getProperty("database.login"),
-                env.getProperty("database.password")
+                environment.getProperty("database.url"),
+                environment.getProperty("database.login"),
+                environment.getProperty("database.password")
         );
     }
 
@@ -38,22 +31,15 @@ public class ApplicationContextConfiguration {
         return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
     }
 
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    @DependsOn("sessionFactory")
-    public Session session() {
-        return sessionFactory().openSession();
-    }
-
     @Bean(initMethod = "migrate")
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Flyway flyway() {
         return Flyway.configure()
-                .dataSource(env.getProperty("database.url"),
-                        env.getProperty("database.login"),
-                        env.getProperty("database.password"))
-                .locations(env.getProperty("database.migration.location"))
+                .dataSource(environment.getProperty("database.url"),
+                        environment.getProperty("database.login"),
+                        environment.getProperty("database.password"))
+                .locations(environment.getProperty("database.migration.location"))
                 .load();
 
     }
+
 }

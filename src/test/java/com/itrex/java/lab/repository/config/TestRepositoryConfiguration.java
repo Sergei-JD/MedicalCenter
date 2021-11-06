@@ -1,39 +1,26 @@
 package com.itrex.java.lab.repository.config;
 
 import org.flywaydb.core.Flyway;
-import org.h2.jdbcx.JdbcConnectionPool;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@Configuration
 @ComponentScan("com.itrex.java.lab.repository")
-@PropertySource("classpath:/application.properties")
+@PropertySource("classpath:/test.properties")
 public class TestRepositoryConfiguration {
 
     @Autowired
-    Environment env;
-
-    @Bean(initMethod = "migrate")
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public Flyway flyway() {
-        return Flyway.configure()
-                .dataSource(env.getProperty("database.url"),
-                        env.getProperty("database.login"),
-                        env.getProperty("database.password"))
-                .locations(env.getProperty("database.migration.location"))
-                .load();
-    }
+    private Environment environment;
 
     @Bean
     @DependsOn("flyway")
     public JdbcConnectionPool jdbcConnectionPool() {
-        return JdbcConnectionPool.create(env.getProperty("database.url"),
-                env.getProperty("database.login"),
-                env.getProperty("database.password"));
+        return JdbcConnectionPool.create(
+                environment.getProperty("database.url"),
+                environment.getProperty("database.login"),
+                environment.getProperty("database.password"));
     }
 
     @Bean
@@ -42,9 +29,15 @@ public class TestRepositoryConfiguration {
         return new org.hibernate.cfg.Configuration().configure().buildSessionFactory();
     }
 
-    @Bean
-    @Scope
-    public Session session() {
-        return sessionFactory().openSession();
+    @Bean(initMethod = "migrate")
+    public Flyway flyway() {
+        return Flyway.configure()
+                .dataSource(environment.getProperty("database.url"),
+                        environment.getProperty("database.login"),
+                        environment.getProperty("database.password"))
+                .locations(environment.getProperty("database.migration.location"))
+                .load();
     }
+
+
 }

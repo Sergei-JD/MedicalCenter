@@ -17,15 +17,15 @@ public class Visit {
     @Column(name = "visit_id", nullable = false)
     private Integer visitId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="patient_id", nullable=false)
     private User patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name="doctor_id", nullable=false)
     private User doctor;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "timeslot_id", referencedColumnName = "timeslot_id")
     private Timeslot timeslot;
 

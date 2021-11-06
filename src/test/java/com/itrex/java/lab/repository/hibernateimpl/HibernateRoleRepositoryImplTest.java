@@ -1,26 +1,21 @@
 package com.itrex.java.lab.repository.hibernateimpl;
 
 import com.itrex.java.lab.entity.Role;
+import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.repository.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.config.TestRepositoryConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringJUnitConfig
-@ContextConfiguration(classes = TestRepositoryConfiguration.class)
 class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 
-    @Qualifier("hibernateRoleRepositoryImpl")
     @Autowired
+    @Qualifier("hibernateRoleRepositoryImpl")
     private RoleRepository roleRepository;
 
     @Test

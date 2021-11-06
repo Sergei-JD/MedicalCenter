@@ -5,8 +5,9 @@ import com.itrex.java.lab.repository.TimeslotRepository;
 import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,19 +15,19 @@ import java.util.Optional;
 @Repository
 public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
-    @Autowired
-    private final Session session;
+    private final SessionFactory sessionFactory;
 
     private static final String FIND_ALL_TIMESLOT_QUERY = "select t from Timeslot t";
 
-    public HibernateTimeslotRepositoryImpl(Session session) {
-        this.session = session;
+    @Autowired
+    public HibernateTimeslotRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Timeslot> getAllTimeslots() throws RepositoryException {
         List<Timeslot> timeslots;
-        try {
+        try(Session session = sessionFactory.openSession()) {
             timeslots = session.createQuery(FIND_ALL_TIMESLOT_QUERY, Timeslot.class).list();
         } catch (Exception ex) {
             throw new RepositoryException("Request to get all timeslots failed" + ex);
@@ -38,7 +39,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     @Override
     public Optional<Timeslot> getTimeslotById(int timeslotId) throws RepositoryException {
         Timeslot timeslot;
-        try {
+        try(Session session = sessionFactory.openSession()) {
             timeslot = session.find(Timeslot.class, timeslotId);
         } catch (Exception ex) {
             throw new RepositoryException("Request to get timeslot by id = " + timeslotId + " = failed" + ex);
@@ -49,21 +50,22 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
     @Override
     public Timeslot add(Timeslot timeslot) throws RepositoryException {
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
+        try(Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
 
-            int newTimeslotId = (Integer) session.save("Timeslot", timeslot);
-            Timeslot addedTimeslot = session.find(Timeslot.class, newTimeslotId);
+            try {
+                int newTimeslotId = (Integer) session.save("Timeslot", timeslot);
+                Timeslot addedTimeslot = session.find(Timeslot.class, newTimeslotId);
 
-            transaction.commit();
+                transaction.commit();
 
-            return addedTimeslot;
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
+                return addedTimeslot;
+            } catch (Exception ex) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                throw new RepositoryException("Request to add timeslot failed" + ex);
             }
-            throw new RepositoryException("Request to add timeslot failed" + ex);
         }
     }
 
@@ -72,7 +74,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
         Transaction transaction = null;
         boolean isDeleted = false;
 
-        try {
+        try(Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             Timeslot timeslot = session.find(Timeslot.class, timeslotId);
 

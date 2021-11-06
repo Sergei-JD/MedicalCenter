@@ -5,8 +5,9 @@ import com.itrex.java.lab.repository.VisitRepository;
 import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,19 +15,19 @@ import java.util.Optional;
 @Repository
 public class HibernateVisitRepositoryImpl implements VisitRepository {
 
-    @Autowired
-    private final Session session;
+    private final SessionFactory sessionFactory;
 
     private static final String FIND_ALL_VISIT_QUERY = "select v from Visit v";
 
-    public HibernateVisitRepositoryImpl(Session session) {
-        this.session = session;
+    @Autowired
+    public HibernateVisitRepositoryImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     @Override
     public List<Visit> getAllVisits() throws RepositoryException {
         List<Visit> visits;
-        try {
+        try(Session session = sessionFactory.openSession()) {
             visits = session.createQuery(FIND_ALL_VISIT_QUERY, Visit.class).list();
         } catch (Exception ex) {
             throw new RepositoryException("Request to get all visits failed" + ex);
@@ -38,7 +39,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     @Override
     public Optional<Visit> getVisitById(int visitId) throws RepositoryException {
         Visit visit;
-        try {
+        try(Session session = sessionFactory.openSession()) {
             visit = session.find(Visit.class, visitId);
         } catch (Exception ex) {
             throw new RepositoryException("Request to get timeslot by id = " + visitId + " = failed");
@@ -49,45 +50,48 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
 
     @Override
     public Visit add(Visit visit) throws RepositoryException {
-        Transaction transaction = null;
-        try {
-            transaction = session.beginTransaction();
+        try(Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
 
-            int newVisitId = (Integer) session.save("Visit", visit);
-            Visit addedVisit = session.find(Visit.class, newVisitId);
+            try {
+                int newVisitId = (Integer) session.save("Visit", visit);
+                Visit addedVisit = session.find(Visit.class, newVisitId);
 
-            transaction.commit();
+                transaction.commit();
 
-            return addedVisit;
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
+                return addedVisit;
+            } catch (Exception ex) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                throw new RepositoryException("Request to add visit failed" + ex);
             }
-            throw new RepositoryException("Request to add visit failed" + ex);
         }
     }
 
     @Override
     public boolean deleteVisitById(int visitId) throws RepositoryException {
-        Transaction transaction = null;
         boolean isDeleted = false;
 
-        try {
-            transaction = session.beginTransaction();
+        try(Session session = sessionFactory.openSession()) {
+            Transaction transaction = session.beginTransaction();
 
-            Visit visit = session.find(Visit.class, visitId);
+            try {
+                Visit visit = session.find(Visit.class, visitId);
 
-            if (visit != null) {
-                session.delete(visit);
-                isDeleted = true;
+                if (visit != null) {
+                    session.delete(visit);
+                    isDeleted = true;
+                }
+                transaction.commit();
+            } catch (Exception ex) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                throw new RepositoryException("Request to delete timeslot by id " + visitId + " failed" + ex);
             }
-            transaction.commit();
-        } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RepositoryException("Request to delete timeslot by id " + visitId + " failed" + ex);
         }
+
         return isDeleted;
     }
 
