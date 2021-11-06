@@ -4,15 +4,17 @@ import com.itrex.java.lab.entity.Timeslot;
 import com.itrex.java.lab.repository.TimeslotRepository;
 import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
     private final SessionFactory sessionFactory;
@@ -51,19 +53,13 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     @Override
     public Timeslot add(Timeslot timeslot) throws RepositoryException {
         try(Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
 
             try {
                 int newTimeslotId = (Integer) session.save("Timeslot", timeslot);
                 Timeslot addedTimeslot = session.find(Timeslot.class, newTimeslotId);
 
-                transaction.commit();
-
                 return addedTimeslot;
             } catch (Exception ex) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
                 throw new RepositoryException("Request to add timeslot failed" + ex);
             }
         }
@@ -71,22 +67,15 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
     @Override
     public boolean deleteTimeslotById(int timeslotId) throws RepositoryException {
-        Transaction transaction = null;
         boolean isDeleted = false;
-
         try(Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
             Timeslot timeslot = session.find(Timeslot.class, timeslotId);
 
             if (timeslot != null) {
                 session.delete(timeslot);
                 isDeleted = true;
             }
-            transaction.commit();
         } catch (Exception ex) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
             throw new RepositoryException("Request to delete timeslot by id " + timeslotId + " failed" + ex);
         }
 

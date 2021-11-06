@@ -4,15 +4,17 @@ import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.repository.RoleRepository;
 import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     private final SessionFactory sessionFactory;
@@ -44,7 +46,6 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
             role = (Role) session.createQuery(FIND_ROLE_BY_NAME_QUERY)
                     .setParameter("name", name)
                     .uniqueResult();
-
         } catch (Exception ex) {
             throw new RepositoryException("Request to get role named = " + name + " = failed" + ex);
         }
@@ -55,18 +56,13 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     @Override
     public Role add(Role role) throws RepositoryException {
         try(Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
+
             try {
                 int newRoleId = (Integer) session.save("Role", role);
                 Role addedRole = session.find(Role.class, newRoleId);
 
-                transaction.commit();
-
                 return addedRole;
             } catch (Exception ex) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
                 throw new RepositoryException("Request to add role failed " + ex);
             }
         }

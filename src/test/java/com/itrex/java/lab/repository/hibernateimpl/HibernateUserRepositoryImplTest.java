@@ -124,10 +124,15 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         userRepository.add(newUser);
 
         //when
-        Optional<User> actualUser = userRepository.getUserByEmail(newUser.getEmail());
+        Optional<User> result = userRepository.getUserByEmail(newUser.getEmail());
 
         //then
-        assertEquals(newUser, actualUser.get());
+        assertAll(
+                () -> assertEquals("Kurt", result.get().getFirstName()),
+                () -> assertEquals("Kobe", result.get().getLastName()),
+                () -> assertEquals(43, result.get().getAge()),
+                () -> assertEquals("M", result.get().getGender())
+        );
     }
 
     @Test

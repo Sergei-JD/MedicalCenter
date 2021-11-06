@@ -4,15 +4,17 @@ import com.itrex.java.lab.entity.Visit;
 import com.itrex.java.lab.repository.VisitRepository;
 import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateVisitRepositoryImpl implements VisitRepository {
 
     private final SessionFactory sessionFactory;
@@ -51,19 +53,13 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     @Override
     public Visit add(Visit visit) throws RepositoryException {
         try(Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
 
             try {
                 int newVisitId = (Integer) session.save("Visit", visit);
                 Visit addedVisit = session.find(Visit.class, newVisitId);
 
-                transaction.commit();
-
                 return addedVisit;
             } catch (Exception ex) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
                 throw new RepositoryException("Request to add visit failed" + ex);
             }
         }
@@ -72,9 +68,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     @Override
     public boolean deleteVisitById(int visitId) throws RepositoryException {
         boolean isDeleted = false;
-
         try(Session session = sessionFactory.openSession()) {
-            Transaction transaction = session.beginTransaction();
 
             try {
                 Visit visit = session.find(Visit.class, visitId);
@@ -83,11 +77,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
                     session.delete(visit);
                     isDeleted = true;
                 }
-                transaction.commit();
             } catch (Exception ex) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
                 throw new RepositoryException("Request to delete timeslot by id " + visitId + " failed" + ex);
             }
         }
