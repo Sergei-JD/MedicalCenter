@@ -21,6 +21,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Qualifier("hibernateVisitRepositoryImpl")
     private VisitRepository visitRepository;
     @Autowired
+    @Qualifier("hibernateUserRepositoryImpl")
     private UserRepository userRepository;
 
     @Test

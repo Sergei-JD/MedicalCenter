@@ -18,9 +18,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired
-    @Qualifier("hibernateUserRepositoryImpl")
+    @Qualifier(value = "hibernateUserRepositoryImpl")
     private UserRepository userRepository;
     @Autowired
+    @Qualifier("hibernateRoleRepositoryImpl")
     private RoleRepository roleRepository;
 
     @Test
