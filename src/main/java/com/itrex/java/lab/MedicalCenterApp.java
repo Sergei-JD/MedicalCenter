@@ -15,10 +15,10 @@ public class MedicalCenterApp {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationContextConfiguration.class);
 
-        System.out.println(ctx.getBean("hibernateUserRepositoryImpl", UserRepository.class).getAllUsers());
-        System.out.println(ctx.getBean("hibernateRoleRepositoryImpl", RoleRepository.class).getAllRoles());
-        System.out.println(ctx.getBean("hibernateTimeslotRepositoryImpl", TimeslotRepository.class).getAllTimeslots());
-        System.out.println(ctx.getBean("hibernateVisitRepositoryImpl", VisitRepository.class).getAllVisits());
+        System.out.println(ctx.getBean(UserRepository.class).getAllUsers());
+        System.out.println(ctx.getBean(RoleRepository.class).getAllRoles());
+        System.out.println(ctx.getBean(TimeslotRepository.class).getAllTimeslots());
+        System.out.println(ctx.getBean(VisitRepository.class).getAllVisits());
 
     }
 

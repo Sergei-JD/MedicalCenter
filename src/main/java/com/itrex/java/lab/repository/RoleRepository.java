@@ -14,5 +14,4 @@ public interface RoleRepository {
 
     Role add(Role role) throws RepositoryException;
 
-
 }

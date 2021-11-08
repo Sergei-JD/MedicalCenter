@@ -3,6 +3,7 @@ package com.itrex.java.lab.repository;
 import com.itrex.java.lab.entity.Role;
 import com.itrex.java.lab.entity.User;
 import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.exception.ServiceException;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,9 +12,9 @@ public interface UserRepository {
 
     List<User> getAllUsers() throws RepositoryException;
 
-    List<User> getAllUsersByRole(String role) throws RepositoryException;
+    List<User> getAllUsersByRole(String role) throws RepositoryException, ServiceException;
 
-    Optional<User> getUserById(int userId) throws RepositoryException;
+    Optional<User> getUserById(int userId) throws RepositoryException, ServiceException;
 
     Optional<User> getUserByEmail(String email) throws RepositoryException;
 

@@ -4,6 +4,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcConnectionPool;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.context.annotation.DependsOn;
@@ -95,4 +96,10 @@ public class ApplicationContextConfiguration {
 
         return hibernateProperties;
     }
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
+
 }

@@ -61,7 +61,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         assertFalse(result);
         List<User> allUsersAfterDelete = userRepository.getAllUsers();
         assertTrue(allUsersBeforeDelete.size() == allUsersAfterDelete.size()
-            && allUsersBeforeDelete.containsAll(allUsersAfterDelete));
+                && allUsersBeforeDelete.containsAll(allUsersAfterDelete));
     }
 
     @Test

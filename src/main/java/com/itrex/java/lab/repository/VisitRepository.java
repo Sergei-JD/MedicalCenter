@@ -10,7 +10,7 @@ public interface VisitRepository {
 
     List<Visit> getAllVisits() throws RepositoryException;
 
-    Optional<Visit> getVisitById(int timeslotId) throws RepositoryException;
+    Optional<Visit> getVisitById(int visitId) throws RepositoryException;
 
     Visit add(Visit visit) throws RepositoryException;
 
