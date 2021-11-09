@@ -2,10 +2,10 @@ package com.itrex.java.lab;
 
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.config.ApplicationContextConfiguration;
-import com.itrex.java.lab.repository.RoleRepository;
-import com.itrex.java.lab.repository.TimeslotRepository;
-import com.itrex.java.lab.repository.UserRepository;
-import com.itrex.java.lab.repository.VisitRepository;
+import com.itrex.java.lab.persistence.repository.RoleRepository;
+import com.itrex.java.lab.persistence.repository.TimeslotRepository;
+import com.itrex.java.lab.persistence.repository.UserRepository;
+import com.itrex.java.lab.persistence.repository.VisitRepository;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
