@@ -35,7 +35,9 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 //    @Test
 //    void getRoleByName_shouldReturnTheRoleByName() {
 //        //given
-//        Role newRole = Role.builder().name(RoleType.DOCTOR).build();
+//        Role newRole = Role.builder()
+//                .name(RoleType.DOCTOR)
+//                .build();
 //        roleRepository.add(newRole);
 //
 //        //when
@@ -43,29 +45,30 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 //
 //        //then
 //        assertEquals(newRole.getName(), result.get().getName());
-//    }
-//
-//    @Test
-//    void addRole_notValidData_NameNull_shouldThrowRepositoryException() {
-//        //given
-//        Role newRole = Role.builder().build();
-//
-//        //when && then
-//        assertThrows(RepositoryException.class, () -> roleRepository.add(newRole));
 //    }
 
-//    @Test
-//    void addRole_ValidData_should() {
-//        //given
-//        Role newRole = Role.builder().name(RoleType.DOCTOR).build();
-//        roleRepository.add(newRole);
-//
-//        //when
-//        Optional<Role> result = roleRepository.getRoleByName(newRole.getName());
-//
-//        //then
-//        assertEquals(newRole.getName(), result.get().getName());
-//
-//    }
+    @Test
+    void addRole_notValidData_NameNull_shouldThrowRepositoryException() {
+        //given
+        Role newRole = Role.builder().build();
+
+        //when && then
+        assertThrows(RepositoryException.class, () -> roleRepository.add(newRole));
+    }
+
+    @Test
+    void addRole_ValidData_should() {
+        //given
+        Role newRole = Role.builder()
+                .name(RoleType.DOCTOR)
+                .build();
+
+        //when
+        Role result = roleRepository.add(newRole);
+
+        //then
+        assertEquals(newRole.getName(), result.getName());
+
+    }
 
 }
