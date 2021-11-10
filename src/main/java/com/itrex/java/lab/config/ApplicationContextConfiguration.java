@@ -33,6 +33,7 @@ public class ApplicationContextConfiguration {
     String hibernateShowSqlProperty;
     @Value("${hibernate.format_sql.property}")
     String hibernateFormatSql;
+
     @Value("${database.url}")
     private String url;
     @Value("${database.login}")
