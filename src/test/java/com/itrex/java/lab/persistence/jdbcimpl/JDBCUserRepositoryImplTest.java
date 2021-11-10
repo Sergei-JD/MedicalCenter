@@ -1,4 +1,4 @@
-package com.itrex.java.lab.persistence.impl;
+package com.itrex.java.lab.persistence.jdbcimpl;
 
 /*class JDBCUserRepositoryImplTest extends BaseRepositoryTest {
 

@@ -27,24 +27,26 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void getAllVisit_shouldReturnTheNumberOfAllVisits() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
 
-        Visit newVisit = new Visit();
-        newVisit.setDoctor(newUser1);
-        newVisit.setPatient(newUser2);
+        Visit newVisit = Visit.builder()
+                .doctor(newUser1)
+                .patient(newUser2)
+                .build();
 
         visitRepository.add(newVisit);
 
@@ -55,24 +57,26 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void getVisitById_shouldReturnTheUserById() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
 
-        Visit newVisit = new Visit();
-        newVisit.setDoctor(newUser1);
-        newVisit.setPatient(newUser2);
+        Visit newVisit = Visit.builder()
+                .doctor(newUser1)
+                .patient(newUser2)
+                .build();
 
         visitRepository.add(newVisit);
 
@@ -91,23 +95,25 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addVisit_notValidData_doctorNull_shouldThrowRepositoryException() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
 
-        Visit newVisit = new Visit();
-        newVisit.setPatient(newUser2);
+        Visit newVisit = Visit.builder()
+                .patient(newUser2)
+                .build();
 
         //when && then
         assertThrows(RepositoryException.class, () -> visitRepository.add(newVisit));
@@ -116,23 +122,25 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addVisit_notValidData_patientNull_shouldThrowRepositoryException() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
 
-        Visit newVisit = new Visit();
-        newVisit.setDoctor(newUser1);
+        Visit newVisit = Visit.builder()
+                .doctor(newUser1)
+                .build();
 
         //when && then
         assertThrows(RepositoryException.class, () -> visitRepository.add(newVisit));
@@ -141,24 +149,26 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addVisit_ValidData_shouldAddVisit() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
 
-        Visit newVisit = new Visit();
-        newVisit.setDoctor(newUser1);
-        newVisit.setPatient(newUser2);
+        Visit newVisit = Visit.builder()
+                .doctor(newUser1)
+                .patient(newUser2)
+                .build();
 
         //when
         Visit result = visitRepository.add(newVisit);
@@ -193,24 +203,27 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void deleteVisitById_existVisit_shouldDeleteVisit() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        userRepository.add(newUser1);
+        userRepository.add(newUser2);
 
-        User doctor = userRepository.add(newUser1);
-        User patient = userRepository.add(newUser2);
+        Visit newVisit = Visit.builder()
+                .doctor(newUser1)
+                .patient(newUser2)
+                .build();
 
-        Visit newVisit = new Visit();
-        newVisit.setDoctor(doctor);
-        newVisit.setPatient(patient);
         Visit savedVisit = visitRepository.add(newVisit);
 
         //when

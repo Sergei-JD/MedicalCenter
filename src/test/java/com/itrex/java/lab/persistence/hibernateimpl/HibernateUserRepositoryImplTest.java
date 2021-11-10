@@ -64,23 +64,23 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         //then
         assertFalse(result);
         List<User> allUsersAfterDelete = userRepository.getAllUsers();
-        assertTrue(allUsersBeforeDelete.size() == allUsersAfterDelete.size()
-                && allUsersBeforeDelete.containsAll(allUsersAfterDelete));
+        assertTrue(allUsersBeforeDelete.size() == allUsersAfterDelete.size());
     }
 
-    @SneakyThrows
     @Test
     void assignRole_shouldReturnTrueWhenTheUserGetsTheRole() throws RepositoryException {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setLastName("Kobe");
-        newUser.setAge(43);
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
         User savedUser = userRepository.add(newUser);
 
-        Role newRole = new Role();
-        newRole.setName(RoleType.DOCTOR);
+        Role newRole = Role.builder()
+                .name(RoleType.DOCTOR)
+                .build();
         Role savedRole = roleRepository.add(newRole);
 
         List<User> allUserByRole = userRepository.getAllUsersByRole(RoleType.DOCTOR);
@@ -95,15 +95,15 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         assertTrue(allUserByRole.stream().anyMatch(user -> user.getUserId().equals(newUser.getUserId())));
     }
 
-    @SneakyThrows
     @Test
     void getUserById_shouldReturnTheUserById() throws RepositoryException {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setLastName("Kobe");
-        newUser.setAge(43);
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
         userRepository.add(newUser);
 
         //when
@@ -121,13 +121,14 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void getUserByEmail_shouldReturnTheUserByEmail() throws RepositoryException {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setLastName("Kobe");
-        newUser.setAge(43);
-        newUser.setEmail("ivan@email.com");
-        newUser.setPassword("563fh5vf");
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .email("ivan@email.com")
+                .password("563fh5vf")
+                .gender("M")
+                .build();
         userRepository.add(newUser);
 
         //when
@@ -145,17 +146,18 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void getAllUsers_shouldReturnTheNumberOfAllUsers() throws RepositoryException {
         //given
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(43);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Naomi");
-        newUser2.setLastName("Jafris");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(43)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Naomi")
+                .lastName("Jafris")
+                .age(33)
+                .gender("F")
+                .build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
@@ -164,29 +166,28 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         assertEquals(userRepository.getAllUsers().size(), 2);
     }
 
-    @SneakyThrows
     @Test
     void getAllUserByRole_shouldReturnTheNumberAllUsersByRole() throws RepositoryException {
         //given
         int usersCountByRoleDoctor = 1;
 
-        User newUser1 = new User();
-        newUser1.setFirstName("Kurt");
-        newUser1.setLastName("Kobe");
-        newUser1.setAge(55);
-        newUser1.setGender("M");
-
-        User newUser2 = new User();
-        newUser2.setFirstName("Jule");
-        newUser2.setLastName("Jackson");
-        newUser2.setAge(33);
-        newUser2.setGender("F");
+        User newUser1 = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(55)
+                .gender("M")
+                .build();
+        User newUser2 = User.builder()
+                .firstName("Jule")
+                .lastName("Jackson")
+                .age(33)
+                .gender("F").build();
 
         userRepository.add(newUser1);
         userRepository.add(newUser2);
 
-        Role newRole = new Role();
-        newRole.setName(RoleType.DOCTOR);
+        Role newRole = Role.builder()
+                .name(RoleType.DOCTOR).build();
 
         roleRepository.add(newRole);
 
@@ -202,10 +203,11 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addUser_notValidData_genderNull_shouldThrowRepositoryException() {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setLastName("Kobe");
-        newUser.setAge(55);
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(55)
+                .build();
 
         //when && then
         assertThrows(RepositoryException.class, () -> userRepository.add(newUser));
@@ -214,10 +216,11 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addUser_notValidData_ageNull_shouldThrowRepositoryException() {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setLastName("Kobe");
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .gender("M")
+                .build();
 
         //when && then
         assertThrows(RepositoryException.class, () -> userRepository.add(newUser));
@@ -226,10 +229,11 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addUser_notValidData_lastName_Null_shouldThrowRepositoryException() {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setAge(55);
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .age(55)
+                .gender("M")
+                .build();
 
         //when && then
         assertThrows(RepositoryException.class, () -> userRepository.add(newUser));
@@ -238,10 +242,11 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addUser_notValidData_firstNameNull_shouldThrowRepositoryException() {
         //given
-        User newUser = new User();
-        newUser.setLastName("Kobe");
-        newUser.setAge(55);
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .lastName("Kobe")
+                .age(55)
+                .gender("M")
+                .build();
 
         //when && then
         assertThrows(RepositoryException.class, () -> userRepository.add(newUser));
@@ -250,11 +255,12 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void addUser_ValidData_shouldAddUser() throws RepositoryException {
         //given
-        User newUser = new User();
-        newUser.setFirstName("Kurt");
-        newUser.setLastName("Kobe");
-        newUser.setAge(55);
-        newUser.setGender("M");
+        User newUser = User.builder()
+                .firstName("Kurt")
+                .lastName("Kobe")
+                .age(55)
+                .gender("M")
+                .build();
 
         //when
         User result = userRepository.add(newUser);

@@ -13,14 +13,14 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/*class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
+class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired
     @Qualifier("hibernateRoleRepositoryImpl")
     private RoleRepository roleRepository;
 
     @Test
-    void getAllRole_shouldReturnTheRolesByName() throws RepositoryException {
+    void getAllRole_shouldReturnTheRolesByName() {
         //given
         Role newRole1 = Role.builder().name(RoleType.DOCTOR).build();
         Role newRole2 = Role.builder().name(RoleType.PATIENT).build();
@@ -32,40 +32,40 @@ import static org.junit.jupiter.api.Assertions.*;
         assertEquals(roleRepository.getAllRoles().size(), 2);
     }
 
-    @Test
-    void getRoleByName_shouldReturnTheRoleByName() throws RepositoryException {
-        //given
-        Role newRole = Role.builder().name(RoleType.DOCTOR).build();
-        roleRepository.add(newRole);
+//    @Test
+//    void getRoleByName_shouldReturnTheRoleByName() {
+//        //given
+//        Role newRole = Role.builder().name(RoleType.DOCTOR).build();
+//        roleRepository.add(newRole);
+//
+//        //when
+//        Optional<Role> result = roleRepository.getRoleByName(newRole.getName());
+//
+//        //then
+//        assertEquals(newRole.getName(), result.get().getName());
+//    }
+//
+//    @Test
+//    void addRole_notValidData_NameNull_shouldThrowRepositoryException() {
+//        //given
+//        Role newRole = Role.builder().build();
+//
+//        //when && then
+//        assertThrows(RepositoryException.class, () -> roleRepository.add(newRole));
+//    }
 
-        //when
-        Optional<Role> result = roleRepository.getRoleByName(newRole.getName());
+//    @Test
+//    void addRole_ValidData_should() {
+//        //given
+//        Role newRole = Role.builder().name(RoleType.DOCTOR).build();
+//        roleRepository.add(newRole);
+//
+//        //when
+//        Optional<Role> result = roleRepository.getRoleByName(newRole.getName());
+//
+//        //then
+//        assertEquals(newRole.getName(), result.get().getName());
+//
+//    }
 
-        //then
-        assertEquals(newRole.getName(), result.get().getName());
-    }
-
-    @Test
-    void addRole_notValidData_NameNull_shouldThrowRepositoryException() {
-        //given
-        Role newRole = Role.builder().build();
-
-        //when && then
-        assertThrows(RepositoryException.class, () -> roleRepository.add(newRole));
-    }
-
-    @Test
-    void addRole_ValidData_should() throws RepositoryException {
-        //given
-        Role newRole = Role.builder().name(RoleType.DOCTOR).build();
-        roleRepository.add(newRole);
-
-        //when
-        Optional<Role> result = roleRepository.getRoleByName(newRole.getName());
-
-        //then
-        assertEquals(newRole.getName(), result.get().getName());
-
-    }
-
-}*/
+}

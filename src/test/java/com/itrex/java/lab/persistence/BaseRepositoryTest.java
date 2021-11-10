@@ -1,6 +1,5 @@
 package com.itrex.java.lab.persistence;
 
-
 import com.itrex.java.lab.persistence.config.TestRepositoryConfiguration;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.AfterEach;

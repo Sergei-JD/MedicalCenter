@@ -9,6 +9,8 @@ public interface DoctorService {
 
     void createDoctor(CreateDoctorDTO doctorDTO);
 
+    void  deleteDoctor(DoctorDTO doctorDTO);
+
     List<DoctorDTO> getAllDoctors();
 
 }
