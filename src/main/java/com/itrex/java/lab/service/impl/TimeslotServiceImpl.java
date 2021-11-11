@@ -8,6 +8,9 @@ import com.itrex.java.lab.service.TimeslotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class TimeslotServiceImpl implements TimeslotService {
@@ -22,5 +25,13 @@ public class TimeslotServiceImpl implements TimeslotService {
             timeslot.setDate(timeslotDTO.getDate());
         }
         return timeslot;
+    }
+
+    @Override
+    public List<TimeslotDTO> getAllTimeslot() {
+        List<Timeslot> timeslots = timeslotRepository.getAllTimeslots();
+        return timeslots.stream()
+                .map(timeslotConverter::toTimeslotDTO)
+                .collect(Collectors.toList());
     }
 }

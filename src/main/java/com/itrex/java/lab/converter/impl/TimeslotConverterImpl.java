@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 public class TimeslotConverterImpl implements TimeslotConverter {
 
     @Override
-    public Timeslot toTimeslot(TimeslotDTO timeslotDTO) {
-        return Timeslot.builder()
-                .startTime(timeslotDTO.getStartTime())
-                .date(timeslotDTO.getDate())
+    public TimeslotDTO toTimeslotDTO(Timeslot timeslot) {
+        return TimeslotDTO.builder()
+                .startTime(timeslot.getStartTime())
+                .date(timeslot.getDate())
                 .build();
     }
 

@@ -5,5 +5,5 @@ import com.itrex.java.lab.persistence.entity.Timeslot;
 
 public interface TimeslotConverter {
 
-    Timeslot toTimeslot(TimeslotDTO timeslotDTO);
+    TimeslotDTO toTimeslotDTO(Timeslot timeslot);
 }
