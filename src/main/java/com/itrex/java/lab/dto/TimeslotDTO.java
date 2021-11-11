@@ -10,7 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
-public class CreateTimeslotDTO {
+public class TimeslotDTO {
 
     private Time startTime;
     private Date date;

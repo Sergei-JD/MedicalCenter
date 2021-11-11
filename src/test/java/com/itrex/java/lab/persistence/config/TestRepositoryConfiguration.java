@@ -14,10 +14,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @ComponentScan("com.itrex.java.lab.persistence")
 @PropertySource("classpath:/test.properties")
+@EnableTransactionManagement
 public class TestRepositoryConfiguration {
 
     @Value("${database.driver}")
