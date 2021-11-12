@@ -17,8 +17,8 @@ VALUES (6,'Svetlana', 'Svetlova', 29, 'svetlana@email.com', '32726781', 'F', 913
 -- -----------------------------------------------------
 -- Insert table role
 -- -----------------------------------------------------
-INSERT INTO role(role_id, name) VALUES (1, 'Doctor');
-INSERT INTO role(role_id, name) VALUES (2, 'Patient');
+INSERT INTO role(role_id, name) VALUES (1, 'DOCTOR');
+INSERT INTO role(role_id, name) VALUES (2, 'PATIENT');
 
 -- -----------------------------------------------------
 -- Insert table user_role

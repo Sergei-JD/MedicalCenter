@@ -1,4 +1,4 @@
-package com.itrex.java.lab.config;
+package com.itrex.java.lab.persistence.config;
 
 import java.util.Properties;
 import javax.sql.DataSource;
@@ -17,10 +17,10 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@ComponentScan("com.itrex.java.lab")
-@PropertySource("classpath:/application.properties")
+@ComponentScan("com.itrex.java.lab.persistence")
+@PropertySource("classpath:/test.properties")
 @EnableTransactionManagement
-public class ApplicationContextConfiguration {
+public class TestRepositoryConfiguration {
 
     @Value("${database.driver}")
     String driverClassName;
@@ -90,11 +90,10 @@ public class ApplicationContextConfiguration {
 
     private Properties hibernateProperties() {
         Properties hibernateProperties = new Properties();
-        hibernateProperties.setProperty("hibernate.dialect", hibernateDialect);
-        hibernateProperties.setProperty("show_sql", hibernateShowSqlProperty);
-        hibernateProperties.setProperty("format_sql", hibernateFormatSql);
+        hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        hibernateProperties.setProperty("show_sql", "true");
+        hibernateProperties.setProperty("format_sql", "true");
 
         return hibernateProperties;
     }
-
 }
