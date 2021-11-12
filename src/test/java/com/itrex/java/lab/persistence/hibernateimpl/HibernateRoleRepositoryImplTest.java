@@ -9,8 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
@@ -31,21 +29,6 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
         //when && then
         assertEquals(roleRepository.getAllRoles().size(), 2);
     }
-
-//    @Test
-//    void getRoleByName_shouldReturnTheRoleByName() {
-//        //given
-//        Role newRole = Role.builder()
-//                .name(RoleType.DOCTOR)
-//                .build();
-//        roleRepository.add(newRole);
-//
-//        //when
-//        Optional<Role> result = roleRepository.getRoleByName(newRole.getName());
-//
-//        //then
-//        assertEquals(newRole.getName(), result.get().getName());
-//    }
 
     @Test
     void addRole_notValidData_NameNull_shouldThrowRepositoryException() {

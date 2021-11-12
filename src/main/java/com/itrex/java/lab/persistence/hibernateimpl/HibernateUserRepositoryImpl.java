@@ -1,23 +1,21 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.repository.UserRepository;
-import com.itrex.java.lab.exception.RepositoryException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
+import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.exception.RepositoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import com.itrex.java.lab.persistence.repository.UserRepository;
 
+import java.util.Set;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
-@Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateUserRepositoryImpl implements UserRepository {
 
     private final SessionFactory sessionFactory;
@@ -34,9 +32,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         List<User> users;
-        try(Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             users = session.createQuery(FIND_ALL_USERS_QUERY, User.class).list();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get all users.\n" + ex);
@@ -46,10 +46,12 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<User> getAllUsersByRole(RoleType role) {
         List<User> users;
-        try(Session session = sessionFactory.openSession()) {
-            users = session.createQuery(SELECT_USER_BY_ROLE_QUERY, User.class).setParameter("name", role.name()).list();
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            users = session.createQuery(SELECT_USER_BY_ROLE_QUERY, User.class).setParameter("name", role).list();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get all users by role.\n" + role);
         }
@@ -58,9 +60,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> getUserById(int userId) {
         User user;
-        try(Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             user = session.find(User.class, userId);
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get user by id " + userId + ".\n" + ex);
@@ -70,9 +74,11 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<User> getUserByEmail(String email) {
         User user;
-        try(Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
             user = (User) session.createQuery(SELECT_USER_BY_EMAIL_QUERY)
                     .setParameter("email", email)
                     .uniqueResult();
@@ -84,59 +90,56 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public boolean deleteUserById(int userId) {
         boolean isDeleted = false;
-        try(Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            session.createSQLQuery(DELETE_USER_ID_FROM_USER_ROLE_QUERY)
+              .setParameter(1, userId).executeUpdate();
 
-            try {
-                session.createSQLQuery(DELETE_USER_ID_FROM_USER_ROLE_QUERY)
-                        .setParameter(1, userId).executeUpdate();
-                User user = session.find(User.class, userId);
-                if (user != null) {
-                    session.delete(user);
-                    isDeleted = true;
-                }
-            } catch (Exception ex) {
-                throw new RepositoryException("Failed to delete user by id " + userId + ".\n" + ex);
+            User user = session.find(User.class, userId);
+            if (user != null) {
+                session.delete(user);
+                isDeleted = true;
             }
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to delete user by id " + userId + ".\n" + ex);
         }
 
         return isDeleted;
     }
 
     @Override
+    @Transactional
     public User add(User user) {
-        try(Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            int newUserId = (Integer) session.save("User", user);
 
-            try {
-                int newUserId = (Integer) session.save("User", user);
-                User addedUser = session.find(User.class, newUserId);
-
-                return addedUser;
-            } catch (Exception ex) {
-                throw new RepositoryException("Failed to add user.\n" + ex);
-            }
+            return session.find(User.class, newUserId);
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to add user.\n" + ex);
         }
     }
 
     @Override
+    @Transactional
     public boolean assignRole(User user, Role role) {
-        try(Session session = sessionFactory.openSession()) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            user = session.find(User.class, user.getUserId());
+            role = session.find(Role.class, role.getRoleId());
 
-            try {
-                user = session.find(User.class, user.getUserId());
-                role = session.find(Role.class, role.getRoleId());
-
-                if (user.getRoles() != null) {
-                    user.getRoles().add(role);
-                } else {
-                    user.setRoles(Set.of(role));
-                }
-
-                return true;
-            } catch (Exception ex) {
-                throw new RepositoryException("Failed to add role to user.\n" + ex);
+            if (user.getRoles() != null) {
+                user.getRoles().add(role);
+            } else {
+                user.setRoles(Set.of(role));
             }
+
+            return true;
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to add role to user.\n" + ex);
         }
     }
 

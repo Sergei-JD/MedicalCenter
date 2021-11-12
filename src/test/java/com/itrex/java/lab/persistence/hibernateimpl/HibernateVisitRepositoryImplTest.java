@@ -1,12 +1,12 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Visit;
-import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import com.itrex.java.lab.persistence.repository.UserRepository;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 

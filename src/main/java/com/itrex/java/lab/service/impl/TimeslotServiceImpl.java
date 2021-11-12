@@ -1,12 +1,12 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.converter.TimeslotConverter;
-import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-import com.itrex.java.lab.service.TimeslotService;
 import lombok.RequiredArgsConstructor;
+import com.itrex.java.lab.dto.TimeslotDTO;
 import org.springframework.stereotype.Service;
+import com.itrex.java.lab.service.TimeslotService;
+import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.converter.TimeslotConverter;
+import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;

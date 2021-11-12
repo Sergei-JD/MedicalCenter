@@ -1,12 +1,12 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -29,7 +29,6 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
                 .date(new Date(2021-10-10))
                 .office(505)
                 .build();
-
         Timeslot newTimeslot2 = Timeslot.builder()
                 .startTime(new Time(17-20))
                 .date(new Date(2021-10-10))
