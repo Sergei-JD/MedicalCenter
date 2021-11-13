@@ -9,10 +9,12 @@ public interface DoctorService {
 
     void createDoctor(CreateDoctorDTO doctorDTO);
 
-    void deleteDoctor(DoctorDTO doctorDTO);
+    boolean deleteDoctor(int doctorId);
 
 //    void scheduleDoctor(DoctorDTO doctorDTO, TimeslotDTO timeslotDTO);
 
     List<DoctorDTO> getAllDoctors();
+
+    DoctorDTO getDoctorById(int doctorId);
 
 }

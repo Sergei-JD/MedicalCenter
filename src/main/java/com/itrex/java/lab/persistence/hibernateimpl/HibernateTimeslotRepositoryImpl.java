@@ -33,7 +33,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
             Session session = sessionFactory.getCurrentSession();
             timeslots = session.createQuery(FIND_ALL_TIMESLOT_QUERY, Timeslot.class).list();
         } catch (Exception ex) {
-            throw new RepositoryException("Request to get all timeslots failed.\n" + ex);
+            throw new RepositoryException("Failed to get all timeslots.\n" + ex);
         }
 
         return timeslots;

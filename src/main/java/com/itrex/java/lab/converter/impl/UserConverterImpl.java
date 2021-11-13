@@ -1,12 +1,12 @@
 package com.itrex.java.lab.converter.impl;
 
-import com.itrex.java.lab.converter.UserConverter;
-import com.itrex.java.lab.dto.CreateDoctorDTO;
-import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.dto.CreateDoctorDTO;
+import com.itrex.java.lab.dto.CreatePatientDTO;
 import org.springframework.stereotype.Component;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.converter.UserConverter;
 
 @Component
 public class UserConverterImpl implements UserConverter {
