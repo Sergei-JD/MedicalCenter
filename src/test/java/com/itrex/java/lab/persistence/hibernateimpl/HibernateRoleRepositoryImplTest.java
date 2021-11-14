@@ -30,6 +30,22 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
         assertEquals(roleRepository.getAllRoles().size(), 2);
     }
 
+        @Test
+    void getRoleByName_shouldReturnTheRoleByName() {
+        //given
+        Role newRole = Role.builder()
+                .name(RoleType.DOCTOR)
+                .build();
+
+        roleRepository.add(newRole);
+
+        //when
+        Role result = roleRepository.getRoleByType(RoleType.DOCTOR);
+
+        //then
+        assertEquals(newRole.getName(), result.getName());
+    }
+
     @Test
     void addRole_notValidData_NameNull_shouldThrowRepositoryException() {
         //given
@@ -53,5 +69,4 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
         assertEquals(newRole.getName(), result.getName());
 
     }
-
 }

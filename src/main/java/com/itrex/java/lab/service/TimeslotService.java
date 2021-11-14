@@ -1,14 +1,20 @@
 package com.itrex.java.lab.service;
 
 import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.dto.CreateTimeslotDTO;
 
 import java.util.List;
 
 public interface TimeslotService {
 
-    Timeslot updateTimeslot(Timeslot timeslot, TimeslotDTO timeslotDTO);
+    void createTimeslot(TimeslotDTO timeslotDTO);
 
-    List<TimeslotDTO> getAllTimeslot();
+    boolean deleteTimeslot(int timeslotId);
+
+    List<CreateTimeslotDTO> getAllTimeslot();
+
+    CreateTimeslotDTO getTimeslotById(int timeslotId);
+
+    TimeslotDTO updateTimeslot(TimeslotDTO timeslotDTO);
 
 }

@@ -9,10 +9,12 @@ public interface TimeslotRepository {
 
     List<Timeslot> getAllTimeslots();
 
-    Optional<Timeslot> getTimeslotById(int timeslotId);
+    Optional<Timeslot> getTimeslotById(Integer timeslotId);
 
     Timeslot add(Timeslot timeslot);
 
-    boolean deleteTimeslotById(int timeslotId);
+    void update(Timeslot timeslot);
+
+    boolean deleteTimeslotById(Integer timeslotId);
 
 }

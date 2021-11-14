@@ -1,18 +1,14 @@
 package com.itrex.java.lab.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.sql.Time;
-import java.util.Date;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
-@Builder
-public class TimeslotDTO {
+@SuperBuilder
+@AllArgsConstructor
+public class TimeslotDTO extends CreateTimeslotDTO {
 
-    private Time startTime;
-    private Date date;
+    private Integer timeslotId;
 
 }

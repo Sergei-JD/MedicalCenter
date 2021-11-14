@@ -29,6 +29,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
                 .date(new Date(2021-10-10))
                 .office(505)
                 .build();
+
         Timeslot newTimeslot2 = Timeslot.builder()
                 .startTime(new Time(17-20))
                 .date(new Date(2021-10-10))
@@ -50,6 +51,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
                 .date(new Date(2021-10-10))
                 .office(505)
                 .build();
+
         timeslotRepository.add(newTimeslot);
 
         //when
@@ -123,7 +125,9 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
                 .date(new Date(2021-10-10))
                 .office(505)
                 .build();
+
         timeslotRepository.add(newTimeslot);
+
         List<Timeslot> allTimeslotsBeforeDelete = timeslotRepository.getAllTimeslots();
         assertTrue(allTimeslotsBeforeDelete.stream().noneMatch(timeslot -> timeslot.getTimeslotId().equals(timeslotId)));
 
@@ -132,6 +136,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
 
         //then
         assertFalse(result);
+
         List<Timeslot> allTimeslotsAfterDelete = timeslotRepository.getAllTimeslots();
         assertTrue(allTimeslotsBeforeDelete.size() == allTimeslotsAfterDelete.size()
                 && allTimeslotsBeforeDelete.containsAll(allTimeslotsAfterDelete));
@@ -145,6 +150,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
                 .date(new Date(2021-10-10))
                 .office(505)
                 .build();
+
         timeslotRepository.add(newTimeslot);
 
         //when
@@ -153,5 +159,4 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
         //then
         assertTrue(result);
     }
-
 }

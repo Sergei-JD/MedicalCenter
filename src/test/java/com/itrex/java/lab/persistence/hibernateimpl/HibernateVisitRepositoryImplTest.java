@@ -33,6 +33,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -63,6 +64,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -101,6 +103,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -128,6 +131,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -155,6 +159,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -195,6 +200,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
 
         //then
         assertFalse(result);
+
         List<Visit> allVisitsAfterDelete = visitRepository.getAllVisits();
         assertTrue(allVisitsBeforeDelete.size() == allVisitsAfterDelete.size()
                 && allVisitsBeforeDelete.containsAll(allVisitsAfterDelete));
@@ -209,6 +215,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -232,5 +239,4 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
         //then
         assertTrue(result);
     }
-
 }

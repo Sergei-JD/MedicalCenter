@@ -1,12 +1,9 @@
 package com.itrex.java.lab.converter.impl;
 
-import com.itrex.java.lab.converter.UserConverter;
-import com.itrex.java.lab.dto.CreateDoctorDTO;
-import com.itrex.java.lab.dto.CreatePatientDTO;
-import com.itrex.java.lab.dto.DoctorDTO;
-import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.dto.*;
 import org.springframework.stereotype.Component;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.converter.UserConverter;
 
 @Component
 public class UserConverterImpl implements UserConverter {
@@ -25,8 +22,21 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public DoctorDTO toDoctorDto(User user) {
+    public DoctorDTO toDoctorDTO(User doctor) {
         return DoctorDTO.builder()
+                .firstName(doctor.getFirstName())
+                .lastName(doctor.getLastName())
+                .age(doctor.getAge())
+                .email(doctor.getEmail())
+                .password(doctor.getPassword())
+                .gender(doctor.getGender())
+                .phoneNum(doctor.getPhoneNum())
+                .build();
+    }
+
+    @Override
+    public DoctorViewDTO toDoctorViewDTO(User user) {
+        return DoctorViewDTO.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .build();
@@ -46,8 +56,21 @@ public class UserConverterImpl implements UserConverter {
     }
 
     @Override
-    public PatientDTO toPatientDto(User user) {
+    public PatientDTO toPatientDTO(User patient) {
         return PatientDTO.builder()
+                .firstName(patient.getFirstName())
+                .lastName(patient.getLastName())
+                .age(patient.getAge())
+                .email(patient.getEmail())
+                .password(patient.getPassword())
+                .gender(patient.getGender())
+                .phoneNum(patient.getPhoneNum())
+                .build();
+    }
+
+    @Override
+    public PatientViewDTO toPatientViewDTO(User user) {
+        return PatientViewDTO.builder()
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .build();

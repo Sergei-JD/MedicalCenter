@@ -1,5 +1,6 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import com.itrex.java.lab.persistence.entity.RoleType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -40,18 +41,15 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Optional<Role> getRoleByName(String name) {
-        Role role;
+    public Role getRoleByType(RoleType role) {
         try {
             Session session = sessionFactory.getCurrentSession();
-            role = (Role) session.createQuery(FIND_ROLE_BY_NAME_QUERY)
-                    .setParameter("name", name)
+            return (Role) session.createQuery(FIND_ROLE_BY_NAME_QUERY)
+                    .setParameter("name", role)
                     .uniqueResult();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get role named " + name + ".\n" + ex);
+            throw new RepositoryException("Failed to get role named " + role.name() + ".\n" + ex);
         }
-
-        return Optional.ofNullable(role);
     }
 
     @Override
