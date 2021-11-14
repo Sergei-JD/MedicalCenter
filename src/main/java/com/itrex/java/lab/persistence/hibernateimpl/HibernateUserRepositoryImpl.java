@@ -61,7 +61,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<User> getUserById(int userId) {
+    public Optional<User> getUserById(Integer userId) {
         User user;
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -91,7 +91,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
     @Override
     @Transactional
-    public boolean deleteUserById(int userId) {
+    public boolean deleteUserById(Integer userId) {
         boolean isDeleted = false;
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -143,4 +143,13 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         }
     }
 
+    @Override
+    public void update(User user) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            session.update(user);
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to update user.\n" + ex);
+        }
+    }
 }

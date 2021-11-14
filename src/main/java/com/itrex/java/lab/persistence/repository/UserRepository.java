@@ -13,11 +13,13 @@ public interface UserRepository {
 
     List<User> getAllUsersByRole(RoleType role);
 
-    Optional<User> getUserById(int userId);
+    Optional<User> getUserById(Integer userId);
 
     Optional<User> getUserByEmail(String email);
 
-    boolean deleteUserById(int userId);
+    void update(User user);
+
+    boolean deleteUserById(Integer userId);
 
     User add(User user);
 

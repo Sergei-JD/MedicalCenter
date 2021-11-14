@@ -40,7 +40,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     }
 
     @Override
-    public Optional<Timeslot> getTimeslotById(int timeslotId) {
+    public Optional<Timeslot> getTimeslotById(Integer timeslotId) {
         Timeslot timeslot;
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -65,7 +65,17 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     }
 
     @Override
-    public boolean deleteTimeslotById(int timeslotId) {
+    public void update(Timeslot timeslot) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+           session.update(timeslot);
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to update timeslot.\n" + ex);
+        }
+    }
+
+    @Override
+    public boolean deleteTimeslotById(Integer timeslotId) {
         boolean isDeleted = false;
         try {
             Session session = sessionFactory.getCurrentSession();

@@ -9,10 +9,12 @@ public interface VisitRepository {
 
     List<Visit> getAllVisits();
 
-    Optional<Visit> getVisitById(int visitId);
+    Optional<Visit> getVisitById(Integer visitId);
 
     Visit add(Visit visit);
 
-    boolean deleteVisitById(int visitId);
+    void update(Visit visit);
+
+    boolean deleteVisitById(Integer visitId);
 
 }

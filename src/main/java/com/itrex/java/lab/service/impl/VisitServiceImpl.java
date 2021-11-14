@@ -1,9 +1,7 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
-import com.itrex.java.lab.persistence.repository.UserRepository;
+import com.itrex.java.lab.dto.*;
 import lombok.RequiredArgsConstructor;
-import com.itrex.java.lab.dto.VisitDTO;
 import org.springframework.stereotype.Service;
 import com.itrex.java.lab.service.VisitService;
 import com.itrex.java.lab.persistence.entity.Visit;
@@ -32,12 +30,12 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public List<VisitDTO> getAllVisit() {
+    public List<VisitViewDTO> getAllVisit() {
         try {
             List<Visit> visits = visitRepository.getAllVisits();
 
             return visits.stream()
-                    .map(visitConverter::toVisitDTO)
+                    .map(visitConverter::toVisitViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all visits.\n" + ex);
@@ -45,12 +43,12 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public VisitDTO getVisitById(int visitId) {
-        VisitDTO visitDTO = null;
+    public VisitViewDTO getVisitById(int visitId) {
+        VisitViewDTO visitDTO = null;
         try {
             Optional<Visit> visit = visitRepository.getVisitById(visitId);
             if (visit.isPresent()) {
-                visitDTO = visitConverter.toVisitDTO(visit.get());
+                visitDTO = visitConverter.toVisitViewDTO(visit.get());
             }
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get visit by id " + visitId + ".\n" + ex);
@@ -66,5 +64,50 @@ public class VisitServiceImpl implements VisitService {
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to delete visit by id" + visitId + ".\n" + ex);
         }
+    }
+
+    @Override
+    public VisitDTO updateVisit(VisitDTO visitDTO) {
+        if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
+            throw new ServiceException("Failed to update visit. Not valid visitDTO.");
+        }
+        Visit visit = visitRepository.getVisitById(visitDTO.getVisitId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit no such visit"));
+
+        visit.setDoctor(visitDTO.getDoctorId());
+        visit.setPatient(visitDTO.getPatientId());
+        visit.setTimeslot(visitDTO.getTimeslotId());
+        visit.setComment(visitDTO.getComment());
+
+        try {
+            visitRepository.update(visit);
+        } catch (RepositoryException ex) {
+            throw new ServiceException("Failed to update visit.\n" + ex);
+        }
+
+        return visitConverter.toVisitDTO(visit);
+    }
+
+    @Override
+    public VisitHistoryDTO updateVisitHistory(VisitDTO visitDTO) {
+        if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
+            throw new ServiceException("Failed to update visit history. Not valid visitDTO.");
+        }
+        Visit visit = visitRepository.getVisitById(visitDTO.getVisitId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit history no such visit"));
+
+        visit.setComment(visitDTO.getComment());
+
+        try {
+            visitRepository.update(visit);
+        } catch (RepositoryException ex) {
+            throw new ServiceException("Failed to update visit history.\n" + ex);
+        }
+
+        return visitConverter.toVisitHistoryDTO(visit);
+    }
+
+    private boolean isValidVisitDTO(CreateVisitDTO visitDTO) {
+        return visitDTO != null && visitDTO.getDoctorId() != null && visitDTO.getPatientId() != null;
     }
 }

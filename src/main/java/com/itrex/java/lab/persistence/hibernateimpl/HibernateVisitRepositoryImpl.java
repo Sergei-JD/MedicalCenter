@@ -40,7 +40,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
-    public Optional<Visit> getVisitById(int visitId) {
+    public Optional<Visit> getVisitById(Integer visitId) {
         try {
             Session session = sessionFactory.getCurrentSession();
             return Optional.ofNullable(session.find(Visit.class, visitId));
@@ -62,7 +62,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
-    public boolean deleteVisitById(int visitId) {
+    public boolean deleteVisitById(Integer visitId) {
         boolean isDeleted = false;
         try {
             Session session = sessionFactory.getCurrentSession();
@@ -77,6 +77,16 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
         }
 
         return isDeleted;
+    }
+
+    @Override
+    public void update(Visit visit) {
+        try {
+            Session session = sessionFactory.getCurrentSession();
+            session.update(visit);
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to update visit.\n" + ex);
+        }
     }
 
 }

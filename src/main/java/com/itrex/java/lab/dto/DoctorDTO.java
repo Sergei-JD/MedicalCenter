@@ -1,15 +1,16 @@
 package com.itrex.java.lab.dto;
 
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
-@Setter
 @Getter
-@Builder
-public class DoctorDTO {
+@Setter
+@SuperBuilder
+@AllArgsConstructor
+public class DoctorDTO extends CreateDoctorDTO {
 
-    private String firstName;
-    private String lastName;
+    private Integer userId;
 
 }

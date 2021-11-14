@@ -34,6 +34,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User savedUser = userRepository.add(newUser);
 
         //when
@@ -53,7 +54,9 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         userRepository.add(newUser);
+
         List<User> allUsersBeforeDelete = userRepository.getAllUsers();
         assertTrue(allUsersBeforeDelete.stream().noneMatch(user -> user.getUserId().equals(userId)));
 
@@ -62,6 +65,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
 
         //then
         assertFalse(result);
+
         List<User> allUsersAfterDelete = userRepository.getAllUsers();
         assertTrue(allUsersBeforeDelete.size() == allUsersAfterDelete.size());
     }
@@ -75,11 +79,13 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User savedUser = userRepository.add(newUser);
 
         Role newRole = Role.builder()
                 .name(RoleType.DOCTOR)
                 .build();
+
         Role savedRole = roleRepository.add(newRole);
 
         List<User> allUserByRole = userRepository.getAllUsersByRole(RoleType.DOCTOR);
@@ -90,6 +96,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
 
         //then
         assertTrue(result);
+
         allUserByRole = userRepository.getAllUsersByRole(newRole.getName());
         assertTrue(allUserByRole.stream().anyMatch(user -> user.getUserId().equals(newUser.getUserId())));
     }
@@ -103,6 +110,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         userRepository.add(newUser);
 
         //when
@@ -128,6 +136,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .password("563fh5vf")
                 .gender("M")
                 .build();
+
         userRepository.add(newUser);
 
         //when
@@ -151,6 +160,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .age(43)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Naomi")
                 .lastName("Jafris")
@@ -176,6 +186,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 .age(55)
                 .gender("M")
                 .build();
+
         User newUser2 = User.builder()
                 .firstName("Jule")
                 .lastName("Jackson")
@@ -186,7 +197,8 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         userRepository.add(newUser2);
 
         Role newRole = Role.builder()
-                .name(RoleType.DOCTOR).build();
+                .name(RoleType.DOCTOR)
+                .build();
 
         roleRepository.add(newRole);
 
@@ -272,5 +284,4 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
                 () -> assertEquals("M", result.getGender())
         );
     }
-
 }
