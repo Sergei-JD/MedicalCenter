@@ -4,19 +4,16 @@ import java.util.Properties;
 import javax.sql.DataSource;
 import org.flywaydb.core.Flyway;
 import org.h2.jdbcx.JdbcConnectionPool;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.*;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableAspectJAutoProxy
 @ComponentScan("com.itrex.java.lab")
 @PropertySource("classpath:/application.properties")
 @EnableTransactionManagement

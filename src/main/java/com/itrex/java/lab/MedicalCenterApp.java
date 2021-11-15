@@ -1,7 +1,6 @@
 package com.itrex.java.lab;
 
 import org.springframework.context.ApplicationContext;
-import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.UserRepository;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 import com.itrex.java.lab.config.ApplicationContextConfiguration;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 public class MedicalCenterApp {
 
-    public static void main(String[] args) throws RepositoryException {
+    public static void main(String[] args) {
 
         ApplicationContext ctx = new AnnotationConfigApplicationContext(ApplicationContextConfiguration.class);
 
