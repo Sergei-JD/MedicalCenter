@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional

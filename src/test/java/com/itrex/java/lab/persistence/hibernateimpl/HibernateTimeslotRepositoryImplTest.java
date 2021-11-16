@@ -40,7 +40,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
         timeslotRepository.add(newTimeslot2);
 
         //when && then
-        assertEquals(timeslotRepository.getAllTimeslots().size(), 2);
+        assertEquals(2, timeslotRepository.getAllTimeslots().size());
     }
 
     @Test

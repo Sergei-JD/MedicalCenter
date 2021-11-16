@@ -16,6 +16,7 @@ public class SuccessfulExecuteRepositoryGetMethodAdvice {
 
     @Pointcut("execution(* com.itrex.java.lab.persistence.hibernateimpl.*.get*(..))")
     public void getMethodInThePersistenceLayer() {
+        // Do nothing
     }
 
     @AfterReturning(value = "getMethodInThePersistenceLayer()")

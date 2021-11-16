@@ -52,7 +52,7 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
         visitRepository.add(newVisit);
 
         //when && then
-        assertEquals(visitRepository.getAllVisits().size(), 1);
+        assertEquals( 1, visitRepository.getAllVisits().size());
     }
 
     @Test
@@ -86,12 +86,12 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
         Optional<Visit> result = visitRepository.getVisitById(newVisit.getVisitId());
 
         //then
-        assertAll(
+        result.ifPresent(visit -> assertAll(
                 () -> assertEquals("Kurt", result.get().getDoctor().getFirstName()),
                 () -> assertEquals("Kobe", result.get().getDoctor().getLastName()),
                 () -> assertEquals("Naomi", result.get().getPatient().getFirstName()),
                 () -> assertEquals("Jafris", result.get().getPatient().getLastName())
-        );
+        ));
     }
 
     @Test
@@ -185,7 +185,6 @@ class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
                 () -> assertEquals("Naomi", result.getPatient().getFirstName()),
                 () -> assertEquals("Jafris", result.getPatient().getLastName())
         );
-//        assertEquals(newVisit, result);
     }
 
     @Test

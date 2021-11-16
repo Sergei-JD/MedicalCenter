@@ -21,23 +21,31 @@ public class ApplicationContextConfiguration {
 
     @Value("${database.driver}")
     String driverClassName;
+
     @Value("${hibernate.hbm2ddl.auto.property}")
     String hibernateHbm2ddlAutoProperty;
+
     @Value("${hibernate.dialect.property}")
     String hibernateDialect;
+
     @Value("${hibernate.show_sql.property}")
     String hibernateShowSqlProperty;
+
     @Value("${hibernate.format_sql.property}")
     String hibernateFormatSql;
 
     @Value("${database.url}")
     private String url;
+
     @Value("${database.login}")
     private String login;
+
     @Value("${database.password}")
     private String password;
+
     @Value("${database.migration.location}")
     private String migrationLocation;
+
     @Value("${entity.package.to.scan}")
     private String entityPackageToScan;
 

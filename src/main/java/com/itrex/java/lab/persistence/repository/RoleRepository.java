@@ -4,7 +4,6 @@ import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface RoleRepository {
 

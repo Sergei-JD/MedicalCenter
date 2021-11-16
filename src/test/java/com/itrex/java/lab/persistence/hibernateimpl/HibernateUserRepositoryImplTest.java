@@ -67,7 +67,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         assertFalse(result);
 
         List<User> allUsersAfterDelete = userRepository.getAllUsers();
-        assertTrue(allUsersBeforeDelete.size() == allUsersAfterDelete.size());
+        assertEquals(allUsersBeforeDelete.size(), allUsersAfterDelete.size());
     }
 
     @Test
@@ -117,12 +117,12 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         Optional<User> result = userRepository.getUserById(newUser.getUserId());
 
         //then
-        assertAll(
+        result.ifPresent(user -> assertAll(
                 () -> assertEquals("Kurt", result.get().getFirstName()),
                 () -> assertEquals("Kobe", result.get().getLastName()),
                 () -> assertEquals(43, result.get().getAge()),
                 () -> assertEquals("M", result.get().getGender())
-        );
+        ));
     }
 
     @Test
@@ -143,12 +143,12 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         Optional<User> result = userRepository.getUserByEmail(newUser.getEmail());
 
         //then
-        assertAll(
+        result.ifPresent(user -> assertAll(
                 () -> assertEquals("Kurt", result.get().getFirstName()),
                 () -> assertEquals("Kobe", result.get().getLastName()),
                 () -> assertEquals(43, result.get().getAge()),
                 () -> assertEquals("M", result.get().getGender())
-        );
+        ));
     }
 
     @Test
@@ -172,7 +172,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
         userRepository.add(newUser2);
 
         //when && then
-        assertEquals(userRepository.getAllUsers().size(), 2);
+        assertEquals(2, userRepository.getAllUsers().size());
     }
 
     @Test
@@ -208,7 +208,7 @@ class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
 
         //then
         assertTrue(result);
-        assertEquals(allUserByRole.size(), usersCountByRoleDoctor);
+        assertEquals(usersCountByRoleDoctor, allUserByRole.size());
     }
 
     @Test

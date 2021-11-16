@@ -68,7 +68,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     public void update(Timeslot timeslot) {
         try {
             Session session = sessionFactory.getCurrentSession();
-           session.update(timeslot);
+            session.update(timeslot);
         } catch (Exception ex) {
             throw new RepositoryException("Failed to update timeslot.\n" + ex);
         }

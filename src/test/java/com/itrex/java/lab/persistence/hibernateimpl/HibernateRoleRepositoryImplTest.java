@@ -27,7 +27,7 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
         roleRepository.add(newRole2);
 
         //when && then
-        assertEquals(roleRepository.getAllRoles().size(), 2);
+        assertEquals( 2, roleRepository.getAllRoles().size());
     }
 
         @Test
