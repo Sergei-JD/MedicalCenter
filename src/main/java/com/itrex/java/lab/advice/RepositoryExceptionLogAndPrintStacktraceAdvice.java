@@ -1,6 +1,5 @@
 package com.itrex.java.lab.advice;
 
-import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,8 +19,7 @@ public class RepositoryExceptionLogAndPrintStacktraceAdvice {
     public void logException(JoinPoint joinPoint, Exception exception) {
 
         log.error(String.format(EXCEPTION_MESSAGE_LOG, joinPoint.getSignature().getName(),
-                exception.getMessage()));
-        log.error(Arrays.toString(exception.getStackTrace()));
+                exception.getMessage()), exception);
     }
 
 }

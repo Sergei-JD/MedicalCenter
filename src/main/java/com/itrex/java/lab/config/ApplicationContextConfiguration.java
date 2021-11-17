@@ -1,8 +1,14 @@
 package com.itrex.java.lab.config;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Properties;
 import javax.sql.DataSource;
+
+import org.apache.log4j.PropertyConfigurator;
 import org.flywaydb.core.Flyway;
+import lombok.extern.slf4j.Slf4j;
 import org.h2.jdbcx.JdbcConnectionPool;
 import org.springframework.context.annotation.*;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
@@ -12,6 +18,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+@Slf4j
 @Configuration
 @EnableAspectJAutoProxy
 @ComponentScan("com.itrex.java.lab")
@@ -100,6 +107,38 @@ public class ApplicationContextConfiguration {
         hibernateProperties.setProperty("format_sql", hibernateFormatSql);
 
         return hibernateProperties;
+    }
+
+    @Bean
+    @Profile(Profiles.DEV)
+    public void devLogger() {
+
+        String log4JPropertyFile = "src/main/resources/dev_log4j.properties";
+        Properties p = new Properties();
+
+        try (FileInputStream fileInputStream = new FileInputStream(log4JPropertyFile)) {
+            p.load(fileInputStream);
+            PropertyConfigurator.configure(p);
+            log.info("dev.properties file received successfully!");
+        } catch (IOException ex) {
+            log.error("dev.properties file is not available!");
+        }
+    }
+
+    @Bean
+    @Profile(Profiles.PROD)
+    public void prodLogger() {
+
+        String log4JPropertyFile = "src/main/resources/prod_log4j.properties";
+        Properties p = new Properties();
+
+        try (FileInputStream fileInputStream = new FileInputStream(log4JPropertyFile)) {
+            p.load(fileInputStream);
+            PropertyConfigurator.configure(p);
+            log.info("prod.properties file received successfully!");
+        } catch (IOException ex) {
+            log.error("prod.properties file is not available!");
+        }
     }
 
 }

@@ -1,10 +1,10 @@
 package com.itrex.java.lab.advice;
 
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -19,10 +19,13 @@ public class SuccessfulExecuteRepositoryGetMethodAdvice {
         // Do nothing
     }
 
-    @AfterReturning(value = "getMethodInThePersistenceLayer()")
-    public void successfulResultOfExecutingRepositoryMethod(JoinPoint joinPoint) {
-
+    @Around(value = "getMethodInThePersistenceLayer()")
+    public Object successfulResultOfExecutingRepositoryMethod(ProceedingJoinPoint joinPoint) throws Throwable {
+        Object result = joinPoint.proceed();
         log.info(String.format(SUCCESS_MESSAGE, joinPoint.getSignature().getName()));
+        log.info(result.toString());
+
+        return result;
     }
 
 }
