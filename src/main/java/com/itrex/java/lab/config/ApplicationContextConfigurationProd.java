@@ -1,11 +1,14 @@
 package com.itrex.java.lab.config;
 
+import java.io.IOException;
 import java.util.Properties;
 import javax.sql.DataSource;
+import java.io.FileInputStream;
 
 import org.flywaydb.core.Flyway;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.jdbcx.JdbcConnectionPool;
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.context.annotation.*;
 import org.apache.tomcat.dbcp.dbcp2.BasicDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +19,12 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Slf4j
 @Configuration
+@Profile(Profiles.PROD)
 @EnableAspectJAutoProxy
 @ComponentScan("com.itrex.java.lab")
-@PropertySource("classpath:/application.properties")
+@PropertySource("classpath:/application-prod.properties")
 @EnableTransactionManagement
-public class ApplicationContextConfiguration {
+public class ApplicationContextConfigurationProd {
 
     @Value("${database.driver}")
     String driverClassName;
@@ -51,6 +55,9 @@ public class ApplicationContextConfiguration {
 
     @Value("${entity.package.to.scan}")
     private String entityPackageToScan;
+
+    @Value("${logging.config}")
+    private String log4jPropertiesPath;
 
     @Bean(initMethod = "migrate")
     public Flyway flyway() {
@@ -103,6 +110,20 @@ public class ApplicationContextConfiguration {
         hibernateProperties.setProperty("format_sql", hibernateFormatSql);
 
         return hibernateProperties;
+    }
+
+    @Bean
+    public void prodLogger() {
+
+        Properties p = new Properties();
+
+        try (FileInputStream is = new FileInputStream(log4jPropertiesPath)) {
+            p.load(is);
+            PropertyConfigurator.configure(p);
+            log.info("log4j-prod.properties file received successfully!");
+        } catch (IOException ex) {
+            log.error("log4j-prod.properties file is not available!");
+        }
     }
 
 }
