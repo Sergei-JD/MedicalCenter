@@ -15,11 +15,11 @@ public class RepositoryExceptionLogAndPrintStacktraceAdvice {
             "This method broke: %s with the message: %s";
 
     @AfterThrowing(value = "execution(* com.itrex.java.lab.persistence.hibernateimpl.*.*(..))",
-            throwing = "exception")
-    public void logException(JoinPoint joinPoint, Exception exception) {
+            throwing = "ex")
+    public void logException(JoinPoint joinPoint, Exception ex) {
 
         log.error(String.format(EXCEPTION_MESSAGE_LOG, joinPoint.getSignature().getName(),
-                exception.getMessage()), exception);
+                ex.getMessage()), ex);
     }
 
 }

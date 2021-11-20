@@ -4,7 +4,6 @@ database:
   password =
   migration.location = db/migration
   driver = org.h2.Driver
-
 hibernate:
   hbm2ddl.auto.property = "create-drop"
   dialect.property = org.hibernate.dialect.H2Dialect
