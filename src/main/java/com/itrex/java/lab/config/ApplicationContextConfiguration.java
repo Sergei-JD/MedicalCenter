@@ -17,16 +17,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Slf4j
 @Configuration
 @EnableAspectJAutoProxy
+@EnableTransactionManagement
+@Profile({"dev", "prod", "default"})
 @ComponentScan("com.itrex.java.lab")
 @PropertySource("classpath:/application.properties")
-@EnableTransactionManagement
 public class ApplicationContextConfiguration {
 
     @Value("${database.driver}")
     String driverClassName;
-
-    @Value("${hibernate.hbm2ddl.auto.property}")
-    String hibernateHbm2ddlAutoProperty;
 
     @Value("${hibernate.dialect.property}")
     String hibernateDialect;
