@@ -43,7 +43,51 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public VisitViewDTO getVisitById(int visitId) {
+    public List<VisitViewDTO> getAllFreeVisits() {
+        try {
+            List<Visit> visits = visitRepository.getAllVisits();
+
+            return visits.stream()
+                    .filter(o -> (o.getDoctor() == null && o.getPatient() == null))
+                    .map(visitConverter::toVisitViewDTO)
+                    .collect(Collectors.toList());
+        } catch (RepositoryException ex) {
+            throw new ServiceException("Failed to get all free visits.\n" + ex);
+        }
+    }
+
+    @Override
+    public List<VisitViewDTO> getAllFreeVisitsForDoctorDyId(int doctorId) {
+        try {
+            List<Visit> visits = visitRepository.getAllVisits();
+
+            return visits.stream()
+                    .filter(o -> (o.getDoctor() != null
+                            && o.getDoctor().getUserId() == doctorId
+                            && o.getPatient() == null))
+                    .map(visitConverter::toVisitViewDTO)
+                    .collect(Collectors.toList());
+        } catch (RepositoryException ex) {
+            throw new ServiceException("Failed to get all free visits for doctor by id .\n" + ex);
+        }
+    }
+
+    @Override
+    public List<VisitViewDTO> getAllVisitsForPatientDyId(int patientId) {
+        try {
+            List<Visit> visits = visitRepository.getAllVisits();
+
+            return visits.stream()
+                    .filter(o -> (o.getPatient() != null && o.getPatient().getUserId() == patientId))
+                    .map(visitConverter::toVisitViewDTO)
+                    .collect(Collectors.toList());
+        } catch (RepositoryException ex) {
+            throw new ServiceException("Failed to get all visits for patient by id .\n" + ex);
+        }
+    }
+
+    @Override
+    public Optional<VisitViewDTO> getVisitById(int visitId) {
         VisitViewDTO visitDTO = null;
         try {
             Optional<Visit> visit = visitRepository.getVisitById(visitId);
@@ -54,7 +98,7 @@ public class VisitServiceImpl implements VisitService {
             throw new ServiceException("Failed to get visit by id " + visitId + ".\n" + ex);
         }
 
-        return visitDTO;
+        return Optional.ofNullable(visitDTO);
     }
 
     @Override

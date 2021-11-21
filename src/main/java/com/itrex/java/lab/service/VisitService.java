@@ -6,6 +6,7 @@ import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitHistoryDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface VisitService {
 
@@ -15,7 +16,13 @@ public interface VisitService {
 
     List<VisitViewDTO> getAllVisit();
 
-    VisitViewDTO getVisitById(int visitId);
+    List<VisitViewDTO>getAllFreeVisits();
+
+    List<VisitViewDTO>getAllFreeVisitsForDoctorDyId(int doctorId);
+
+    List<VisitViewDTO>getAllVisitsForPatientDyId(int patientId);
+
+    Optional<VisitViewDTO> getVisitById(int visitId);
 
     VisitDTO updateVisit(VisitDTO visitDTO);
 

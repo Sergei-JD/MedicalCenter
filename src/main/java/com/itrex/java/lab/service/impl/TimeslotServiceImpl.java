@@ -47,7 +47,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
-    public CreateTimeslotDTO getTimeslotById(int timeslotId) {
+    public Optional<CreateTimeslotDTO> getTimeslotById(int timeslotId) {
         CreateTimeslotDTO timeslotDTO = null;
         try {
             Optional<Timeslot> timeslot = timeslotRepository.getTimeslotById(timeslotId);
@@ -58,7 +58,7 @@ public class TimeslotServiceImpl implements TimeslotService {
             throw new ServiceException("Failed to get timeslot by id " + timeslotId + ".\n" + ex);
         }
 
-        return timeslotDTO;
+        return Optional.ofNullable(timeslotDTO);
     }
 
     @Override

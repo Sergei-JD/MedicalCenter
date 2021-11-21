@@ -5,6 +5,7 @@ import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.CreatePatientDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PatientService {
 
@@ -14,7 +15,7 @@ public interface PatientService {
 
     List<PatientViewDTO> getAllPatients();
 
-    PatientViewDTO getPatientById(int patientId);
+    Optional<PatientViewDTO> getPatientById(int patientId);
 
     PatientDTO updatePatient(PatientDTO patientDTO);
 
