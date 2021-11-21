@@ -1,5 +1,6 @@
 package com.itrex.java.lab.service.impl;
 
+import com.itrex.java.lab.dto.VisitViewDTO;
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
@@ -55,7 +56,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public DoctorViewDTO getDoctorById(int doctorId) {
+    public Optional<DoctorViewDTO> getDoctorById(int doctorId) {
         DoctorViewDTO doctorDTO = null;
         try {
             Optional<User> doctor = userRepository.getUserById(doctorId);
@@ -66,7 +67,7 @@ public class DoctorServiceImpl implements DoctorService {
             throw new ServiceException("Failed to get doctor by id " + doctorId + ".\n" + ex);
         }
 
-        return doctorDTO;
+        return Optional.ofNullable(doctorDTO);
     }
 
     @Override

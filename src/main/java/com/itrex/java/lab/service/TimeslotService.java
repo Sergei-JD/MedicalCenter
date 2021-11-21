@@ -4,6 +4,7 @@ import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TimeslotService {
 
@@ -13,7 +14,7 @@ public interface TimeslotService {
 
     List<CreateTimeslotDTO> getAllTimeslot();
 
-    CreateTimeslotDTO getTimeslotById(int timeslotId);
+    Optional<CreateTimeslotDTO> getTimeslotById(int timeslotId);
 
     TimeslotDTO updateTimeslot(TimeslotDTO timeslotDTO);
 

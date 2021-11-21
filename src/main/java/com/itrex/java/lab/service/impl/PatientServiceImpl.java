@@ -1,6 +1,7 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.PatientDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import org.springframework.stereotype.Service;
@@ -55,7 +56,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public PatientViewDTO getPatientById(int patientId) {
+    public Optional<PatientViewDTO> getPatientById(int patientId) {
         PatientViewDTO patientDTO = null;
         try {
             Optional<User> patient = userRepository.getUserById(patientId);
@@ -66,7 +67,7 @@ public class PatientServiceImpl implements PatientService {
             throw new ServiceException("Failed to get patient by id " + patientId + ".\n" + ex);
         }
 
-        return patientDTO;
+        return Optional.ofNullable(patientDTO);
     }
 
     @Override
