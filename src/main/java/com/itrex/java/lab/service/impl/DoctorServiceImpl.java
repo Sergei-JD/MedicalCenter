@@ -1,6 +1,6 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.dto.VisitViewDTO;
+import com.itrex.java.lab.util.UserConversionUtils;
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import com.itrex.java.lab.service.DoctorService;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.converter.UserConverter;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
@@ -25,12 +24,11 @@ import java.util.stream.Collectors;
 public class DoctorServiceImpl implements DoctorService {
 
     private final UserRepository userRepository;
-    private final UserConverter userConverter;
 
     @Override
     public void createDoctor(CreateDoctorDTO doctorDTO) {
         try {
-            User user = userConverter.toUser(doctorDTO);
+            User user = UserConversionUtils.toUser(doctorDTO);
 
             user.setRoles(Set.of(Role.builder()
                     .name(RoleType.DOCTOR)
@@ -48,7 +46,7 @@ public class DoctorServiceImpl implements DoctorService {
             List<User> doctors = userRepository.getAllUsersByRole(RoleType.DOCTOR);
 
             return doctors.stream()
-                    .map(userConverter::toDoctorViewDTO)
+                    .map(UserConversionUtils::toDoctorViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all doctors.\n" + ex);
@@ -61,7 +59,7 @@ public class DoctorServiceImpl implements DoctorService {
         try {
             Optional<User> doctor = userRepository.getUserById(doctorId);
             if (doctor.isPresent()) {
-                doctorDTO = userConverter.toDoctorViewDTO(doctor.get());
+                doctorDTO = UserConversionUtils.toDoctorViewDTO(doctor.get());
             }
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get doctor by id " + doctorId + ".\n" + ex);
@@ -101,7 +99,7 @@ public class DoctorServiceImpl implements DoctorService {
             throw new ServiceException("Failed to update doctor.\n" + ex);
         }
 
-        return userConverter.toDoctorDTO(doctor);
+        return UserConversionUtils.toDoctorDTO(doctor);
     }
 
     private boolean isValidDoctorDTO(CreateDoctorDTO doctorDTO) {

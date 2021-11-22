@@ -1,16 +1,9 @@
-package com.itrex.java.lab.persistence.serviceimpl;
+package com.itrex.java.lab.service.serviceimpl;
 
-import com.itrex.java.lab.converter.UserConverter;
 import com.itrex.java.lab.converter.VisitConverter;
-import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
-import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Visit;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
-import com.itrex.java.lab.persistence.repository.UserRepository;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
-import com.itrex.java.lab.service.impl.DoctorServiceImpl;
 import com.itrex.java.lab.service.impl.VisitServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import com.itrex.java.lab.persistence.config.TestRepositoryConfiguration;
+import com.itrex.java.lab.config.TestRepositoryConfiguration;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = TestRepositoryConfiguration.class)

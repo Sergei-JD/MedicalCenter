@@ -1,17 +1,10 @@
-package com.itrex.java.lab.persistence.serviceimpl;
+package com.itrex.java.lab.service.serviceimpl;
 
 import com.itrex.java.lab.converter.TimeslotConverter;
-import com.itrex.java.lab.converter.UserConverter;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
-import com.itrex.java.lab.dto.DoctorViewDTO;
-import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-import com.itrex.java.lab.persistence.repository.UserRepository;
 import com.itrex.java.lab.service.impl.TimeslotServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

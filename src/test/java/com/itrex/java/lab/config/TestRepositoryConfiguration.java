@@ -1,4 +1,4 @@
-package com.itrex.java.lab.persistence.config;
+package com.itrex.java.lab.config;
 
 import java.util.Properties;
 import javax.sql.DataSource;

@@ -1,7 +1,7 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.dto.VisitViewDTO;
+import com.itrex.java.lab.util.UserConversionUtils;
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void createPatient(CreatePatientDTO patientDTO) {
         try {
-            User user = userConverter.toUser(patientDTO);
+            User user = UserConversionUtils.toUser(patientDTO);
 
             user.setRoles(Set.of(Role.builder()
                     .name(RoleType.PATIENT)
@@ -48,7 +48,7 @@ public class PatientServiceImpl implements PatientService {
             List<User> patients = userRepository.getAllUsersByRole(RoleType.PATIENT);
 
             return patients.stream()
-                    .map(userConverter::toPatientViewDTO)
+                    .map(UserConversionUtils::toPatientViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all patients.\n" + ex);
@@ -61,7 +61,7 @@ public class PatientServiceImpl implements PatientService {
         try {
             Optional<User> patient = userRepository.getUserById(patientId);
             if (patient.isPresent()) {
-                patientDTO = userConverter.toPatientViewDTO(patient.get());
+                patientDTO = UserConversionUtils.toPatientViewDTO(patient.get());
             }
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get patient by id " + patientId + ".\n" + ex);
@@ -101,7 +101,7 @@ public class PatientServiceImpl implements PatientService {
             throw new ServiceException("Failed to update patient.\n" + ex);
         }
 
-        return userConverter.toPatientDTO(patient);
+        return UserConversionUtils.toPatientDTO(patient);
     }
 
     private boolean isValidPatientDTO(CreatePatientDTO patientDTO) {
