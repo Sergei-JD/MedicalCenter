@@ -17,7 +17,7 @@ public interface UserRepository {
 
     Optional<User> getUserByEmail(String email);
 
-    void update(User user);
+    User update(User user);
 
     boolean deleteUserById(Integer userId);
 

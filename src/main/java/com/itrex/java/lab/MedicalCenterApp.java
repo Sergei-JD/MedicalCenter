@@ -1,40 +1,38 @@
 package com.itrex.java.lab;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.Environment;
 import com.itrex.java.lab.service.DoctorService;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
 import com.itrex.java.lab.persistence.repository.UserRepository;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
-import com.itrex.java.lab.config.ApplicationContextConfiguration;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.util.Arrays;
+@SpringBootApplication
+public class MedicalCenterApp implements CommandLineRunner {
 
-@Slf4j
-public class MedicalCenterApp {
+    @Autowired
+    private ApplicationContext context;
 
     public static void main(String[] args) {
+        SpringApplication.run(MedicalCenterApp.class, args);
+    }
 
-        ApplicationContext context = new AnnotationConfigApplicationContext(ApplicationContextConfiguration.class);
+    @Override
+    public void run(String... args) throws Exception {
 
-        log.info("GetAllUsers: {}", context.getBean(UserRepository.class).getAllUsers());
-        log.info("GetAllRoles: {}", context.getBean(RoleRepository.class).getAllRoles());
-        log.info("GetAllTimeslots: {}", context.getBean(TimeslotRepository.class).getAllTimeslots());
-        log.info("GetAllVisits: {}", context.getBean(VisitRepository.class).getAllVisits());
-
+        Environment env = context.getBean(Environment.class);
         DoctorService doctorService = context.getBean(DoctorService.class);
+
         doctorService.getAllDoctors();
 
-        Arrays.stream(context.getBean(Environment.class).getActiveProfiles()).forEach(log::info);
-
-        log.info("Informational conclusion! Everything is fine!");
-        log.error("Error! Something went wrong!");
-        Logger.getRootLogger().setLevel(Level.INFO);
+        for (String activeProfile : env.getActiveProfiles()) {
+            System.out.println(activeProfile);
+        }
 
     }
 

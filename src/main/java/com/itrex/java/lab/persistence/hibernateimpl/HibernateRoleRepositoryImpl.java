@@ -10,28 +10,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
 @Transactional
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
-    private final SessionFactory sessionFactory;
+    private EntityManager entityManager;
 
     private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
     private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
 
-    @Autowired
-    public HibernateRoleRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public List<Role> getAllRoles() {
         List<Role> roles;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            roles = session.createQuery(FIND_ALL_ROLES_QUERY, Role.class).list();
+            roles = entityManager.createQuery(FIND_ALL_ROLES_QUERY, Role.class).getResultList();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get all roles.\n" + ex);
         }
@@ -42,10 +38,9 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     @Override
     public Role getRoleByType(RoleType role) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            return (Role) session.createQuery(FIND_ROLE_BY_NAME_QUERY)
+            return (Role) entityManager.createQuery(FIND_ROLE_BY_NAME_QUERY)
                     .setParameter("name", role)
-                    .uniqueResult();
+                    .getResultList();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get role named " + role.name() + ".\n" + ex);
         }
@@ -54,7 +49,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     @Override
     public Role add(Role role) {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = entityManager.unwrap(Session.class);
             int newRoleId = (Integer) session.save("Role", role);
 
             return session.find(Role.class, newRoleId);

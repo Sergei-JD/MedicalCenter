@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,21 +18,15 @@ import java.util.Optional;
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateVisitRepositoryImpl implements VisitRepository {
 
-    private final SessionFactory sessionFactory;
+    private EntityManager entityManager;
 
     private static final String FIND_ALL_VISIT_QUERY = "select v from Visit v";
-
-    @Autowired
-    public HibernateVisitRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public List<Visit> getAllVisits() throws RepositoryException {
         List<Visit> visits;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            visits = session.createQuery(FIND_ALL_VISIT_QUERY, Visit.class).list();
+            visits = entityManager.createQuery(FIND_ALL_VISIT_QUERY, Visit.class).getResultList();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get all visits.\n" + ex);
         }
@@ -42,8 +37,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     @Override
     public Optional<Visit> getVisitById(Integer visitId) {
         try {
-            Session session = sessionFactory.getCurrentSession();
-            return Optional.ofNullable(session.find(Visit.class, visitId));
+            return Optional.ofNullable(entityManager.find(Visit.class, visitId));
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get timeslot by id " + visitId + ".\n" + ex);
         }
@@ -52,7 +46,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     @Override
     public Visit add(Visit visit) {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = entityManager.unwrap(Session.class);
             int newVisitId = (Integer) session.save("Visit", visit);
 
             return session.find(Visit.class, newVisitId);
@@ -65,11 +59,10 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     public boolean deleteVisitById(Integer visitId) {
         boolean isDeleted = false;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Visit visit = session.find(Visit.class, visitId);
+            Visit visit = entityManager.find(Visit.class, visitId);
 
             if (visit != null) {
-                session.delete(visit);
+                entityManager.remove(visit);
                 isDeleted = true;
             }
         } catch (Exception ex) {
@@ -80,10 +73,12 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
-    public void update(Visit visit) {
+    public Visit update(Visit visit) {
+        Visit updateVisit;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            session.update(visit);
+            updateVisit = entityManager.merge(visit);
+
+            return updateVisit;
         } catch (Exception ex) {
             throw new RepositoryException("Failed to update visit.\n" + ex);
         }

@@ -1,7 +1,6 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.dto.VisitViewDTO;
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import org.springframework.stereotype.Service;
