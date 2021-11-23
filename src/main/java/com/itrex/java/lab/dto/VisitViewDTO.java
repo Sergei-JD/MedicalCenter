@@ -13,6 +13,7 @@ public class VisitViewDTO {
 
     private Integer visitId;
     private User doctor;
+    private User patient;
     private Timeslot timeslot;
 
 }

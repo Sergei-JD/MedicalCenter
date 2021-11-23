@@ -18,7 +18,7 @@ public interface VisitService {
 
     List<VisitViewDTO>getAllFreeVisits();
 
-    List<VisitViewDTO>getAllFreeVisitsForDoctorDyId(int doctorId);
+    List<VisitViewDTO> getAllFreeVisitsForDoctorById(int doctorId);
 
     List<VisitViewDTO>getAllVisitsForPatientDyId(int patientId);
 

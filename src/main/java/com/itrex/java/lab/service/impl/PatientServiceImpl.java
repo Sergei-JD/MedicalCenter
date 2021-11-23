@@ -9,7 +9,6 @@ import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.service.PatientService;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.converter.UserConverter;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
@@ -25,7 +24,6 @@ import java.util.stream.Collectors;
 public class PatientServiceImpl implements PatientService {
 
     private final UserRepository userRepository;
-    private final UserConverter userConverter;
 
     @Override
     public void createPatient(CreatePatientDTO patientDTO) {

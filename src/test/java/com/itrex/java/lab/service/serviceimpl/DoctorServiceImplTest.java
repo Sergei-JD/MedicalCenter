@@ -1,33 +1,33 @@
 package com.itrex.java.lab.service.serviceimpl;
 
-import com.itrex.java.lab.dto.DoctorViewDTO;
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
-import com.itrex.java.lab.persistence.repository.UserRepository;
-import com.itrex.java.lab.service.impl.DoctorServiceImpl;
 import java.util.Set;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.InjectMocks;
+import org.junit.jupiter.api.Test;
+import com.itrex.java.lab.dto.DoctorDTO;
+import com.itrex.java.lab.dto.DoctorViewDTO;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
+import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.service.impl.DoctorServiceImpl;
+import com.itrex.java.lab.persistence.repository.UserRepository;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
-import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.mockito.junit.jupiter.MockitoSettings;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalMatchers.not;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.AdditionalMatchers.not;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -47,8 +47,6 @@ public class DoctorServiceImplTest {
     private DoctorServiceImpl doctorService;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private RoleRepository roleRepository;
 
     @Test
     void getAllDoctors_validData_shouldReturnDoctorsList() {
@@ -67,6 +65,15 @@ public class DoctorServiceImplTest {
         assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME)
                 && doctor.getLastName().equals(TEST_USER_LAST_NAME)));
         verify(userRepository, times(1)).getAllUsersByRole(eq(TEST_USER_ROLE));
+    }
+
+    @Test
+    void getAllDoctors_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        when(userRepository.getAllUsersByRole(RoleType.DOCTOR)).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(ServiceException.class, () -> doctorService.getAllDoctors());
     }
 
     @Test
@@ -93,6 +100,25 @@ public class DoctorServiceImplTest {
     }
 
     @Test
+    void getDoctorById_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        when(userRepository.getUserById(1)).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(ServiceException.class, () -> doctorService.getDoctorById(1)) ;
+    }
+
+    @Test
+    void updateDoctorById_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        DoctorDTO doctorDTO = DoctorDTO.builder().build();
+        when(userRepository.getUserById(1)).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(ServiceException.class, () -> doctorService.updateDoctor(doctorDTO)) ;
+    }
+
+    @Test
     void getDoctorById_invalidData_shouldReturnEmptyOptional() {
         //given
         Integer doctorId = -1;
@@ -104,7 +130,6 @@ public class DoctorServiceImplTest {
         // then
         assertTrue(actualOptDoctor.isEmpty());
     }
-
 
     private User initUser(Integer id) {
         return User.builder()

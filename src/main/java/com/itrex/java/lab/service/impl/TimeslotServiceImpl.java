@@ -1,5 +1,6 @@
 package com.itrex.java.lab.service.impl;
 
+import com.itrex.java.lab.util.TimeslotConversionUtils;
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,11 @@ import java.util.stream.Collectors;
 public class TimeslotServiceImpl implements TimeslotService {
 
     private final TimeslotRepository timeslotRepository;
-    private final TimeslotConverter timeslotConverter;
 
     @Override
     public void createTimeslot(TimeslotDTO timeslotDTO) {
         try {
-            Timeslot timeslot = timeslotConverter.toTimeslot(timeslotDTO);
+            Timeslot timeslot = TimeslotConversionUtils.toTimeslot(timeslotDTO);
 
             timeslotRepository.add(timeslot);
         } catch (RepositoryException ex) {
@@ -39,7 +39,7 @@ public class TimeslotServiceImpl implements TimeslotService {
             List<Timeslot> timeslots = timeslotRepository.getAllTimeslots();
 
             return timeslots.stream()
-                    .map(timeslotConverter::toTimeslotDTO)
+                    .map(TimeslotConversionUtils::toTimeslotDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all timeslots.\n" + ex);
@@ -52,7 +52,7 @@ public class TimeslotServiceImpl implements TimeslotService {
         try {
             Optional<Timeslot> timeslot = timeslotRepository.getTimeslotById(timeslotId);
             if (timeslot.isPresent()) {
-                timeslotDTO = timeslotConverter.toTimeslotDTO(timeslot.get());
+                timeslotDTO = TimeslotConversionUtils.toTimeslotDTO(timeslot.get());
             }
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get timeslot by id " + timeslotId + ".\n" + ex);
@@ -88,7 +88,7 @@ public class TimeslotServiceImpl implements TimeslotService {
             throw new ServiceException("Failed to update timeslot.\n" + ex);
         }
 
-        return timeslotConverter.toTimeslotDTO(timeslot);
+        return TimeslotConversionUtils.toTimeslotDTO(timeslot);
     }
 
     private boolean isValidTimeslotDTO(CreateTimeslotDTO timeslotDTO) {

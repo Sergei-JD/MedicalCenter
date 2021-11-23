@@ -1,11 +1,11 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.*;
+import com.itrex.java.lab.util.VisitConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.itrex.java.lab.service.VisitService;
 import com.itrex.java.lab.persistence.entity.Visit;
-import com.itrex.java.lab.converter.VisitConverter;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
@@ -20,11 +20,10 @@ import java.util.stream.Collectors;
 public class VisitServiceImpl implements VisitService {
 
     private final VisitRepository visitRepository;
-    private final VisitConverter visitConverter;
 
     @Override
     public void createVisit(CreateVisitDTO visitDTO) {
-        Visit visit = visitConverter.toVisit(visitDTO);
+        Visit visit = VisitConversionUtils.toVisit(visitDTO);
 
         visitRepository.add(visit);
     }
@@ -35,7 +34,7 @@ public class VisitServiceImpl implements VisitService {
             List<Visit> visits = visitRepository.getAllVisits();
 
             return visits.stream()
-                    .map(visitConverter::toVisitViewDTO)
+                    .map(VisitConversionUtils::toVisitViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all visits.\n" + ex);
@@ -48,8 +47,8 @@ public class VisitServiceImpl implements VisitService {
             List<Visit> visits = visitRepository.getAllVisits();
 
             return visits.stream()
-                    .filter(o -> (o.getDoctor() == null && o.getPatient() == null))
-                    .map(visitConverter::toVisitViewDTO)
+                    .filter(visit -> (visit.getDoctor() == null && visit.getPatient() == null))
+                    .map(VisitConversionUtils::toVisitViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all free visits.\n" + ex);
@@ -57,15 +56,15 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public List<VisitViewDTO> getAllFreeVisitsForDoctorDyId(int doctorId) {
+    public List<VisitViewDTO> getAllFreeVisitsForDoctorById(int doctorId) {
         try {
             List<Visit> visits = visitRepository.getAllVisits();
 
             return visits.stream()
-                    .filter(o -> (o.getDoctor() != null
-                            && o.getDoctor().getUserId() == doctorId
-                            && o.getPatient() == null))
-                    .map(visitConverter::toVisitViewDTO)
+                    .filter(visit -> (visit.getDoctor() != null
+                            && visit.getDoctor().getUserId() == doctorId
+                            && visit.getPatient() == null))
+                    .map(VisitConversionUtils::toVisitViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all free visits for doctor by id .\n" + ex);
@@ -78,8 +77,9 @@ public class VisitServiceImpl implements VisitService {
             List<Visit> visits = visitRepository.getAllVisits();
 
             return visits.stream()
-                    .filter(o -> (o.getPatient() != null && o.getPatient().getUserId() == patientId))
-                    .map(visitConverter::toVisitViewDTO)
+                    .filter(visit -> (visit.getPatient() != null
+                            && visit.getPatient().getUserId() == patientId))
+                    .map(VisitConversionUtils::toVisitViewDTO)
                     .collect(Collectors.toList());
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get all visits for patient by id .\n" + ex);
@@ -92,7 +92,7 @@ public class VisitServiceImpl implements VisitService {
         try {
             Optional<Visit> visit = visitRepository.getVisitById(visitId);
             if (visit.isPresent()) {
-                visitDTO = visitConverter.toVisitViewDTO(visit.get());
+                visitDTO = VisitConversionUtils.toVisitViewDTO(visit.get());
             }
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to get visit by id " + visitId + ".\n" + ex);
@@ -129,7 +129,7 @@ public class VisitServiceImpl implements VisitService {
             throw new ServiceException("Failed to update visit.\n" + ex);
         }
 
-        return visitConverter.toVisitDTO(visit);
+        return VisitConversionUtils.toVisitDTO(visit);
     }
 
     @Override
@@ -148,7 +148,7 @@ public class VisitServiceImpl implements VisitService {
             throw new ServiceException("Failed to update visit history.\n" + ex);
         }
 
-        return visitConverter.toVisitHistoryDTO(visit);
+        return VisitConversionUtils.toVisitHistoryDTO(visit);
     }
 
     private boolean isValidVisitDTO(CreateVisitDTO visitDTO) {

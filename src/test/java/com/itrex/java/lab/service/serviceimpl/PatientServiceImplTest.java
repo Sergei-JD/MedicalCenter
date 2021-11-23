@@ -1,26 +1,27 @@
 package com.itrex.java.lab.service.serviceimpl;
 
+import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.UserRepository;
 
-import com.itrex.java.lab.service.impl.PatientServiceImpl;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.InjectMocks;
+import org.junit.jupiter.api.Test;
 import org.mockito.quality.Strictness;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import com.itrex.java.lab.service.impl.PatientServiceImpl;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.AdditionalMatchers.not;
@@ -44,8 +45,6 @@ public class PatientServiceImplTest {
     private PatientServiceImpl patientService;
     @Mock
     private UserRepository userRepository;
-    @Mock
-    private RoleRepository roleRepository;
 
     @Test
     void getAllPatients_validData_shouldReturnPatientsList() {
@@ -63,6 +62,15 @@ public class PatientServiceImplTest {
         assertEquals(expectedListSize, result.size());
         assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME) && doctor.getLastName().equals(TEST_USER_LAST_NAME)));
         verify(userRepository, times(1)).getAllUsersByRole(eq(TEST_USER_ROLE));
+    }
+
+    @Test
+    void getAllPatients_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        when(userRepository.getAllUsersByRole(RoleType.PATIENT)).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(ServiceException.class, () -> patientService.getAllPatients());
     }
 
     @Test
@@ -88,6 +96,38 @@ public class PatientServiceImplTest {
         assertThrows(ServiceException.class, () -> patientService.deletePatient(1)) ;
     }
 
+    @Test
+    void getPatientById_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        when(userRepository.getUserById(1)).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(ServiceException.class, () -> patientService.getPatientById(1)) ;
+    }
+
+    @Test
+    void updatePatientById_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        PatientDTO patientDTO = PatientDTO.builder().build();
+        when(userRepository.getUserById(1)).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(ServiceException.class, () -> patientService.updatePatient(patientDTO)) ;
+    }
+
+    @Test
+    void getDoctorById_invalidData_shouldReturnEmptyOptional() {
+        //given
+        Integer patientId = -1;
+
+        //when
+        when(userRepository.getUserById(patientId)).thenReturn(Optional.empty());
+        Optional<PatientViewDTO> actualOptPatient = patientService.getPatientById(patientId);
+
+        // then
+        assertTrue(actualOptPatient.isEmpty());
+    }
+
     private User initUser(Integer id) {
         return User.builder()
                 .userId(id)
@@ -101,5 +141,4 @@ public class PatientServiceImplTest {
                 .roles(Set.of(Role.builder().name(TEST_USER_ROLE).build()))
                 .build();
     }
-
 }
