@@ -1,7 +1,6 @@
 package com.itrex.java.lab.service.serviceimpl;
 
-import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.dto.PatientViewDTO;
+import com.itrex.java.lab.dto.*;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.exception.ServiceException;
@@ -45,6 +44,38 @@ public class PatientServiceImplTest {
     private PatientServiceImpl patientService;
     @Mock
     private UserRepository userRepository;
+
+    @Test
+    void createPatient_validData_shouldCreatePatient() {
+        //given
+        PatientDTO patientDTO = PatientDTO.builder()
+                .firstName(TEST_USER_FIRST_NAME)
+                .lastName(TEST_USER_LAST_NAME)
+                .age(TEST_USER_AGE)
+                .email(TEST_USER_EMAIL)
+                .password(TEST_USER_PASSWORD)
+                .gender(TEST_USER_GENDER)
+                .phoneNum(TEST_USER_NUMBER_PHONE)
+                .roles(Set.of(Role.builder().name(TEST_USER_ROLE).build()))
+                .build();
+        User patient = initUser(1);
+
+        //when
+        when(userRepository.add(patient)).thenReturn(patient);
+        CreatePatientDTO actualPatientDTO = patientService.createPatient(patientDTO);
+
+        //then
+        assertAll(
+                () -> assertEquals(patient.getFirstName(), actualPatientDTO.getFirstName()),
+                () -> assertEquals(patient.getLastName(), actualPatientDTO.getLastName()),
+                () -> assertEquals(patient.getAge(), actualPatientDTO.getAge()),
+                () -> assertEquals(patient.getEmail(), actualPatientDTO.getEmail()),
+                () -> assertEquals(patient.getPassword(), actualPatientDTO.getPassword()),
+                () -> assertEquals(patient.getGender(), actualPatientDTO.getGender()),
+                () -> assertEquals(patient.getPhoneNum(), actualPatientDTO.getPhoneNum()),
+                () -> assertEquals(patient.getRoles(), actualPatientDTO.getRoles())
+        );
+    }
 
     @Test
     void getAllPatients_validData_shouldReturnPatientsList() {
@@ -97,6 +128,24 @@ public class PatientServiceImplTest {
     }
 
     @Test
+    void getPatientById_validData_shouldReturnThePatientById() {
+        //given
+        User addedPatient = initUser(1);
+
+        when(userRepository.getUserById(1))
+                .thenReturn(Optional.of(addedPatient));
+
+        //when
+        Optional<PatientViewDTO> result = patientService.getPatientById(1);
+
+        //then
+        verify(userRepository, times(1)).getUserById(eq(1));
+        assertTrue(result.stream().allMatch(patient -> patient.getFirstName().equals(TEST_USER_FIRST_NAME)
+                && patient.getLastName().equals(TEST_USER_LAST_NAME)
+        ));
+    }
+
+    @Test
     void getPatientById_repositoryThrowError_shouldThrowServiceException() {
         //given
         when(userRepository.getUserById(1)).thenThrow(new RepositoryException("some msg"));
@@ -113,19 +162,6 @@ public class PatientServiceImplTest {
 
         //when && then
         assertThrows(ServiceException.class, () -> patientService.updatePatient(patientDTO)) ;
-    }
-
-    @Test
-    void getDoctorById_invalidData_shouldReturnEmptyOptional() {
-        //given
-        Integer patientId = -1;
-
-        //when
-        when(userRepository.getUserById(patientId)).thenReturn(Optional.empty());
-        Optional<PatientViewDTO> actualOptPatient = patientService.getPatientById(patientId);
-
-        // then
-        assertTrue(actualOptPatient.isEmpty());
     }
 
     private User initUser(Integer id) {

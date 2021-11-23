@@ -1,7 +1,10 @@
 package com.itrex.java.lab.dto;
 
+import com.itrex.java.lab.persistence.entity.Role;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,5 +20,6 @@ public class CreatePatientDTO {
     private String password;
     private String gender;
     private Integer phoneNum;
+    private Set<Role> roles;
 
 }

@@ -1,11 +1,11 @@
 package com.itrex.java.lab.service.impl;
 
 import com.itrex.java.lab.dto.*;
-import com.itrex.java.lab.util.VisitConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.itrex.java.lab.service.VisitService;
 import com.itrex.java.lab.persistence.entity.Visit;
+import com.itrex.java.lab.util.VisitConversionUtils;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
@@ -22,10 +22,16 @@ public class VisitServiceImpl implements VisitService {
     private final VisitRepository visitRepository;
 
     @Override
-    public void createVisit(CreateVisitDTO visitDTO) {
-        Visit visit = VisitConversionUtils.toVisit(visitDTO);
+    public CreateVisitDTO createVisit(CreateVisitDTO visitDTO) {
+        try {
+            Visit visit = VisitConversionUtils.toVisit(visitDTO);
 
-        visitRepository.add(visit);
+            visitRepository.add(visit);
+        } catch (RepositoryException ex) {
+            throw new ServiceException("Failed to create visit.\n" + ex);
+        }
+
+        return visitDTO;
     }
 
     @Override

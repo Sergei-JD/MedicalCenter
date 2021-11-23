@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface TimeslotService {
 
-    void createTimeslot(TimeslotDTO timeslotDTO);
+    TimeslotDTO createTimeslot(TimeslotDTO timeslotDTO);
 
     boolean deleteTimeslot(int timeslotId);
 

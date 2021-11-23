@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface VisitService {
 
-    void createVisit(CreateVisitDTO visitDTO);
+    CreateVisitDTO createVisit(CreateVisitDTO visitDTO);
 
     boolean deleteVisit(int visitId);
 

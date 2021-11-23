@@ -1,14 +1,14 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.util.TimeslotConversionUtils;
+
 import lombok.RequiredArgsConstructor;
-import com.itrex.java.lab.dto.CreateTimeslotDTO;
-import org.springframework.stereotype.Service;
 import com.itrex.java.lab.dto.TimeslotDTO;
+import org.springframework.stereotype.Service;
+import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.service.TimeslotService;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.converter.TimeslotConverter;
+import com.itrex.java.lab.util.TimeslotConversionUtils;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
@@ -23,7 +23,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     private final TimeslotRepository timeslotRepository;
 
     @Override
-    public void createTimeslot(TimeslotDTO timeslotDTO) {
+    public TimeslotDTO createTimeslot(TimeslotDTO timeslotDTO) {
         try {
             Timeslot timeslot = TimeslotConversionUtils.toTimeslot(timeslotDTO);
 
@@ -31,6 +31,8 @@ public class TimeslotServiceImpl implements TimeslotService {
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to create timeslot.\n" + ex);
         }
+
+        return timeslotDTO;
     }
 
     @Override

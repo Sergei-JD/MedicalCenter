@@ -1,14 +1,14 @@
 package com.itrex.java.lab.service.impl;
 
-import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.util.UserConversionUtils;
 import lombok.RequiredArgsConstructor;
+import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import org.springframework.stereotype.Service;
 import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.service.PatientService;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.util.UserConversionUtils;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
@@ -26,7 +26,7 @@ public class PatientServiceImpl implements PatientService {
     private final UserRepository userRepository;
 
     @Override
-    public void createPatient(CreatePatientDTO patientDTO) {
+    public CreatePatientDTO createPatient(CreatePatientDTO patientDTO) {
         try {
             User user = UserConversionUtils.toUser(patientDTO);
 
@@ -38,6 +38,8 @@ public class PatientServiceImpl implements PatientService {
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to create patient.\n" + ex);
         }
+
+        return patientDTO;
     }
 
     @Override

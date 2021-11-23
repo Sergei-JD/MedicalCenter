@@ -1,5 +1,7 @@
 package com.itrex.java.lab.service.serviceimpl;
 
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.dto.VisitDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.persistence.entity.*;
@@ -18,6 +20,7 @@ import com.itrex.java.lab.persistence.repository.VisitRepository;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Optional;
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
@@ -42,8 +45,6 @@ public class VisitServiceImplTest {
     private final static String TEST_USER_PASSWORD = "password";
     private final static String TEST_USER_GENDER = "test gender";
     private final static Integer TEST_USER_NUMBER_PHONE = 34546674;
-    private final static RoleType TEST_USER_ROLE_DOCTOR = RoleType.DOCTOR;
-    private final static RoleType TEST_USER_ROLE_PATIENT = RoleType.PATIENT;
 
     private final static Time TEST_START_TIME = new Time(12-20);
     private final static Date TEST_DATE = new Date(2021-10-10);
@@ -53,6 +54,42 @@ public class VisitServiceImplTest {
     private VisitServiceImpl visitService;
     @Mock
     private VisitRepository visitRepository;
+
+    @Test
+    void createVisit_validData_shouldCreateVisit() {
+        //given
+        VisitDTO visitDTO = VisitDTO.builder()
+                .doctorId(User.builder()
+                        .firstName(TEST_USER_FIRST_NAME)
+                        .lastName(TEST_USER_LAST_NAME)
+                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
+                .patientId(User.builder()
+                        .firstName(TEST_USER_FIRST_NAME)
+                        .lastName(TEST_USER_LAST_NAME)
+                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
+                .timeslotId(Timeslot.builder()
+                        .startTime(TEST_START_TIME)
+                        .date(TEST_DATE)
+                        .office(TEST_OFFICE)
+                        .build())
+                .build();
+        Visit visit = initVisit(1);
+
+        //when
+        when(visitRepository.add(visit)).thenReturn(visit);
+        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
+
+        //then
+        assertAll(
+                () -> assertEquals(visit.getDoctor().getFirstName(), actualVisitDTO.getDoctorId().getFirstName()),
+                () -> assertEquals(visit.getDoctor().getLastName(), actualVisitDTO.getDoctorId().getLastName()),
+                () -> assertEquals(visit.getPatient().getFirstName(), actualVisitDTO.getPatientId().getFirstName()),
+                () -> assertEquals(visit.getPatient().getLastName(), actualVisitDTO.getPatientId().getLastName()),
+                () -> assertEquals(visit.getTimeslot().getStartTime(), actualVisitDTO.getTimeslotId().getStartTime()),
+                () -> assertEquals(visit.getTimeslot().getDate(), actualVisitDTO.getTimeslotId().getDate()),
+                () -> assertEquals(visit.getTimeslot().getOffice(), actualVisitDTO.getTimeslotId().getOffice())
+        );
+    }
 
     @Test
     void getAllVisits_validData_shouldReturnVisitsList() {
@@ -210,6 +247,27 @@ public class VisitServiceImplTest {
 
         //when && then
         assertThrows(ServiceException.class, () -> visitService.deleteVisit(1));
+    }
+
+    @Test
+    void getVisitById_validData_shouldReturnTheVisitById() {
+        //given
+        Visit addedVisit = initVisit(1);
+
+        when(visitRepository.getVisitById(1))
+                .thenReturn(Optional.of(addedVisit));
+
+        //when
+        Optional<VisitViewDTO> result = visitService.getVisitById(1);
+
+        //then
+        verify(visitRepository, times(1)).getVisitById(eq(1));
+        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getFirstName().equals(TEST_USER_FIRST_NAME)
+                && visit.getDoctor().getLastName().equals(TEST_USER_LAST_NAME)
+                && visit.getTimeslot().getStartTime().equals(TEST_START_TIME)
+                && visit.getTimeslot().getDate().equals(TEST_DATE)
+                && visit.getTimeslot().getOffice().equals(TEST_OFFICE)
+        ));
     }
 
     @Test

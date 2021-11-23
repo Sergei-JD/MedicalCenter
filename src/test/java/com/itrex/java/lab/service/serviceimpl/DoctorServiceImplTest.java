@@ -1,17 +1,15 @@
 package com.itrex.java.lab.service.serviceimpl;
 
 import java.util.Set;
+
+import com.itrex.java.lab.dto.*;
+import com.itrex.java.lab.persistence.entity.*;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.junit.jupiter.api.Test;
-import com.itrex.java.lab.dto.DoctorDTO;
-import com.itrex.java.lab.dto.DoctorViewDTO;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.service.impl.DoctorServiceImpl;
 import com.itrex.java.lab.persistence.repository.UserRepository;
@@ -47,6 +45,38 @@ public class DoctorServiceImplTest {
     private DoctorServiceImpl doctorService;
     @Mock
     private UserRepository userRepository;
+
+    @Test
+    void createDoctor_validData_shouldCreateDoctor() {
+        //given
+        DoctorDTO doctorDTO = DoctorDTO.builder()
+                .firstName(TEST_USER_FIRST_NAME)
+                .lastName(TEST_USER_LAST_NAME)
+                .age(TEST_USER_AGE)
+                .email(TEST_USER_EMAIL)
+                .password(TEST_USER_PASSWORD)
+                .gender(TEST_USER_GENDER)
+                .phoneNum(TEST_USER_NUMBER_PHONE)
+                .roles(Set.of(Role.builder().name(TEST_USER_ROLE).build()))
+                .build();
+        User doctor = initUser(1);
+
+        //when
+        when(userRepository.add(doctor)).thenReturn(doctor);
+        CreateDoctorDTO actualDoctorDTO = doctorService.createDoctor(doctorDTO);
+
+        //then
+        assertAll(
+                () -> assertEquals(doctor.getFirstName(), actualDoctorDTO.getFirstName()),
+                () -> assertEquals(doctor.getLastName(), actualDoctorDTO.getLastName()),
+                () -> assertEquals(doctor.getAge(), actualDoctorDTO.getAge()),
+                () -> assertEquals(doctor.getEmail(), actualDoctorDTO.getEmail()),
+                () -> assertEquals(doctor.getPassword(), actualDoctorDTO.getPassword()),
+                () -> assertEquals(doctor.getGender(), actualDoctorDTO.getGender()),
+                () -> assertEquals(doctor.getPhoneNum(), actualDoctorDTO.getPhoneNum()),
+                () -> assertEquals(doctor.getRoles(), actualDoctorDTO.getRoles())
+        );
+    }
 
     @Test
     void getAllDoctors_validData_shouldReturnDoctorsList() {
@@ -100,6 +130,24 @@ public class DoctorServiceImplTest {
     }
 
     @Test
+    void getDoctorById_validData_shouldReturnTheDoctorById() {
+        //given
+        User addedDoctor = initUser(1);
+
+        when(userRepository.getUserById(1))
+                .thenReturn(Optional.of(addedDoctor));
+
+        //when
+        Optional<DoctorViewDTO> result = doctorService.getDoctorById(1);
+
+        //then
+        verify(userRepository, times(1)).getUserById(eq(1));
+        assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME)
+                && doctor.getLastName().equals(TEST_USER_LAST_NAME)
+        ));
+    }
+
+    @Test
     void getDoctorById_repositoryThrowError_shouldThrowServiceException() {
         //given
         when(userRepository.getUserById(1)).thenThrow(new RepositoryException("some msg"));
@@ -116,19 +164,6 @@ public class DoctorServiceImplTest {
 
         //when && then
         assertThrows(ServiceException.class, () -> doctorService.updateDoctor(doctorDTO)) ;
-    }
-
-    @Test
-    void getDoctorById_invalidData_shouldReturnEmptyOptional() {
-        //given
-        Integer doctorId = -1;
-
-        //when
-        when(userRepository.getUserById(doctorId)).thenReturn(Optional.empty());
-        Optional<DoctorViewDTO> actualOptDoctor = doctorService.getDoctorById(doctorId);
-
-        // then
-        assertTrue(actualOptDoctor.isEmpty());
     }
 
     private User initUser(Integer id) {

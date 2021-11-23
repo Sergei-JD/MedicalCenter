@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface PatientService {
 
-    void createPatient(CreatePatientDTO patientDTO);
+    CreatePatientDTO createPatient(CreatePatientDTO patientDTO);
 
     boolean deletePatient(int patientId);
 

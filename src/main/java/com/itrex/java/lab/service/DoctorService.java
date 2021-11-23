@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface DoctorService {
 
-    void createDoctor(CreateDoctorDTO doctorDTO);
+    CreateDoctorDTO createDoctor(CreateDoctorDTO doctorDTO);
 
     boolean deleteDoctor(int doctorId);
 
