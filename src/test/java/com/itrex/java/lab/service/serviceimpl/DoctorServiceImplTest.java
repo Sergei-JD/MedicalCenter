@@ -79,6 +79,18 @@ public class DoctorServiceImplTest {
     }
 
     @Test
+    void createDoctor_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        DoctorDTO doctorDTO = DoctorDTO.builder().build();
+
+        //when
+        when(doctorService.createDoctor(doctorDTO)).thenThrow(new RepositoryException("some msg"));
+
+        //then
+        assertThrows(ServiceException.class, () -> doctorService.createDoctor(doctorDTO));
+    }
+
+    @Test
     void getAllDoctors_validData_shouldReturnDoctorsList() {
         //given
         Integer expectedListSize = 2;

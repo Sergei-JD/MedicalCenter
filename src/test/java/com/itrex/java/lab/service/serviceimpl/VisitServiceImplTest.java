@@ -1,9 +1,6 @@
 package com.itrex.java.lab.service.serviceimpl;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
-import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitViewDTO;
+import com.itrex.java.lab.dto.*;
 import com.itrex.java.lab.persistence.entity.*;
 
 import org.mockito.Mock;
@@ -35,8 +32,6 @@ public class VisitServiceImplTest {
 
     private final static Integer TEST_VISIT_DOCTOR_ID = 1;
     private final static Integer TEST_VISIT_PATIENT_ID = 2;
-    private final static Integer TEST_VISIT_TIMESLOT_ID = 3;
-    private final static String TEST_VISIT_COMMENT = "test comment";
 
     private final static String TEST_USER_FIRST_NAME = "test name";
     private final static String TEST_USER_LAST_NAME = "test last name";
@@ -89,6 +84,18 @@ public class VisitServiceImplTest {
                 () -> assertEquals(visit.getTimeslot().getDate(), actualVisitDTO.getTimeslotId().getDate()),
                 () -> assertEquals(visit.getTimeslot().getOffice(), actualVisitDTO.getTimeslotId().getOffice())
         );
+    }
+
+    @Test
+    void createVisit_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        VisitDTO visitDTO = VisitDTO.builder().build();
+
+        //when
+        when(visitService.createVisit(visitDTO)).thenThrow(new RepositoryException("some msg"));
+
+        //then
+        assertThrows(ServiceException.class, () -> visitService.createVisit(visitDTO));
     }
 
     @Test

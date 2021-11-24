@@ -1,8 +1,6 @@
 package com.itrex.java.lab.service.serviceimpl;
 
-import com.itrex.java.lab.util.TimeslotConversionUtils;
-import org.mockito.Mock;
-import org.mockito.InjectMocks;
+import org.mockito.*;
 import org.junit.jupiter.api.Test;
 import org.mockito.quality.Strictness;
 import com.itrex.java.lab.dto.TimeslotDTO;
@@ -18,6 +16,7 @@ import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.Format;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
@@ -40,21 +39,26 @@ public class TimeslotServiceImplTest {
     @Mock
     private TimeslotRepository timeslotRepository;
 
-//    @Test
-//    void createTimeslot_repositoryThrowError_shouldThrowServiceException() {
-//        //given
-//        TimeslotDTO timeslotDTO = TimeslotDTO.builder()
-//                .timeslotId(1)
-//                .startTime(TEST_START_TIME)
-//                .date(TEST_DATE)
-//                .office(TEST_OFFICE)
-//                .build();
-//        Timeslot timeslot = initTimeslot(1);
-//        when(timeslotRepository.add(timeslot)).thenThrow(new RepositoryException("some msg"));
-//
-//        //when && then
-//        assertThrows(ServiceException.class, () -> timeslotService.createTimeslot(timeslotDTO));
-//    }
+    @Captor
+    ArgumentCaptor<Timeslot> timeslotCaptor;
+
+    @Test
+    void updateTimeslot_existTimeslot_shouldUpdateTimeslot() {
+        //given
+        TimeslotDTO timeslotDTO = TimeslotDTO.builder()
+                .timeslotId(1)
+                .startTime(TEST_START_TIME)
+                .date(TEST_DATE)
+                .office(TEST_OFFICE)
+                .build();
+        timeslotService.createTimeslot(timeslotDTO);
+
+        timeslotService.updateTimeslot(timeslotDTO);
+
+        Mockito.verify(timeslotRepository).update(timeslotCaptor.capture());
+
+    }
+
 
     @Test
     void createTimeslot_validData_shouldCreateTimeslot() {
@@ -81,6 +85,23 @@ public class TimeslotServiceImplTest {
                 () -> assertEquals(timeslot.getDate(), actualTimeslotDTO.getDate()),
                 () -> assertEquals(timeslot.getOffice(), actualTimeslotDTO.getOffice())
         );
+    }
+
+    @Test
+    void createTimeslot_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        TimeslotDTO timeslotDTO = TimeslotDTO.builder()
+                .timeslotId(1)
+                .startTime(TEST_START_TIME)
+                .date(TEST_DATE)
+                .office(TEST_OFFICE)
+                .build();
+
+        //when
+        when(timeslotService.createTimeslot(timeslotDTO)).thenThrow(new RepositoryException("some msg"));
+
+        //then
+        assertThrows(ServiceException.class, () -> timeslotService.createTimeslot(timeslotDTO));
     }
 
     @Test
