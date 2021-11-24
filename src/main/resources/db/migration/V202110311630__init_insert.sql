@@ -34,9 +34,9 @@ INSERT INTO user_role (user_id, role_id) VALUES ('6', '2');
 -- -----------------------------------------------------
 -- Insert table timeslot
 -- -----------------------------------------------------
-INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('1', '12:20', '2021-10-10', '308');
-INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('2', '13:40', '2021-10-11', '208');
-INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('3', '14:00', '2021-10-12', '108');
+INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('1', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), '308');
+INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('2', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), '208');
+INSERT INTO timeslot(timeslot_id, start_time, date, office) VALUES ('3', CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP(), '108');
 
 -- -----------------------------------------------------
 -- Insert table visit

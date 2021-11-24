@@ -18,6 +18,7 @@ import java.util.Set;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +80,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public DoctorDTO updateDoctor(DoctorDTO doctorDTO) {
         if (!isValidDoctorDTO(doctorDTO) || doctorDTO.getUserId() == null) {
             throw new ServiceException("Failed to update doctor. Not valid doctorDTO.");

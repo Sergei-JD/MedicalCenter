@@ -1,5 +1,6 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -15,10 +16,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateVisitRepositoryImpl implements VisitRepository {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private static final String FIND_ALL_VISIT_QUERY = "select v from Visit v";
 

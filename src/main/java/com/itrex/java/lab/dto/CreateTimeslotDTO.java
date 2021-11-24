@@ -1,10 +1,11 @@
 package com.itrex.java.lab.dto;
 
-import lombok.*;
+import java.time.Instant;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.sql.Time;
-import java.util.Date;
 
 @Getter
 @Setter
@@ -13,8 +14,8 @@ import java.util.Date;
 @AllArgsConstructor
 public class CreateTimeslotDTO {
 
-    private Time startTime;
-    private Date date;
+    private Instant startTime;
+    private Instant date;
     private Integer office;
 
 }

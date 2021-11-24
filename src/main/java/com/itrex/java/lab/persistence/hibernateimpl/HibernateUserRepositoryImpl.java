@@ -1,31 +1,29 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.stereotype.Repository;
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
+import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.repository.UserRepository;
-
-import javax.persistence.EntityManager;
-import java.util.Set;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import javax.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
+@RequiredArgsConstructor
 public class HibernateUserRepositoryImpl implements UserRepository {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private static final String FIND_ALL_USERS_QUERY = "select u from User u";
     private static final String DELETE_USER_ID_FROM_USER_ROLE_QUERY = "DELETE FROM user_role WHERE user_id = ?";
     private static final String SELECT_USER_BY_EMAIL_QUERY = "FROM User u where u.email = :email";
-    private static final String SELECT_USER_BY_ROLE_QUERY =
-            "SELECT u FROM User u JOIN FETCH u.roles r WHERE r.name = :name";
+    private static final String SELECT_USER_BY_ROLE_QUERY = "SELECT u FROM User u JOIN FETCH u.roles r WHERE r.name = :name";
 
     @Override
     @Transactional(readOnly = true)
@@ -54,7 +52,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<User> getUserById(Integer userId) {
         User user;
         try {
@@ -72,8 +69,8 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         User user;
         try {
             user = (User) entityManager.createQuery(SELECT_USER_BY_EMAIL_QUERY)
-                    .setParameter("email", email)
-                    .getResultList();
+              .setParameter("email", email)
+              .getResultList();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get user by email " + email + ".\n" + ex);
         }

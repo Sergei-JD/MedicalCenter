@@ -1,6 +1,7 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
 import com.itrex.java.lab.persistence.entity.RoleType;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -14,10 +15,11 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 @Repository
+@RequiredArgsConstructor
 @Transactional
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
-    private EntityManager entityManager;
+    private final EntityManager entityManager;
 
     private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
     private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
