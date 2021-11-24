@@ -1,25 +1,24 @@
 package com.itrex.java.lab.persistence.serviceimpl;
 
-import com.itrex.java.lab.converter.UserConverter;
+import org.mockito.Mock;
+import org.mockito.InjectMocks;
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.dto.DoctorViewDTO;
-import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.converter.UserConverter;
 import com.itrex.java.lab.persistence.entity.User;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.service.impl.DoctorServiceImpl;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 import com.itrex.java.lab.persistence.repository.UserRepository;
-import com.itrex.java.lab.service.impl.DoctorServiceImpl;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class DoctorServiceImplTest {

@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "visit", schema = "public")
+@Table(name = "visit", schema = "PUBLIC")
 public class Visit {
 
     @Id

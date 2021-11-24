@@ -11,7 +11,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "user", schema = "public")
+@Table(name = "user", schema = "PUBLIC")
 public class User {
 
     @Id

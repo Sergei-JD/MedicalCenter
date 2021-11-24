@@ -2,12 +2,12 @@ package com.itrex.java.lab.persistence.hibernateimpl;
 
 import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.List;
@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired

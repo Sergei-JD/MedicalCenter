@@ -1,24 +1,24 @@
 package com.itrex.java.lab.persistence.entity;
 
+import lombok.Data;
+import lombok.Builder;
 import java.time.Instant;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
+import lombok.AccessLevel;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "timeslot", schema = "public")
+@Table(name = "timeslot", schema = "PUBLIC")
 public class Timeslot {
 
     @Id
