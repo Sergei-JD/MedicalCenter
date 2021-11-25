@@ -1,18 +1,18 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.persistence.entity.RoleType;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 
 @Repository
 @RequiredArgsConstructor
@@ -38,14 +38,19 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role getRoleByType(RoleType role) {
+    public Optional<Role> getRoleByType(RoleType roleType) {
+        Role role = null;
         try {
-            return (Role) entityManager.createQuery(FIND_ROLE_BY_NAME_QUERY)
-                    .setParameter("name", role)
+            List<Role> roles = entityManager.createQuery(FIND_ROLE_BY_NAME_QUERY, Role.class)
+                    .setParameter("name", roleType)
                     .getResultList();
+            if (!CollectionUtils.isEmpty(roles)) {
+                role = roles.get(0);
+            }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get role named " + role.name() + ".\n" + ex);
+            throw new RepositoryException("Failed to get role named " + roleType.name() + ".\n" + ex);
         }
+        return Optional.ofNullable(role);
     }
 
     @Override

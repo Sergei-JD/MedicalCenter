@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Repository
 @RequiredArgsConstructor
@@ -66,11 +67,14 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<User> getUserByEmail(String email) {
-        User user;
+        User user = null;
         try {
-            user = (User) entityManager.createQuery(SELECT_USER_BY_EMAIL_QUERY)
+            List<User> users = entityManager.createQuery(SELECT_USER_BY_EMAIL_QUERY, User.class)
               .setParameter("email", email)
               .getResultList();
+            if (!CollectionUtils.isEmpty(users)) {
+                user = users.get(0);
+            }
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get user by email " + email + ".\n" + ex);
         }

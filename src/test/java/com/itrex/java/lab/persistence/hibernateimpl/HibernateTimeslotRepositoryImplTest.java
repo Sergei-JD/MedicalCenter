@@ -6,8 +6,8 @@ import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 import org.springframework.transaction.annotation.Transactional;
+import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 import java.time.Instant;
 import java.util.List;
