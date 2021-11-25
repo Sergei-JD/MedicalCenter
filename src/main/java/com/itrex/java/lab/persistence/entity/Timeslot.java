@@ -1,18 +1,24 @@
 package com.itrex.java.lab.persistence.entity;
 
-import javax.persistence.*;
-
-import lombok.*;
-
-import java.sql.Time;
-import java.util.Date;
+import lombok.Data;
+import lombok.Builder;
+import java.time.Instant;
+import lombok.AccessLevel;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Data
 @Entity
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Table(name = "timeslot", schema = "public")
+@Table(name = "timeslot", schema = "PUBLIC")
 public class Timeslot {
 
     @Id
@@ -21,10 +27,10 @@ public class Timeslot {
     private Integer timeslotId;
 
     @Column(name = "start_time")
-    private Time startTime;
+    private Instant startTime;
 
     @Column(name = "date")
-    private Date date;
+    private Instant date;
 
     @Column(name = "office")
     private Integer office;

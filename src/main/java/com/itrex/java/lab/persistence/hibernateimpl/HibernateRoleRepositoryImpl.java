@@ -1,37 +1,35 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.persistence.entity.RoleType;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.util.CollectionUtils;
 import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 
 import java.util.List;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 
 @Repository
+@RequiredArgsConstructor
 @Transactional
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManager entityManager;
 
     private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
     private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
 
-    @Autowired
-    public HibernateRoleRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public List<Role> getAllRoles() {
         List<Role> roles;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            roles = session.createQuery(FIND_ALL_ROLES_QUERY, Role.class).list();
+            roles = entityManager.createQuery(FIND_ALL_ROLES_QUERY, Role.class).getResultList();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get all roles.\n" + ex);
         }
@@ -40,21 +38,25 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
     }
 
     @Override
-    public Role getRoleByType(RoleType role) {
+    public Optional<Role> getRoleByType(RoleType roleType) {
+        Role role = null;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            return (Role) session.createQuery(FIND_ROLE_BY_NAME_QUERY)
-                    .setParameter("name", role)
-                    .uniqueResult();
+            List<Role> roles = entityManager.createQuery(FIND_ROLE_BY_NAME_QUERY, Role.class)
+                    .setParameter("name", roleType)
+                    .getResultList();
+            if (!CollectionUtils.isEmpty(roles)) {
+                role = roles.get(0);
+            }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get role named " + role.name() + ".\n" + ex);
+            throw new RepositoryException("Failed to get role named " + roleType.name() + ".\n" + ex);
         }
+        return Optional.ofNullable(role);
     }
 
     @Override
     public Role add(Role role) {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = entityManager.unwrap(Session.class);
             int newRoleId = (Integer) session.save("Role", role);
 
             return session.find(Role.class, newRoleId);

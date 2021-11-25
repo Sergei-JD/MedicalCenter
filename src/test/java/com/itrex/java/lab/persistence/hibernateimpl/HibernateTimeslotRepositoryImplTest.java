@@ -2,19 +2,20 @@ package com.itrex.java.lab.persistence.hibernateimpl;
 
 import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired
@@ -25,14 +26,14 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void getAllTimeslot_shouldReturnTheNumberOfAllTimeslots() throws RepositoryException {
         //given
         Timeslot newTimeslot1 = Timeslot.builder()
-                .startTime(new Time(16-20))
-                .date(new Date(2021-10-10))
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
         Timeslot newTimeslot2 = Timeslot.builder()
-                .startTime(new Time(17-20))
-                .date(new Date(2021-10-10))
+                .startTime(Instant.parse("2021-04-09T16:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T16:30:45.123Z"))
                 .office(101)
                 .build();
 
@@ -47,8 +48,8 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void getTimeslotById_shouldReturnTheTimeslotById() throws RepositoryException {
         //given
         Timeslot newTimeslot = Timeslot.builder()
-                .startTime(new Time(16-20))
-                .date(new Date(2021-10-10))
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
@@ -65,8 +66,8 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void addTimeslot_notValidData_officeNull_shouldThrowRepositoryException() {
         //given
         Timeslot newTimeslot = Timeslot.builder()
-                .startTime(new Time(12-20))
-                .date(new Date(2021-10-10))
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .build();
 
         //when && then
@@ -77,7 +78,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void addTimeslot_notValidData_dateNull_shouldThrowRepositoryException() {
         //given
         Timeslot newTimeslot = Timeslot.builder()
-                .startTime(new Time(12-20))
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
@@ -89,7 +90,7 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void addTimeslot_notValidData_timeNull_shouldThrowRepositoryException() {
         //given
         Timeslot newTimeslot = Timeslot.builder()
-                .date(new Date(2021-10-10))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
@@ -101,17 +102,18 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void addTimeslot_ValidData_shouldAddTimeslot() throws RepositoryException {
         //given
         Timeslot newTimeslot = Timeslot.builder()
-                .startTime(new Time(12-20))
-                .date(new Date(2021-10-10))
-                .office(505).build();
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .office(505)
+                .build();
 
         //when
         Timeslot result = timeslotRepository.add(newTimeslot);
 
         //then
         assertAll(
-                () -> assertEquals(new Time(12-20), result.getStartTime()),
-                () -> assertEquals(new Date(2021-10-10), result.getDate()),
+                () -> assertEquals(Instant.parse("2021-04-09T15:30:45.123Z"), result.getStartTime()),
+                () -> assertEquals(Instant.parse("2021-04-09T15:30:45.123Z"), result.getDate()),
                 () -> assertEquals(505, result.getOffice())
         );
     }
@@ -121,8 +123,8 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
         //given
         int timeslotId = -1;
         Timeslot newTimeslot = Timeslot.builder()
-                .startTime(new Time(12-20))
-                .date(new Date(2021-10-10))
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
@@ -146,8 +148,8 @@ class HibernateTimeslotRepositoryImplTest extends BaseRepositoryTest {
     void deleteTimeslotById_existTimeslot_shouldDeleteTimeslot() throws RepositoryException {
         //given
         Timeslot newTimeslot = Timeslot.builder()
-                .startTime(new Time(12-20))
-                .date(new Date(2021-10-10))
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 

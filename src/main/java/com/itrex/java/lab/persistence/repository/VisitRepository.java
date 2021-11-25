@@ -13,7 +13,7 @@ public interface VisitRepository {
 
     Visit add(Visit visit);
 
-    void update(Visit visit);
+    Visit update(Visit visit);
 
     boolean deleteVisitById(Integer visitId);
 

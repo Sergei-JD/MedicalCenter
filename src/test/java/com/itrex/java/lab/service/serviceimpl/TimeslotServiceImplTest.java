@@ -16,7 +16,7 @@ import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.text.Format;
+import java.time.Instant;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Optional;
@@ -30,8 +30,8 @@ import static org.mockito.AdditionalMatchers.not;
 @MockitoSettings(strictness = Strictness.WARN)
 public class TimeslotServiceImplTest {
 
-    private final static Time TEST_START_TIME = new Time(12-20);
-    private final static Date TEST_DATE = new Date(2021-10-10);
+    private final static Instant TEST_START_TIME = Instant.parse("2021-04-09T15:30:45.123Z");
+    private final static Instant TEST_DATE = Instant.parse("2021-04-09T15:30:45.123Z");
     private final static Integer TEST_OFFICE = 505;
 
     @InjectMocks

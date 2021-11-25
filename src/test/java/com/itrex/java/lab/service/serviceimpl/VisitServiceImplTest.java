@@ -15,8 +15,7 @@ import com.itrex.java.lab.service.impl.VisitServiceImpl;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.Set;
 import java.util.List;
@@ -41,8 +40,8 @@ public class VisitServiceImplTest {
     private final static String TEST_USER_GENDER = "test gender";
     private final static Integer TEST_USER_NUMBER_PHONE = 34546674;
 
-    private final static Time TEST_START_TIME = new Time(12-20);
-    private final static Date TEST_DATE = new Date(2021-10-10);
+    private final static Instant TEST_START_TIME = Instant.parse("2021-04-09T15:30:45.123Z");
+    private final static Instant TEST_DATE = Instant.parse("2021-04-09T15:30:45.123Z");
     private final static Integer TEST_OFFICE = 505;
 
     @InjectMocks

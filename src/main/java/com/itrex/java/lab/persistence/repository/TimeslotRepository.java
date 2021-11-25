@@ -13,7 +13,7 @@ public interface TimeslotRepository {
 
     Timeslot add(Timeslot timeslot);
 
-    void update(Timeslot timeslot);
+    Timeslot update(Timeslot timeslot);
 
     boolean deleteTimeslotById(Integer timeslotId);
 

@@ -1,28 +1,15 @@
 package com.itrex.java.lab.persistence;
 
-import org.flywaydb.core.Flyway;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import com.itrex.java.lab.config.TestRepositoryConfiguration;
+import org.springframework.stereotype.Repository;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = TestRepositoryConfiguration.class)
+@Rollback
+@ActiveProfiles("test")
+@DataJpaTest(includeFilters =
+@ComponentScan.Filter(type = FilterType.ANNOTATION, classes = Repository.class))
 public abstract class BaseRepositoryTest {
-
-    @Autowired
-    private Flyway flyway;
-
-    @BeforeEach
-    public void migrate() {
-        flyway.migrate();
-    }
-
-    @AfterEach
-    public void clean() {
-        flyway.clean();
-    }
 }

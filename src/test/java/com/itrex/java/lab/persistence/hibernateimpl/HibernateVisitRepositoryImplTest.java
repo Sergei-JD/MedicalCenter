@@ -9,12 +9,14 @@ import com.itrex.java.lab.persistence.repository.UserRepository;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 class HibernateVisitRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired

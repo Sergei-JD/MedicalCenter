@@ -1,16 +1,20 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
-import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.junit.jupiter.api.Test;
+import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import com.itrex.java.lab.persistence.repository.RoleRepository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired
@@ -40,10 +44,10 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
         roleRepository.add(newRole);
 
         //when
-        Role result = roleRepository.getRoleByType(RoleType.DOCTOR);
+        Optional<Role> result = roleRepository.getRoleByType(RoleType.DOCTOR);
 
         //then
-        assertEquals(newRole.getName(), result.getName());
+        result.ifPresent(role -> assertEquals(newRole.getName(), result.get().getName()));
     }
 
     @Test

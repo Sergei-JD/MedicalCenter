@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 import com.itrex.java.lab.persistence.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Transactional
 class HibernateUserRepositoryImplTest extends BaseRepositoryTest {
 
     @Autowired

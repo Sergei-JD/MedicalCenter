@@ -1,5 +1,6 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
@@ -10,28 +11,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManager entityManager;
 
     private static final String FIND_ALL_TIMESLOT_QUERY = "select t from Timeslot t";
-
-    @Autowired
-    public HibernateTimeslotRepositoryImpl(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
 
     @Override
     public List<Timeslot> getAllTimeslots() {
         List<Timeslot> timeslots;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            timeslots = session.createQuery(FIND_ALL_TIMESLOT_QUERY, Timeslot.class).list();
+            timeslots = entityManager.createQuery(FIND_ALL_TIMESLOT_QUERY, Timeslot.class).getResultList();
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get all timeslots.\n" + ex);
         }
@@ -43,8 +40,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     public Optional<Timeslot> getTimeslotById(Integer timeslotId) {
         Timeslot timeslot;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            timeslot = session.find(Timeslot.class, timeslotId);
+            timeslot = entityManager.find(Timeslot.class, timeslotId);
         } catch (Exception ex) {
             throw new RepositoryException("Failed to get timeslot by id " + timeslotId + ".\n" + ex);
         }
@@ -55,7 +51,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     @Override
     public Timeslot add(Timeslot timeslot) {
         try {
-            Session session = sessionFactory.getCurrentSession();
+            Session session = entityManager.unwrap(Session.class);
             int newTimeslotId = (Integer) session.save("Timeslot", timeslot);
 
             return session.find(Timeslot.class, newTimeslotId);
@@ -65,10 +61,12 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     }
 
     @Override
-    public void update(Timeslot timeslot) {
+    public Timeslot update(Timeslot timeslot) {
+        Timeslot updateTimeslot;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            session.update(timeslot);
+            updateTimeslot = entityManager.merge(timeslot);
+
+            return updateTimeslot;
         } catch (Exception ex) {
             throw new RepositoryException("Failed to update timeslot.\n" + ex);
         }
@@ -78,11 +76,10 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
     public boolean deleteTimeslotById(Integer timeslotId) {
         boolean isDeleted = false;
         try {
-            Session session = sessionFactory.getCurrentSession();
-            Timeslot timeslot = session.find(Timeslot.class, timeslotId);
+            Timeslot timeslot = entityManager.find(Timeslot.class, timeslotId);
 
             if (timeslot != null) {
-                session.delete(timeslot);
+                entityManager.remove(timeslot);
                 isDeleted = true;
             }
         } catch (Exception ex) {
