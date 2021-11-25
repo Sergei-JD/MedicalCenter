@@ -39,27 +39,6 @@ public class TimeslotServiceImplTest {
     @Mock
     private TimeslotRepository timeslotRepository;
 
-    @Captor
-    ArgumentCaptor<Timeslot> timeslotCaptor;
-
-    @Test
-    void updateTimeslot_existTimeslot_shouldUpdateTimeslot() {
-        //given
-        TimeslotDTO timeslotDTO = TimeslotDTO.builder()
-                .timeslotId(1)
-                .startTime(TEST_START_TIME)
-                .date(TEST_DATE)
-                .office(TEST_OFFICE)
-                .build();
-        timeslotService.createTimeslot(timeslotDTO);
-
-        timeslotService.updateTimeslot(timeslotDTO);
-
-        Mockito.verify(timeslotRepository).update(timeslotCaptor.capture());
-
-    }
-
-
     @Test
     void createTimeslot_validData_shouldCreateTimeslot() {
         //given
