@@ -42,7 +42,7 @@ public class TimeslotServiceImplTest {
     @Test
     void createTimeslot_validData_shouldCreateTimeslot() {
         //given
-        TimeslotDTO timeslotDTO = TimeslotDTO.builder()
+        CreateTimeslotDTO timeslotDTO = CreateTimeslotDTO.builder()
                 .startTime(TEST_START_TIME)
                 .date(TEST_DATE)
                 .office(TEST_OFFICE)
@@ -56,7 +56,7 @@ public class TimeslotServiceImplTest {
 
         //when
         when(timeslotRepository.add(timeslot)).thenReturn(timeslot);
-        TimeslotDTO actualTimeslotDTO = timeslotService.createTimeslot(timeslotDTO);
+        CreateTimeslotDTO actualTimeslotDTO = timeslotService.createTimeslot(timeslotDTO);
 
         //then
         assertAll(

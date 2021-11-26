@@ -23,16 +23,16 @@ public class TimeslotServiceImpl implements TimeslotService {
     private final TimeslotRepository timeslotRepository;
 
     @Override
-    public TimeslotDTO createTimeslot(TimeslotDTO timeslotDTO) {
+    public CreateTimeslotDTO createTimeslot(CreateTimeslotDTO createTimeslotDTO) {
         try {
-            Timeslot timeslot = TimeslotConversionUtils.toTimeslot(timeslotDTO);
+            Timeslot timeslot = TimeslotConversionUtils.toTimeslot(createTimeslotDTO);
 
             timeslotRepository.add(timeslot);
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to create timeslot.\n" + ex);
         }
 
-        return timeslotDTO;
+        return createTimeslotDTO;
     }
 
     @Override
