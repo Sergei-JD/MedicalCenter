@@ -1,8 +1,11 @@
 package com.itrex.java.lab.dto;
 
+import com.itrex.java.lab.persistence.entity.Role;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Setter
 @Getter
@@ -11,5 +14,6 @@ public class PatientViewDTO {
 
     private String firstName;
     private String lastName;
+    private Set<Role> roles;
 
 }

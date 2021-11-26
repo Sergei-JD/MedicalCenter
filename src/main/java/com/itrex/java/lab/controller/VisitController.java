@@ -33,7 +33,7 @@ public class VisitController {
         boolean result = visitService.deleteVisit(id);
 
         return result
-                ? new ResponseEntity<>(result, HttpStatus.OK)
+                ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
@@ -82,9 +82,8 @@ public class VisitController {
 
         Optional<VisitViewDTO> visitViewDTO = visitService.getVisitById(id);
 
-        return visitViewDTO.isPresent()
-                ? new ResponseEntity<>(visitViewDTO.get(), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return visitViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/visit/updateVisit")

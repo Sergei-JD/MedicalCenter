@@ -33,7 +33,7 @@ public class PatientController {
         boolean result = patientService.deletePatient(id);
 
         return result
-                ? new ResponseEntity<>(result, HttpStatus.OK)
+                ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
@@ -52,9 +52,8 @@ public class PatientController {
 
         Optional<PatientViewDTO> patientViewDTO = patientService.getPatientById(id);
 
-        return patientViewDTO.isPresent()
-                ? new ResponseEntity<>(patientViewDTO.get(), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return patientViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/patient/update")

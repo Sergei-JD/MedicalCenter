@@ -36,7 +36,7 @@ public class TimeslotController {
         boolean result = timeslotService.deleteTimeslot(id);
 
         return result
-                ? new ResponseEntity<>(result, HttpStatus.OK)
+                ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
@@ -55,9 +55,8 @@ public class TimeslotController {
 
         Optional<CreateTimeslotDTO> timeslotDTO = timeslotService.getTimeslotById(id);
 
-        return timeslotDTO.isPresent()
-                ? new ResponseEntity<>(timeslotDTO.get(), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return timeslotDTO.map(createTimeslotDTO -> new ResponseEntity<>(createTimeslotDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/timeslot/update")

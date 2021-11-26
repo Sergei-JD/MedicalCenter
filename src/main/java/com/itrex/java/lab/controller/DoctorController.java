@@ -33,7 +33,7 @@ public class DoctorController {
         boolean result = doctorService.deleteDoctor(id);
 
         return result
-                ? new ResponseEntity<>(result, HttpStatus.OK)
+                ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
@@ -52,9 +52,8 @@ public class DoctorController {
 
         Optional<DoctorViewDTO> doctorViewDTO = doctorService.getDoctorById(id);
 
-        return doctorViewDTO.isPresent()
-                ? new ResponseEntity<>(doctorViewDTO.get(), HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return doctorViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PutMapping("/doctor/update")

@@ -1,4 +1,4 @@
-package com.itrex.java.lab.service.serviceimpl;
+package com.itrex.java.lab.service.services;
 
 import com.itrex.java.lab.dto.*;
 import com.itrex.java.lab.persistence.entity.Role;

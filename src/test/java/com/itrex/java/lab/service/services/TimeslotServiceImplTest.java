@@ -1,4 +1,4 @@
-package com.itrex.java.lab.service.serviceimpl;
+package com.itrex.java.lab.service.services;
 
 import org.mockito.*;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,6 @@ import com.itrex.java.lab.service.impl.TimeslotServiceImpl;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
-import java.sql.Date;
-import java.sql.Time;
 import java.time.Instant;
 import java.util.List;
 import java.util.Arrays;
