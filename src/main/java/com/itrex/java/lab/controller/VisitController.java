@@ -13,11 +13,12 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/visits")
 public class VisitController {
 
     private final VisitService visitService;
 
-    @PostMapping("/visit/new")
+    @PostMapping("/new")
     public ResponseEntity<CreateVisitDTO> createVisit(@RequestBody CreateVisitDTO createVisitDTO) throws ServiceException {
 
         CreateVisitDTO newVisit = visitService.createVisit(createVisitDTO);
@@ -27,7 +28,7 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @DeleteMapping("/visit/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteVisit(@PathVariable(name = "id") int id) throws ServiceException {
 
         boolean result = visitService.deleteVisit(id);
@@ -37,7 +38,7 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping("/visitsAll")
+    @GetMapping
     public ResponseEntity<List<VisitViewDTO>> getAllVisit() throws ServiceException {
 
         List<VisitViewDTO> visits = visitService.getAllVisit();
@@ -47,7 +48,7 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/visitsAllFree")
+    @GetMapping("/free")
     public ResponseEntity<List<VisitViewDTO>> getAllFreeVisits() throws ServiceException {
 
         List<VisitViewDTO> visits = visitService.getAllFreeVisits();
@@ -57,7 +58,7 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/visitsAllFreeForDoctorById")
+    @GetMapping("/doctors/free/{id}")
     public ResponseEntity<List<VisitViewDTO>> getAllFreeVisitsForDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
 
         List<VisitViewDTO> visits = visitService.getAllFreeVisitsForDoctorById(id);
@@ -67,7 +68,7 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/visitsAllForPatientDyId")
+    @GetMapping("/patients/{id}")
     public ResponseEntity<List<VisitViewDTO>> getAllVisitsForPatientDyId(@PathVariable(name = "id") int id) throws ServiceException {
 
         List<VisitViewDTO> visits = visitService.getAllVisitsForPatientDyId(id);
@@ -77,7 +78,7 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/visit/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<VisitViewDTO> getVisitById(@PathVariable(name = "id") int id) throws ServiceException {
 
         Optional<VisitViewDTO> visitViewDTO = visitService.getVisitById(id);
@@ -86,8 +87,8 @@ public class VisitController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/visit/updateVisit")
-    public ResponseEntity<VisitDTO> updateVisit(@RequestBody VisitDTO visitDTO) throws ServiceException {
+    @PutMapping("/{id}")
+    public ResponseEntity<VisitDTO> updateVisit(@RequestBody VisitDTO visitDTO, @PathVariable String id) throws ServiceException {
 
         VisitDTO updatedVisit = visitService.updateVisit(visitDTO);
 
@@ -96,8 +97,8 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @PutMapping("/visit/updateVisitHistory")
-    public ResponseEntity<VisitHistoryDTO> updateVisitHistory(@RequestBody VisitDTO visitDTO) throws ServiceException {
+    @PutMapping("/{id}/History")
+    public ResponseEntity<VisitHistoryDTO> updateVisitHistory(@RequestBody VisitDTO visitDTO, @PathVariable String id) throws ServiceException {
 
         VisitHistoryDTO updatedVisitHistory = visitService.updateVisitHistory(visitDTO);
 

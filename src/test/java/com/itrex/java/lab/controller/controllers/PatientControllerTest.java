@@ -44,7 +44,7 @@ class PatientControllerTest extends BaseControllerTest {
         // when
         when(patientService.getPatientById(patientId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/patient/{id}", patientId)
+        MvcResult mvcResult = mockMvc.perform(get("/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -83,7 +83,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.deletePatient(patientId)).thenReturn(true);
 
         //then
-        mockMvc.perform(delete("/patient/delete/{id}", patientId)
+        mockMvc.perform(delete("/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -97,62 +97,62 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.deletePatient(patientId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/patient/delete/{id}", patientId)
+        mockMvc.perform(delete("/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
 
-//    @Test
-//    void createPatient_validData_shouldReturnNewPatientDTO() throws Exception {
-//        //given
-//        CreatePatientDTO expectedResponseBody = CreatePatientDTO.builder()
-//                .firstName("test first name")
-//                .lastName("test lsat name")
-//                .age(25)
-//                .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
-//                .build();
-//
-//        //when
-//        when(patientService.createPatient(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        //then
-//        MvcResult mvcResult = mockMvc.perform(post("/patient/new")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
-//
-//    @Test
-//    void updatePatient_validData_shouldReturnUpdatedPatientDTO() throws Exception {
-//        //given
-//        Integer patientId = 1;
-//        PatientDTO expectedResponseBody = PatientDTO.builder()
-//                .userId(patientId)
-//                .firstName("test first name")
-//                .lastName("test lsat name")
-//                .age(25)
-//                .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
-//                .build();
-//
-//        //when
-//        when(patientService.updatePatient(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        // then
-//        MvcResult mvcResult = mockMvc.perform(put("/patient/update")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
+    @Test
+    void createPatient_validData_shouldReturnNewPatientDTO() throws Exception {
+        //given
+        CreatePatientDTO expectedResponseBody = CreatePatientDTO.builder()
+                .firstName("test first name")
+                .lastName("test lsat name")
+                .age(25)
+                .gender("M")
+                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
+                .build();
+
+        //when
+        when(patientService.createPatient(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/patients/new")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    void updatePatient_validData_shouldReturnUpdatedPatientDTO() throws Exception {
+        //given
+        Integer patientId = 1;
+        PatientDTO expectedResponseBody = PatientDTO.builder()
+                .userId(patientId)
+                .firstName("test first name")
+                .lastName("test lsat name")
+                .age(25)
+                .gender("M")
+                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
+                .build();
+
+        //when
+        when(patientService.updatePatient(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        // then
+        MvcResult mvcResult = mockMvc.perform(put("/patients/{id}")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
 
 }

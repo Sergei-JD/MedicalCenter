@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.service.impl.DoctorServiceImpl;
+import com.itrex.java.lab.service.hibernate.DoctorServiceImpl;
 import com.itrex.java.lab.persistence.repository.UserRepository;
 
 import java.util.List;

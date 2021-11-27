@@ -1,4 +1,4 @@
-package com.itrex.java.lab.service.impl;
+package com.itrex.java.lab.service.hibernate;
 
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.DoctorDTO;

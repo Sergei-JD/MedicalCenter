@@ -40,7 +40,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         // when
         when(timeslotService.getTimeslotById(timeslotId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/timeslot/{id}", timeslotId)
+        MvcResult mvcResult = mockMvc.perform(get("/timeslots/{id}", timeslotId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -79,7 +79,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(true);
 
         //then
-        mockMvc.perform(delete("/timeslot/delete/{id}", timeslotId)
+        mockMvc.perform(delete("/timeslots/{id}", timeslotId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -93,58 +93,58 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/timeslot/delete/{id}", timeslotId)
+        mockMvc.perform(delete("/timeslots/{id}", timeslotId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
 
-//    @Test
-//    void createTimeslot_validData_shouldReturnNewTimeslotDTO() throws Exception {
-//        //given
-//        CreateTimeslotDTO expectedResponseBody = CreateTimeslotDTO.builder()
-//                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                .office(505)
-//                .build();
-//
-//        //when
-//        when(timeslotService.createTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        //then
-//        MvcResult mvcResult = mockMvc.perform(post("/timeslot/new")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
-//
-//    @Test
-//    void updateTimeslot_validData_shouldReturnUpdatedTimeslotDTO() throws Exception {
-//        //given
-//        Integer timeslotId = 1;
-//        TimeslotDTO expectedResponseBody = TimeslotDTO.builder()
-//                .timeslotId(timeslotId)
-//                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                .office(505)
-//                .build();
-//
-//        //when
-//        when(timeslotService.updateTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        // then
-//        MvcResult mvcResult = mockMvc.perform(put("/timeslot/update")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
+    @Test
+    void createTimeslot_validData_shouldReturnNewTimeslotDTO() throws Exception {
+        //given
+        CreateTimeslotDTO expectedResponseBody = CreateTimeslotDTO.builder()
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .office(505)
+                .build();
+
+        //when
+        when(timeslotService.createTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/timeslots/new")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    void updateTimeslot_validData_shouldReturnUpdatedTimeslotDTO() throws Exception {
+        //given
+        Integer timeslotId = 1;
+        TimeslotDTO expectedResponseBody = TimeslotDTO.builder()
+                .timeslotId(timeslotId)
+                .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .date(Instant.parse("2021-04-09T15:30:45.123Z"))
+                .office(505)
+                .build();
+
+        //when
+        when(timeslotService.updateTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        // then
+        MvcResult mvcResult = mockMvc.perform(put("/timeslots/{id}")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
 
 }

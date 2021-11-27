@@ -5,8 +5,7 @@ import lombok.experimental.SuperBuilder;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

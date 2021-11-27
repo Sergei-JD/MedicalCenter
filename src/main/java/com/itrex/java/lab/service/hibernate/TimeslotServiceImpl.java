@@ -1,12 +1,9 @@
-package com.itrex.java.lab.service.impl;
+package com.itrex.java.lab.service.hibernate;
 
 
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.TimeslotDTO;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.service.TimeslotService;
 import com.itrex.java.lab.exception.ServiceException;

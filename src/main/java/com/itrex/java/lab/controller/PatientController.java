@@ -13,11 +13,12 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/patients")
 public class PatientController {
 
     private final PatientService patientService;
 
-    @PostMapping("/patient/new")
+    @PostMapping("/new")
     public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) throws ServiceException {
 
         CreatePatientDTO newPatient = patientService.createPatient(createPatientDTO);
@@ -27,7 +28,7 @@ public class PatientController {
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @DeleteMapping("/patient/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deletePatient(@PathVariable(name = "id") int id) throws ServiceException {
 
         boolean result = patientService.deletePatient(id);
@@ -37,7 +38,7 @@ public class PatientController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping("/patients")
+    @GetMapping
     public ResponseEntity<List<PatientViewDTO>> getAllPatients() throws ServiceException {
 
         List<PatientViewDTO> patients = patientService.getAllPatients();
@@ -47,7 +48,7 @@ public class PatientController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/patient/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<PatientViewDTO> getPatientById(@PathVariable(name = "id") int id) throws ServiceException {
 
         Optional<PatientViewDTO> patientViewDTO = patientService.getPatientById(id);
@@ -56,8 +57,8 @@ public class PatientController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/patient/update")
-    public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) throws ServiceException {
+    @PutMapping("/{id}")
+    public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO, @PathVariable int id) throws ServiceException {
 
         PatientDTO updatedPatient = patientService.updatePatient(patientDTO);
 

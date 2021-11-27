@@ -6,7 +6,9 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 @SuperBuilder
+@NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class TimeslotDTO extends CreateTimeslotDTO {
 
     private Integer timeslotId;

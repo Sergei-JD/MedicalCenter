@@ -2,7 +2,6 @@ package com.itrex.java.lab.controller;
 
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 
-import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.TimeslotService;
@@ -16,11 +15,12 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/timeslots")
 public class TimeslotController {
 
     private final TimeslotService timeslotService;
 
-    @PostMapping("/timeslot/new")
+    @PostMapping("/new")
     public ResponseEntity<CreateTimeslotDTO> createTimeslot(@RequestBody CreateTimeslotDTO createTimeslotDTO) throws ServiceException {
 
         CreateTimeslotDTO newTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
@@ -30,7 +30,7 @@ public class TimeslotController {
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @DeleteMapping("/timeslot/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteTimeslot(@PathVariable(name = "id") int id) throws ServiceException {
 
         boolean result = timeslotService.deleteTimeslot(id);
@@ -40,7 +40,7 @@ public class TimeslotController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping("/timeslots")
+    @GetMapping
     public ResponseEntity<List<CreateTimeslotDTO>> getAllTimeslot() throws ServiceException {
 
         List<CreateTimeslotDTO> timeslots = timeslotService.getAllTimeslot();
@@ -50,7 +50,7 @@ public class TimeslotController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/timeslot/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<CreateTimeslotDTO> getTimeslotById(@PathVariable(name = "id") int id) throws ServiceException {
 
         Optional<CreateTimeslotDTO> timeslotDTO = timeslotService.getTimeslotById(id);
@@ -59,7 +59,7 @@ public class TimeslotController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/timeslot/update")
+    @PutMapping("/{id}")
     public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) throws ServiceException {
 
         TimeslotDTO updatedTimeslot = timeslotService.updateTimeslot(timeslotDTO);

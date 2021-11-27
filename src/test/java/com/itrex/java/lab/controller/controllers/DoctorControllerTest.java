@@ -7,6 +7,7 @@ import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.persistence.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -43,7 +44,7 @@ class DoctorControllerTest extends BaseControllerTest {
         // when
         when(doctorService.getDoctorById(doctorId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/doctor/{id}", doctorId)
+        MvcResult mvcResult = mockMvc.perform(get("/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -80,7 +81,7 @@ class DoctorControllerTest extends BaseControllerTest {
         // when
         when(doctorService.deleteDoctor(doctorId)).thenReturn(true);
         //then
-        mockMvc.perform(delete("/doctor/delete/{id}", doctorId)
+        mockMvc.perform(delete("/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -94,36 +95,64 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.deleteDoctor(doctorId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/doctor/delete/{id}", doctorId)
+        mockMvc.perform(delete("/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
 
-//    @Test
-//    void createDoctor_validData_shouldReturnNewDoctorDTO() throws Exception {
-//        //given
-//        CreateDoctorDTO expectedResponseBody = CreateDoctorDTO.builder()
-//                .firstName("test first name")
-//                .lastName("test lsat name")
-//                .age(25)
-//                .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
-//                .build();
-//
-//        //when
-//        when(doctorService.createDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        //then
-//        MvcResult mvcResult = mockMvc.perform(post("/doctor/new")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
-//
+    @Test
+    void createDoctor_validData_shouldReturnNewDoctorDTO() throws Exception {
+        //given
+        CreateDoctorDTO expectedResponseBody = CreateDoctorDTO.builder()
+                .firstName("test first name")
+                .lastName("test lsat name")
+                .age(25)
+                .gender("M")
+                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
+                .build();
+
+        //when
+        when(doctorService.createDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/doctors/new")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    void updateDoctor_validData_shouldReturnUpdatedDoctorDTO() throws Exception {
+        //given
+        Integer doctorId = 1;
+        DoctorDTO expectedResponseBody = DoctorDTO.builder()
+                .userId(doctorId)
+                .firstName("test first name")
+                .lastName("test lsat name")
+                .age(25)
+                .gender("M")
+                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
+                .build();
+
+        //when
+        when(doctorService.updateDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        // then
+        MvcResult mvcResult = mockMvc.perform(put("/doctors/{id}")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
 //    @Test
 //    void updateDoctor_validData_shouldReturnUpdatedDoctorDTO() throws Exception {
 //        //given
@@ -138,13 +167,15 @@ class DoctorControllerTest extends BaseControllerTest {
 //                .build();
 //
 //        //when
-//        when(doctorService.updateDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
+//        when(doctorService.updateDoctor(expectedResponseBody.getUserId())).thenReturn(expectedResponseBody.getUserId());
 //
 //        // then
-//        MvcResult mvcResult = mockMvc.perform(put("/doctor/update")
+//        MvcResult mvcResult = mockMvc.perform(put("/doctors/{id}", doctorId)
 //                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+//                        .content(objectMapper.writeValueAsString(new User().getFirstName("changed name")))
 //                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id").value("1"))
+//                .andExpect(jsonPath("$.name").value("changed name"))
 //                .andReturn();
 //
 //        String actualResponseBody = mvcResult.getResponse().getContentAsString();

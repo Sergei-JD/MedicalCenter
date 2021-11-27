@@ -55,7 +55,7 @@ class VisitControllerTest extends BaseControllerTest {
         // when
         when(visitService.getVisitById(visitId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visit/{id}", visitId)
+        MvcResult mvcResult = mockMvc.perform(get("/visits/{id}", visitId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -75,7 +75,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllVisit()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visitsAll")
+        MvcResult mvcResult = mockMvc.perform(get("/visits")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -95,7 +95,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllFreeVisits()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visitsAllFree")
+        MvcResult mvcResult = mockMvc.perform(get("/visits/free")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -105,47 +105,47 @@ class VisitControllerTest extends BaseControllerTest {
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
     }
 
-//    @Test
-//    void getAllFreeVisitsForDoctorById_validData_shouldReturnVisitsList() throws Exception {
-//        //given
-//        Integer visitId = 1;
-//        VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
-//
-//        // when
-//        List<VisitViewDTO> expectedResponseBody = Arrays.asList(visitViewDTO,  visitViewDTO);
-//        when(visitService.getAllFreeVisitsForDoctorById(visitId)).thenReturn(expectedResponseBody);
-//
-//        //then
-//        MvcResult mvcResult = mockMvc.perform(get("/visitsAllFreeForDoctorById")
-//                        .contentType("application/json"))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
-//
-//    @Test
-//    void getAllVisitsForPatientDyId_validData_shouldReturnVisitsList() throws Exception {
-//        //given
-//        Integer visitId = 1;
-//        VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
-//
-//        // when
-//        List<VisitViewDTO> expectedResponseBody = Arrays.asList(visitViewDTO,  visitViewDTO);
-//        when(visitService.getAllVisitsForPatientDyId(visitId)).thenReturn(expectedResponseBody);
-//
-//        //then
-//        MvcResult mvcResult = mockMvc.perform(get("/visitsAllForPatientDyId")
-//                        .contentType("application/json"))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
+    @Test
+    void getAllFreeVisitsForDoctorById_validData_shouldReturnVisitsList() throws Exception {
+        //given
+        Integer visitId = 1;
+        VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
+
+        // when
+        List<VisitViewDTO> expectedResponseBody = Arrays.asList(visitViewDTO,  visitViewDTO);
+        when(visitService.getAllFreeVisitsForDoctorById(visitId)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(get("/visits/doctors/free/{id}")
+                        .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    void getAllVisitsForPatientById_validData_shouldReturnVisitsList() throws Exception {
+        //given
+        Integer visitId = 1;
+        VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
+
+        // when
+        List<VisitViewDTO> expectedResponseBody = Arrays.asList(visitViewDTO,  visitViewDTO);
+        when(visitService.getAllVisitsForPatientDyId(visitId)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(get("/visits/patients/{id}")
+                        .contentType("application/json"))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
 
     @Test
     void deleteVisit_validDate_shouldReturnTrue() throws Exception {
@@ -154,7 +154,7 @@ class VisitControllerTest extends BaseControllerTest {
         // when
         when(visitService.deleteVisit(visitId)).thenReturn(true);
         //then
-        mockMvc.perform(delete("/visit/delete/{id}", visitId)
+        mockMvc.perform(delete("/visits/{id}", visitId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -168,89 +168,89 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.deleteVisit(visitId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/visit/delete/{id}", visitId)
+        mockMvc.perform(delete("/visits/{id}", visitId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
 
-//    @Test
-//    void createVisit_validData_shouldReturnNewVisitDTO() throws Exception {
-//        //given
-//        CreateVisitDTO expectedResponseBody = CreateVisitDTO.builder()
-//                .doctorId(User.builder()
-//                        .firstName("test first name")
-//                        .lastName("test last name")
-//                        .age(25)
-//                        .gender("M")
-//                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
-//                .patientId(User.builder()
-//                        .firstName("test first name")
-//                        .lastName("test last name")
-//                        .age(25)
-//                        .gender("M")
-//                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
-//                .timeslotId(Timeslot.builder()
-//                        .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                        .date(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                        .office(505)
-//                        .build())
-//                .build();
-//
-//        //when
-//        when(visitService.createVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        //then
-//        MvcResult mvcResult = mockMvc.perform(post("/visit/new")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
-//
-//    @Test
-//    void updateVisit_validData_shouldReturnUpdatedVisitDTO() throws Exception {
-//        //given
-//        Integer visitId = 1;
-//        VisitDTO expectedResponseBody = VisitDTO.builder()
-//                .visitId(visitId)
-//                .doctorId(User.builder()
-//                        .userId(1)
-//                        .firstName("test first name")
-//                        .lastName("test last name")
-//                        .age(25)
-//                        .gender("M")
-//                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
-//                .patientId(User.builder()
-//                        .userId(2)
-//                        .firstName("test first name")
-//                        .lastName("test last name")
-//                        .age(25)
-//                        .gender("M")
-//                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
-//                .timeslotId(Timeslot.builder()
-//                        .timeslotId(1)
-//                        .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                        .date(Instant.parse("2021-04-09T15:30:45.123Z"))
-//                        .office(505)
-//                        .build())
-//                .build();
-//
-//        //when
-//        when(visitService.updateVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
-//
-//        // then
-//        MvcResult mvcResult = mockMvc.perform(put("/visit/update")
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-//                .andExpect(status().isOk())
-//                .andReturn();
-//
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
+    @Test
+    void createVisit_validData_shouldReturnNewVisitDTO() throws Exception {
+        //given
+        CreateVisitDTO expectedResponseBody = CreateVisitDTO.builder()
+                .doctorId(User.builder()
+                        .firstName("test first name")
+                        .lastName("test last name")
+                        .age(25)
+                        .gender("M")
+                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
+                .patientId(User.builder()
+                        .firstName("test first name")
+                        .lastName("test last name")
+                        .age(25)
+                        .gender("M")
+                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
+                .timeslotId(Timeslot.builder()
+                        .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                        .date(Instant.parse("2021-04-09T15:30:45.123Z"))
+                        .office(505)
+                        .build())
+                .build();
+
+        //when
+        when(visitService.createVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/visits/new")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    void updateVisit_validData_shouldReturnUpdatedVisitDTO() throws Exception {
+        //given
+        Integer visitId = 1;
+        VisitDTO expectedResponseBody = VisitDTO.builder()
+                .visitId(visitId)
+                .doctorId(User.builder()
+                        .userId(1)
+                        .firstName("test first name")
+                        .lastName("test last name")
+                        .age(25)
+                        .gender("M")
+                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
+                .patientId(User.builder()
+                        .userId(2)
+                        .firstName("test first name")
+                        .lastName("test last name")
+                        .age(25)
+                        .gender("M")
+                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
+                .timeslotId(Timeslot.builder()
+                        .timeslotId(1)
+                        .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
+                        .date(Instant.parse("2021-04-09T15:30:45.123Z"))
+                        .office(505)
+                        .build())
+                .build();
+
+        //when
+        when(visitService.updateVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        // then
+        MvcResult mvcResult = mockMvc.perform(put("/visits/{id}")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
 
 }

@@ -1,8 +1,6 @@
 package com.itrex.java.lab.controller;
 
 import com.itrex.java.lab.dto.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.DoctorService;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +13,12 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/doctors")
 public class DoctorController {
 
     private final DoctorService doctorService;
 
-    @PostMapping("/doctor/new")
+    @PostMapping("/new")
     public ResponseEntity<CreateDoctorDTO> createDoctor(@RequestBody CreateDoctorDTO createDoctorDTO) throws ServiceException {
 
         CreateDoctorDTO newDoctor = doctorService.createDoctor(createDoctorDTO);
@@ -29,7 +28,7 @@ public class DoctorController {
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
-    @DeleteMapping("/doctor/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteDoctor(@PathVariable(name = "id") int id) throws ServiceException {
 
         boolean result = doctorService.deleteDoctor(id);
@@ -39,7 +38,7 @@ public class DoctorController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @GetMapping("/doctors")
+    @GetMapping
     public ResponseEntity<List<DoctorViewDTO>> getAllDoctors() throws ServiceException {
 
         List<DoctorViewDTO> doctors = doctorService.getAllDoctors();
@@ -49,7 +48,7 @@ public class DoctorController {
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/doctor/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<DoctorViewDTO> getDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
 
         Optional<DoctorViewDTO> doctorViewDTO = doctorService.getDoctorById(id);
@@ -58,8 +57,8 @@ public class DoctorController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/doctor/update")
-    public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO) throws ServiceException {
+    @PutMapping("/{id}")
+    public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO, @PathVariable int id) throws ServiceException {
 
         DoctorDTO updatedDoctor = doctorService.updateDoctor(doctorDTO);
 
