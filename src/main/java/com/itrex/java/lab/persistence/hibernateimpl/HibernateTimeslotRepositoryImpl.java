@@ -2,27 +2,23 @@ package com.itrex.java.lab.persistence.hibernateimpl;
 
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
 
+@Deprecated
 @Repository
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
     private final EntityManager entityManager;
 
-    private static final String FIND_ALL_TIMESLOT_QUERY = "select t from Timeslot t";
+    private static final String FIND_ALL_TIMESLOT_QUERY = "SELECT t FROM Timeslot t";
 
     @Override
     public List<Timeslot> getAllTimeslots() {

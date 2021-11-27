@@ -1,28 +1,24 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Visit;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
 
+@Deprecated
 @Repository
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRED, rollbackFor = RepositoryException.class)
 public class HibernateVisitRepositoryImpl implements VisitRepository {
 
     private final EntityManager entityManager;
 
-    private static final String FIND_ALL_VISIT_QUERY = "select v from Visit v";
+    private static final String FIND_ALL_VISIT_QUERY = "SELECT v FROM Visit v";
 
     @Override
     public List<Visit> getAllVisits() throws RepositoryException {

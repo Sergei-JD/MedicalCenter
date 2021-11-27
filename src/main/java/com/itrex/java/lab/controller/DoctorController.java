@@ -1,6 +1,8 @@
 package com.itrex.java.lab.controller;
 
 import com.itrex.java.lab.dto.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.DoctorService;
 import lombok.RequiredArgsConstructor;

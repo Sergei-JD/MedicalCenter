@@ -7,22 +7,21 @@ import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 
 import java.util.List;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 
+@Deprecated
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     private final EntityManager entityManager;
 
-    private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
-    private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
+    private static final String FIND_ALL_ROLES_QUERY = "SELECT r FROM Role r";
+    private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r WHERE r.name = :name";
 
 
     @Override

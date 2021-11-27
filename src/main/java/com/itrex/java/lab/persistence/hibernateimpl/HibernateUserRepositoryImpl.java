@@ -1,33 +1,33 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.repository.UserRepository;
+import java.util.Set;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import javax.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
 import org.springframework.util.CollectionUtils;
+import org.springframework.stereotype.Repository;
+import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.repository.UserRepository;
 
+
+@Deprecated
 @Repository
 @RequiredArgsConstructor
 public class HibernateUserRepositoryImpl implements UserRepository {
 
     private final EntityManager entityManager;
 
-    private static final String FIND_ALL_USERS_QUERY = "select u from User u";
+    private static final String FIND_ALL_USERS_QUERY = "SELECT u FROM User u";
     private static final String DELETE_USER_ID_FROM_USER_ROLE_QUERY = "DELETE FROM user_role WHERE user_id = ?";
-    private static final String SELECT_USER_BY_EMAIL_QUERY = "FROM User u where u.email = :email";
+    private static final String SELECT_USER_BY_EMAIL_QUERY = "FROM User u WHERE u.email = :email";
     private static final String SELECT_USER_BY_ROLE_QUERY = "SELECT u FROM User u JOIN FETCH u.roles r WHERE r.name = :name";
 
     @Override
-    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         List<User> users;
         try {
@@ -40,7 +40,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<User> getAllUsersByRole(RoleType role) {
         List<User> users;
         try {
@@ -65,7 +64,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<User> getUserByEmail(String email) {
         User user = null;
         try {
@@ -83,7 +81,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public boolean deleteUserById(Integer userId) {
         boolean isDeleted = false;
         try {
@@ -104,7 +101,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public User add(User user) {
         try {
             Session session = entityManager.unwrap(Session.class);
@@ -117,7 +113,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    @Transactional
     public boolean assignRole(User user, Role role) {
         try {
             user = entityManager.find(User.class, user.getUserId());

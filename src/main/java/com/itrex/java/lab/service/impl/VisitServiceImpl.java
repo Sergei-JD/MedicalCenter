@@ -9,6 +9,7 @@ import com.itrex.java.lab.util.VisitConversionUtils;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class VisitServiceImpl implements VisitService {
     private final VisitRepository visitRepository;
 
     @Override
+    @Transactional
     public CreateVisitDTO createVisit(CreateVisitDTO visitDTO) {
         try {
             Visit visit = VisitConversionUtils.toVisit(visitDTO);
@@ -35,6 +37,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllVisit() {
         try {
             List<Visit> visits = visitRepository.getAllVisits();
@@ -48,6 +51,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllFreeVisits() {
         try {
             List<Visit> visits = visitRepository.getAllVisits();
@@ -62,6 +66,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllFreeVisitsForDoctorById(int doctorId) {
         try {
             List<Visit> visits = visitRepository.getAllVisits();
@@ -78,6 +83,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllVisitsForPatientDyId(int patientId) {
         try {
             List<Visit> visits = visitRepository.getAllVisits();
@@ -93,6 +99,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<VisitViewDTO> getVisitById(int visitId) {
         VisitViewDTO visitDTO = null;
         try {
@@ -108,6 +115,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional
     public boolean deleteVisit(int visitId) {
         try {
             return visitRepository.deleteVisitById(visitId);
@@ -117,6 +125,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional
     public VisitDTO updateVisit(VisitDTO visitDTO) {
         if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit. Not valid visitDTO.");
@@ -139,6 +148,7 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    @Transactional
     public VisitHistoryDTO updateVisitHistory(VisitDTO visitDTO) {
         if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit history. Not valid visitDTO.");
@@ -160,4 +170,5 @@ public class VisitServiceImpl implements VisitService {
     private boolean isValidVisitDTO(CreateVisitDTO visitDTO) {
         return visitDTO != null && visitDTO.getDoctorId() != null && visitDTO.getPatientId() != null;
     }
+
 }

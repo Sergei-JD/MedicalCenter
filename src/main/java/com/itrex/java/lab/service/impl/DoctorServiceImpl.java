@@ -13,6 +13,7 @@ import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 import java.util.List;
@@ -26,6 +27,7 @@ public class DoctorServiceImpl implements DoctorService {
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public CreateDoctorDTO createDoctor(CreateDoctorDTO doctorDTO) {
         try {
             User user = UserConversionUtils.toUser(doctorDTO);
@@ -43,6 +45,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DoctorViewDTO> getAllDoctors() {
         try {
             List<User> doctors = userRepository.getAllUsersByRole(RoleType.DOCTOR);
@@ -56,6 +59,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<DoctorViewDTO> getDoctorById(int doctorId) {
         DoctorViewDTO doctorDTO = null;
         try {
@@ -71,6 +75,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public boolean deleteDoctor(int doctorId) {
         try {
             return userRepository.deleteUserById(doctorId);
@@ -80,6 +85,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    @Transactional
     public DoctorDTO updateDoctor(DoctorDTO doctorDTO) {
         if (!isValidDoctorDTO(doctorDTO) || doctorDTO.getUserId() == null) {
             throw new ServiceException("Failed to update doctor. Not valid doctorDTO.");

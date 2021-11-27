@@ -3,7 +3,10 @@ package com.itrex.java.lab.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import com.itrex.java.lab.dto.TimeslotDTO;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.service.TimeslotService;
 import com.itrex.java.lab.exception.ServiceException;
@@ -11,6 +14,7 @@ import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.util.TimeslotConversionUtils;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +27,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     private final TimeslotRepository timeslotRepository;
 
     @Override
+    @Transactional
     public CreateTimeslotDTO createTimeslot(CreateTimeslotDTO createTimeslotDTO) {
         try {
             Timeslot timeslot = TimeslotConversionUtils.toTimeslot(createTimeslotDTO);
@@ -49,6 +54,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<CreateTimeslotDTO> getTimeslotById(int timeslotId) {
         CreateTimeslotDTO timeslotDTO = null;
         try {
@@ -64,6 +70,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
+    @Transactional
     public boolean deleteTimeslot(int timeslotId) {
         try {
             return timeslotRepository.deleteTimeslotById(timeslotId);
@@ -73,6 +80,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
+    @Transactional
     public TimeslotDTO updateTimeslot(TimeslotDTO timeslotDTO) {
         if (!isValidTimeslotDTO(timeslotDTO) || timeslotDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update timeslot. Not valid timeslotDTO.");
