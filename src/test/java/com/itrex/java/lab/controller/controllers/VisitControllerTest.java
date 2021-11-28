@@ -116,7 +116,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllFreeVisitsForDoctorById(visitId)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits/doctors/free/{id}")
+        MvcResult mvcResult = mockMvc.perform(get("/visits/doctors/free/{id}", 1)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -137,7 +137,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllVisitsForPatientDyId(visitId)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits/patients/{id}")
+        MvcResult mvcResult = mockMvc.perform(get("/visits/patients/{id}", 1)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -242,7 +242,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.updateVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/visits/{id}")
+        MvcResult mvcResult = mockMvc.perform(put("/visits/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

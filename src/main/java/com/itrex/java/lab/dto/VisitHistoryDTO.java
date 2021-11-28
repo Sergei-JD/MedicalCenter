@@ -9,6 +9,7 @@ import lombok.Setter;
 @Builder
 public class VisitHistoryDTO {
 
+    private Integer visitId;
     private String comment;
 
 }

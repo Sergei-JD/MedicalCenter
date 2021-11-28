@@ -142,7 +142,7 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.updateDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/doctors/{id}")
+        MvcResult mvcResult = mockMvc.perform(put("/doctors/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
@@ -152,35 +152,5 @@ class DoctorControllerTest extends BaseControllerTest {
 
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
     }
-
-//    @Test
-//    void updateDoctor_validData_shouldReturnUpdatedDoctorDTO() throws Exception {
-//        //given
-//        Integer doctorId = 1;
-//        DoctorDTO expectedResponseBody = DoctorDTO.builder()
-//                .userId(doctorId)
-//                .firstName("test first name")
-//                .lastName("test lsat name")
-//                .age(25)
-//                .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
-//                .build();
-//
-//        //when
-//        when(doctorService.updateDoctor(expectedResponseBody.getUserId())).thenReturn(expectedResponseBody.getUserId());
-//
-//        // then
-//        MvcResult mvcResult = mockMvc.perform(put("/doctors/{id}", doctorId)
-//                        .contentType("application/json")
-//                        .content(objectMapper.writeValueAsString(new User().getFirstName("changed name")))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.id").value("1"))
-//                .andExpect(jsonPath("$.name").value("changed name"))
-//                .andReturn();
-//
-//        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-//
-//        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-//    }
 
 }

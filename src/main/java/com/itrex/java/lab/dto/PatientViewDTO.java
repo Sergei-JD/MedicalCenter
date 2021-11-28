@@ -12,6 +12,7 @@ import java.util.Set;
 @Builder
 public class PatientViewDTO {
 
+    private Integer userId;
     private String firstName;
     private String lastName;
     private Set<Role> roles;

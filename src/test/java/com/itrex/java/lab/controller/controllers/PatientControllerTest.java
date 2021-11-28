@@ -144,7 +144,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.updatePatient(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/patients/{id}")
+        MvcResult mvcResult = mockMvc.perform(put("/patients/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
