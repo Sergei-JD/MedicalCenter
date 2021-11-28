@@ -13,18 +13,18 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/patients")
+@RequestMapping("/med/patients")
 public class PatientController {
 
     private final PatientService patientService;
 
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) throws ServiceException {
 
-        CreatePatientDTO newPatient = patientService.createPatient(createPatientDTO);
+        CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
 
-        return (newPatient != null)
-                ? new ResponseEntity<>(newPatient, HttpStatus.OK)
+        return (addPatient != null)
+                ? new ResponseEntity<>(addPatient, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 

@@ -1,6 +1,7 @@
 package com.itrex.java.lab.dto;
 
 import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.RoleType;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

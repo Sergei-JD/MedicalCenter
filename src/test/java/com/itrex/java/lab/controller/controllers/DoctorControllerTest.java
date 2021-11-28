@@ -7,7 +7,6 @@ import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.entity.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.web.servlet.MockMvc;
@@ -44,7 +43,7 @@ class DoctorControllerTest extends BaseControllerTest {
         // when
         when(doctorService.getDoctorById(doctorId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/doctors/{id}", doctorId)
+        MvcResult mvcResult = mockMvc.perform(get("/med/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -64,7 +63,7 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.getAllDoctors()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/doctors")
+        MvcResult mvcResult = mockMvc.perform(get("/med/doctors")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -81,7 +80,7 @@ class DoctorControllerTest extends BaseControllerTest {
         // when
         when(doctorService.deleteDoctor(doctorId)).thenReturn(true);
         //then
-        mockMvc.perform(delete("/doctors/{id}", doctorId)
+        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -95,7 +94,7 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.deleteDoctor(doctorId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/doctors/{id}", doctorId)
+        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
@@ -115,7 +114,7 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.createDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/doctors/new")
+        MvcResult mvcResult = mockMvc.perform(post("/med/doctors/add")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
@@ -142,7 +141,7 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.updateDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/doctors/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/doctors/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

@@ -44,7 +44,7 @@ class PatientControllerTest extends BaseControllerTest {
         // when
         when(patientService.getPatientById(patientId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/patients/{id}", patientId)
+        MvcResult mvcResult = mockMvc.perform(get("/med/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -64,7 +64,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.getAllPatients()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/patients")
+        MvcResult mvcResult = mockMvc.perform(get("/med/patients")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -83,7 +83,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.deletePatient(patientId)).thenReturn(true);
 
         //then
-        mockMvc.perform(delete("/patients/{id}", patientId)
+        mockMvc.perform(delete("/med/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -97,7 +97,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.deletePatient(patientId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/patients/{id}", patientId)
+        mockMvc.perform(delete("/med/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
@@ -117,7 +117,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.createPatient(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/patients/new")
+        MvcResult mvcResult = mockMvc.perform(post("/med/patients/add")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
@@ -144,7 +144,7 @@ class PatientControllerTest extends BaseControllerTest {
         when(patientService.updatePatient(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/patients/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/patients/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

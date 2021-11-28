@@ -40,7 +40,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         // when
         when(timeslotService.getTimeslotById(timeslotId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/timeslots/{id}", timeslotId)
+        MvcResult mvcResult = mockMvc.perform(get("/med/timeslots/{id}", timeslotId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -60,7 +60,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.getAllTimeslot()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/timeslots")
+        MvcResult mvcResult = mockMvc.perform(get("/med/timeslots")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -79,7 +79,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(true);
 
         //then
-        mockMvc.perform(delete("/timeslots/{id}", timeslotId)
+        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -93,7 +93,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/timeslots/{id}", timeslotId)
+        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
@@ -111,7 +111,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.createTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/timeslots/new")
+        MvcResult mvcResult = mockMvc.perform(post("/med/timeslots/add")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
@@ -136,7 +136,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.updateTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/timeslots/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/timeslots/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

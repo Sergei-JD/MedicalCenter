@@ -1,4 +1,4 @@
-package com.itrex.java.lab.service.services;
+package com.itrex.java.lab.service.hibernate;
 
 import com.itrex.java.lab.dto.*;
 import com.itrex.java.lab.persistence.entity.*;
@@ -11,7 +11,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.service.hibernate.VisitServiceImpl;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
 

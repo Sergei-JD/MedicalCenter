@@ -55,7 +55,7 @@ class VisitControllerTest extends BaseControllerTest {
         // when
         when(visitService.getVisitById(visitId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits/{id}", visitId)
+        MvcResult mvcResult = mockMvc.perform(get("/med/visits/{id}", visitId)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -75,7 +75,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllVisit()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits")
+        MvcResult mvcResult = mockMvc.perform(get("/med/visits")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -95,7 +95,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllFreeVisits()).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits/free")
+        MvcResult mvcResult = mockMvc.perform(get("/med/visits/free")
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -116,7 +116,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllFreeVisitsForDoctorById(visitId)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits/doctors/free/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(get("/med/visits/doctors/free/{id}", 1)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -137,7 +137,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.getAllVisitsForPatientDyId(visitId)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/visits/patients/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(get("/med/visits/patients/{id}", 1)
                         .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -154,7 +154,7 @@ class VisitControllerTest extends BaseControllerTest {
         // when
         when(visitService.deleteVisit(visitId)).thenReturn(true);
         //then
-        mockMvc.perform(delete("/visits/{id}", visitId)
+        mockMvc.perform(delete("/med/visits/{id}", visitId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
     }
@@ -168,7 +168,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.deleteVisit(visitId)).thenReturn(false);
 
         //then
-        mockMvc.perform(delete("/visits/{id}", visitId)
+        mockMvc.perform(delete("/med/visits/{id}", visitId)
                         .contentType("application/json"))
                 .andExpect(status().isNotModified());
     }
@@ -200,7 +200,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.createVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/visits/new")
+        MvcResult mvcResult = mockMvc.perform(post("/med/visits/add")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
@@ -242,7 +242,7 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.updateVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/visits/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/visits/{id}", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

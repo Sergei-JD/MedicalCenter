@@ -1,9 +1,9 @@
 package com.itrex.java.lab.util;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.persistence.entity.Visit;
 
 public class VisitConversionUtils {
@@ -19,6 +19,7 @@ public class VisitConversionUtils {
 
     public static VisitViewDTO toVisitViewDTO(Visit visit) {
         return VisitViewDTO.builder()
+                .visitId(visit.getVisitId())
                 .visitId(visit.getVisitId())
                 .doctor(visit.getDoctor())
                 .timeslot(visit.getTimeslot())
@@ -40,4 +41,5 @@ public class VisitConversionUtils {
                 .comment(visit.getComment())
                 .build();
     }
+
 }

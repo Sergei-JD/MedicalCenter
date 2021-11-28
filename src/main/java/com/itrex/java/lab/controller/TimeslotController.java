@@ -15,18 +15,18 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/timeslots")
+@RequestMapping("/med/timeslots")
 public class TimeslotController {
 
     private final TimeslotService timeslotService;
 
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<CreateTimeslotDTO> createTimeslot(@RequestBody CreateTimeslotDTO createTimeslotDTO) throws ServiceException {
 
-        CreateTimeslotDTO newTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
+        CreateTimeslotDTO addTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
 
-        return (newTimeslot != null)
-                ? new ResponseEntity<>(newTimeslot, HttpStatus.OK)
+        return (addTimeslot != null)
+                ? new ResponseEntity<>(addTimeslot, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 

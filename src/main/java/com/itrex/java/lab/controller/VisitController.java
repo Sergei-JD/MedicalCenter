@@ -13,18 +13,18 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/visits")
+@RequestMapping("/med/visits")
 public class VisitController {
 
     private final VisitService visitService;
 
-    @PostMapping("/new")
+    @PostMapping("/add")
     public ResponseEntity<CreateVisitDTO> createVisit(@RequestBody CreateVisitDTO createVisitDTO) throws ServiceException {
 
-        CreateVisitDTO newVisit = visitService.createVisit(createVisitDTO);
+        CreateVisitDTO addVisit = visitService.createVisit(createVisitDTO);
 
-        return (newVisit != null)
-                ? new ResponseEntity<>(newVisit, HttpStatus.OK)
+        return (addVisit != null)
+                ? new ResponseEntity<>(addVisit, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 

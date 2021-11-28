@@ -1,7 +1,7 @@
 package com.itrex.java.lab.util;
 
-import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
+import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 
 public class TimeslotConversionUtils {
@@ -22,4 +22,5 @@ public class TimeslotConversionUtils {
                 .office(timeslot.getOffice())
                 .build();
     }
+
 }
