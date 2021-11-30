@@ -1,14 +1,20 @@
 package com.itrex.java.lab.controller;
 
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
-
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.TimeslotService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,7 +65,7 @@ public class TimeslotController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping
     public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) throws ServiceException {
 
         TimeslotDTO updatedTimeslot = timeslotService.updateTimeslot(timeslotDTO);

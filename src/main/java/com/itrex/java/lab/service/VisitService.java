@@ -1,16 +1,16 @@
 package com.itrex.java.lab.service;
 
-import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitDTO;
 import com.itrex.java.lab.dto.VisitHistoryDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface VisitService {
 
-    CreateVisitDTO createVisit(CreateVisitDTO visitDTO);
+    VisitDTO createVisit(CreateVisitDTO visitDTO);
 
     boolean deleteVisit(int visitId);
 

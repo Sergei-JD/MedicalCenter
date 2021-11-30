@@ -1,9 +1,11 @@
 package com.itrex.java.lab.dto;
 
-import java.time.Instant;
-
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import java.time.Instant;
 
 @Data
 @SuperBuilder

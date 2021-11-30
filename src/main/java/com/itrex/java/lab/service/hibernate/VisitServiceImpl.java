@@ -1,16 +1,22 @@
 package com.itrex.java.lab.service.hibernate;
 
-import com.itrex.java.lab.dto.*;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitDTO;
+import com.itrex.java.lab.dto.VisitHistoryDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
+import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.data.TimeslotRepository;
+import com.itrex.java.lab.persistence.data.UserRepository;
+import com.itrex.java.lab.persistence.data.VisitRepository;
+import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.persistence.entity.Visit;
+import com.itrex.java.lab.service.VisitService;
+import com.itrex.java.lab.util.VisitConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import com.itrex.java.lab.service.VisitService;
-import com.itrex.java.lab.persistence.entity.Visit;
-import com.itrex.java.lab.util.VisitConversionUtils;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.repository.VisitRepository;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -22,93 +28,79 @@ public class VisitServiceImpl implements VisitService {
 
     private final VisitRepository visitRepository;
 
+    private final UserRepository userRepository;
+
+    private final TimeslotRepository timeslotRepository;
+
     @Override
     @Transactional
-    public CreateVisitDTO createVisit(CreateVisitDTO visitDTO) {
-        try {
-            Visit visit = VisitConversionUtils.toVisit(visitDTO);
+    public VisitDTO createVisit(CreateVisitDTO visitDTO) {
+        User doctor = userRepository.findById(visitDTO.getDoctorId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such doctor"));
+        User patient = userRepository.findById(visitDTO.getPatientId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such patient"));
+        Timeslot timeslot = timeslotRepository.findById(visitDTO.getTimeslotId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such timeslot"));
 
-            visitRepository.add(visit);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to create visit.\n" + ex);
-        }
+        Visit newVisit = Visit.builder()
+                .doctor(doctor)
+                .patient(patient)
+                .timeslot(timeslot)
+                .comment(visitDTO.getComment())
+                .build();
 
-        return visitDTO;
+        return VisitConversionUtils.toVisitDTO(visitRepository.save(newVisit));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllVisit() {
-        try {
-            List<Visit> visits = visitRepository.getAllVisits();
+        List<Visit> visits = visitRepository.findAll();
 
-            return visits.stream()
-                    .map(VisitConversionUtils::toVisitViewDTO)
-                    .collect(Collectors.toList());
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get all visits.\n" + ex);
-        }
+        return visits.stream()
+                .map(VisitConversionUtils::toVisitViewDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllFreeVisits() {
-        try {
-            List<Visit> visits = visitRepository.getAllVisits();
+        List<Visit> visits = visitRepository.findAll();
 
-            return visits.stream()
-                    .filter(visit -> (visit.getDoctor() == null && visit.getPatient() == null))
-                    .map(VisitConversionUtils::toVisitViewDTO)
-                    .collect(Collectors.toList());
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get all free visits.\n" + ex);
-        }
+        return visits.stream()
+                .filter(visit -> (visit.getDoctor() == null && visit.getPatient() == null))
+                .map(VisitConversionUtils::toVisitViewDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllFreeVisitsForDoctorById(int doctorId) {
-        try {
-            List<Visit> visits = visitRepository.getAllVisits();
+        List<Visit> visits = visitRepository.findAll();
 
-            return visits.stream()
-                    .filter(visit -> (visit.getDoctor() != null
-                            && visit.getDoctor().getUserId() == doctorId
-                            && visit.getPatient() == null))
-                    .map(VisitConversionUtils::toVisitViewDTO)
-                    .collect(Collectors.toList());
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get all free visits for doctor by id .\n" + ex);
-        }
+        return visits.stream()
+                .filter(visit -> (visit.getDoctor() != null
+                        && visit.getDoctor().getUserId() == doctorId
+                        && visit.getPatient() == null))
+                .map(VisitConversionUtils::toVisitViewDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<VisitViewDTO> getAllVisitsForPatientDyId(int patientId) {
-        try {
-            List<Visit> visits = visitRepository.getAllVisits();
+        List<Visit> visits = visitRepository.findAll();
 
-            return visits.stream()
-                    .filter(visit -> (visit.getPatient() != null
-                            && visit.getPatient().getUserId() == patientId))
-                    .map(VisitConversionUtils::toVisitViewDTO)
-                    .collect(Collectors.toList());
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get all visits for patient by id .\n" + ex);
-        }
+        return visits.stream()
+                .filter(visit -> (visit.getPatient() != null
+                        && visit.getPatient().getUserId() == patientId))
+                .map(VisitConversionUtils::toVisitViewDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<VisitViewDTO> getVisitById(int visitId) {
         VisitViewDTO visitDTO = null;
-        try {
-            Optional<Visit> visit = visitRepository.getVisitById(visitId);
-            if (visit.isPresent()) {
-                visitDTO = VisitConversionUtils.toVisitViewDTO(visit.get());
-            }
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get visit by id " + visitId + ".\n" + ex);
+
+        Optional<Visit> visit = visitRepository.findById(visitId);
+        if (visit.isPresent()) {
+            visitDTO = VisitConversionUtils.toVisitViewDTO(visit.get());
         }
 
         return Optional.ofNullable(visitDTO);
@@ -118,7 +110,9 @@ public class VisitServiceImpl implements VisitService {
     @Transactional
     public boolean deleteVisit(int visitId) {
         try {
-            return visitRepository.deleteVisitById(visitId);
+            visitRepository.deleteById(visitId);
+
+            return true;
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to delete visit by id" + visitId + ".\n" + ex);
         }
@@ -130,16 +124,24 @@ public class VisitServiceImpl implements VisitService {
         if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit. Not valid visitDTO.");
         }
-        Visit visit = visitRepository.getVisitById(visitDTO.getVisitId())
+
+        Visit visit = visitRepository.findById(visitDTO.getVisitId())
                 .orElseThrow(() -> new ServiceException("Failed to update visit no such visit"));
 
-        visit.setDoctor(visitDTO.getDoctorId());
-        visit.setPatient(visitDTO.getPatientId());
-        visit.setTimeslot(visitDTO.getTimeslotId());
+        User doctor = userRepository.findById(visitDTO.getDoctorId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such doctor"));
+        User patient = userRepository.findById(visitDTO.getPatientId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such patient"));
+        Timeslot timeslot = timeslotRepository.findById(visitDTO.getTimeslotId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such timeslot"));
+
+        visit.setDoctor(doctor);
+        visit.setPatient(patient);
+        visit.setTimeslot(timeslot);
         visit.setComment(visitDTO.getComment());
 
         try {
-            visitRepository.update(visit);
+            visitRepository.save(visit);
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to update visit.\n" + ex);
         }
@@ -153,13 +155,13 @@ public class VisitServiceImpl implements VisitService {
         if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit history. Not valid visitDTO.");
         }
-        Visit visit = visitRepository.getVisitById(visitDTO.getVisitId())
+        Visit visit = visitRepository.findById(visitDTO.getVisitId())
                 .orElseThrow(() -> new ServiceException("Failed to update visit history no such visit"));
 
         visit.setComment(visitDTO.getComment());
 
         try {
-            visitRepository.update(visit);
+            visitRepository.save(visit);
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to update visit history.\n" + ex);
         }

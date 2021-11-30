@@ -37,7 +37,6 @@ class DoctorControllerTest extends BaseControllerTest {
         DoctorViewDTO expectedResponseBody = DoctorViewDTO.builder()
                 .firstName("test first name")
                 .lastName("test lsat name")
-                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
                 .build();
 
         // when
@@ -141,7 +140,7 @@ class DoctorControllerTest extends BaseControllerTest {
         when(doctorService.updateDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/med/doctors/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/doctors", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

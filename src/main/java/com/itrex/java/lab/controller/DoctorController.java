@@ -1,12 +1,21 @@
 package com.itrex.java.lab.controller;
 
-import com.itrex.java.lab.dto.*;
+import com.itrex.java.lab.dto.CreateDoctorDTO;
+import com.itrex.java.lab.dto.DoctorDTO;
+import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.DoctorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,8 +66,8 @@ public class DoctorController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO, @PathVariable int id) throws ServiceException {
+    @PutMapping
+    public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO) throws ServiceException {
 
         DoctorDTO updatedDoctor = doctorService.updateDoctor(doctorDTO);
 

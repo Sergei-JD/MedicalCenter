@@ -1,17 +1,17 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import org.hibernate.Session;
-import lombok.RequiredArgsConstructor;
-import org.springframework.util.CollectionUtils;
-import org.springframework.stereotype.Repository;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
-import javax.persistence.EntityManager;
 
 @Deprecated
 @Repository

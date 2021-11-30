@@ -15,6 +15,5 @@ public class DoctorViewDTO {
     private Integer userId;
     private String firstName;
     private String lastName;
-    private Set<Role> roles;
 
 }

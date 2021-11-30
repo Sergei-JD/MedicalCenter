@@ -1,16 +1,16 @@
 package com.itrex.java.lab.service.hibernate;
 
 
-import lombok.RequiredArgsConstructor;
-import com.itrex.java.lab.dto.TimeslotDTO;
-import org.springframework.stereotype.Service;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
-import com.itrex.java.lab.service.TimeslotService;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.util.TimeslotConversionUtils;
+import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.repository.TimeslotRepository;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.data.TimeslotRepository;
+import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.service.TimeslotService;
+import com.itrex.java.lab.util.TimeslotConversionUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -25,22 +25,24 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
-    public CreateTimeslotDTO createTimeslot(CreateTimeslotDTO createTimeslotDTO) {
+    public TimeslotDTO createTimeslot(CreateTimeslotDTO timeslotDTO) {
         try {
-            Timeslot timeslot = TimeslotConversionUtils.toTimeslot(createTimeslotDTO);
+            Timeslot newTimeslot = Timeslot.builder()
+                    .startTime(timeslotDTO.getStartTime())
+                    .date(timeslotDTO.getDate())
+                    .office(timeslotDTO.getOffice())
+                    .build();
 
-            timeslotRepository.add(timeslot);
+            return TimeslotConversionUtils.toTimeslotDTO(timeslotRepository.save(newTimeslot));
         } catch (RepositoryException ex) {
             throw new ServiceException("Failed to create timeslot.\n" + ex);
         }
-
-        return createTimeslotDTO;
     }
 
     @Override
     public List<CreateTimeslotDTO> getAllTimeslot() {
         try {
-            List<Timeslot> timeslots = timeslotRepository.getAllTimeslots();
+            List<Timeslot> timeslots = timeslotRepository.findAll();
 
             return timeslots.stream()
                     .map(TimeslotConversionUtils::toTimeslotDTO)
@@ -51,16 +53,12 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<CreateTimeslotDTO> getTimeslotById(int timeslotId) {
         CreateTimeslotDTO timeslotDTO = null;
-        try {
-            Optional<Timeslot> timeslot = timeslotRepository.getTimeslotById(timeslotId);
-            if (timeslot.isPresent()) {
-                timeslotDTO = TimeslotConversionUtils.toTimeslotDTO(timeslot.get());
-            }
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get timeslot by id " + timeslotId + ".\n" + ex);
+
+        Optional<Timeslot> timeslot = timeslotRepository.findById(timeslotId);
+        if (timeslot.isPresent()) {
+            timeslotDTO = TimeslotConversionUtils.toTimeslotDTO(timeslot.get());
         }
 
         return Optional.ofNullable(timeslotDTO);
@@ -69,11 +67,9 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     public boolean deleteTimeslot(int timeslotId) {
-        try {
-            return timeslotRepository.deleteTimeslotById(timeslotId);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to delete timeslot by id" + timeslotId + ".\n" + ex);
-        }
+        timeslotRepository.deleteById(timeslotId);
+
+        return timeslotRepository.findById(timeslotId).isEmpty();
     }
 
     @Override
@@ -82,18 +78,14 @@ public class TimeslotServiceImpl implements TimeslotService {
         if (!isValidTimeslotDTO(timeslotDTO) || timeslotDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update timeslot. Not valid timeslotDTO.");
         }
-        Timeslot timeslot = timeslotRepository.getTimeslotById(timeslotDTO.getTimeslotId())
+        Timeslot timeslot = timeslotRepository.findById(timeslotDTO.getTimeslotId())
                 .orElseThrow(() -> new ServiceException("Failed to update timeslot no such timeslot"));
 
         timeslot.setOffice(timeslotDTO.getOffice());
         timeslot.setStartTime(timeslotDTO.getStartTime());
         timeslot.setDate(timeslotDTO.getDate());
 
-        try {
-            timeslotRepository.update(timeslot);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to update timeslot.\n" + ex);
-        }
+        timeslotRepository.save(timeslot);
 
         return TimeslotConversionUtils.toTimeslotDTO(timeslot);
     }

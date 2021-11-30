@@ -136,7 +136,7 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.updateTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/med/timeslots/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/timeslots", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

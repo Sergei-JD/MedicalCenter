@@ -37,15 +37,15 @@ class VisitControllerTest extends BaseControllerTest {
         Integer visitId = 1;
         VisitViewDTO expectedResponseBody = VisitViewDTO.builder()
                 .visitId(visitId)
-                .doctor(User.builder()
+                .doctor(DoctorViewDTO.builder()
                         .firstName("test first name")
                         .lastName("test last name")
-                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
-                .patient(User.builder()
+                        .build())
+                .patient(PatientViewDTO.builder()
                         .firstName("test first name")
                         .lastName("test last name")
-                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
-                .timeslot(Timeslot.builder()
+                        .build())
+                .timeslot(TimeslotDTO.builder()
                         .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
                         .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                         .office(505)
@@ -176,33 +176,25 @@ class VisitControllerTest extends BaseControllerTest {
     @Test
     void createVisit_validData_shouldReturnNewVisitDTO() throws Exception {
         //given
-        CreateVisitDTO expectedResponseBody = CreateVisitDTO.builder()
-                .doctorId(User.builder()
-                        .firstName("test first name")
-                        .lastName("test last name")
-                        .age(25)
-                        .gender("M")
-                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
-                .patientId(User.builder()
-                        .firstName("test first name")
-                        .lastName("test last name")
-                        .age(25)
-                        .gender("M")
-                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
-                .timeslotId(Timeslot.builder()
-                        .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
-                        .date(Instant.parse("2021-04-09T15:30:45.123Z"))
-                        .office(505)
-                        .build())
+        VisitDTO expectedResponseBody = VisitDTO.builder()
+                .doctorId(User.builder().userId(1).build().getUserId())
+                .patientId(User.builder().userId(2).build().getUserId())
+                .timeslotId(Timeslot.builder().timeslotId(1).build().getTimeslotId())
+                .build();
+
+        CreateVisitDTO requestBody = CreateVisitDTO.builder()
+                .doctorId(User.builder().userId(1).build().getUserId())
+                .patientId(User.builder().userId(2).build().getUserId())
+                .timeslotId(Timeslot.builder().timeslotId(1).build().getTimeslotId())
                 .build();
 
         //when
-        when(visitService.createVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
+        when(visitService.createVisit(requestBody)).thenReturn(expectedResponseBody);
 
         //then
         MvcResult mvcResult = mockMvc.perform(post("/med/visits/add")
                         .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                        .content(objectMapper.writeValueAsString(requestBody)))
                 .andExpect(status().isOk())
                 .andReturn();
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
@@ -216,33 +208,16 @@ class VisitControllerTest extends BaseControllerTest {
         Integer visitId = 1;
         VisitDTO expectedResponseBody = VisitDTO.builder()
                 .visitId(visitId)
-                .doctorId(User.builder()
-                        .userId(1)
-                        .firstName("test first name")
-                        .lastName("test last name")
-                        .age(25)
-                        .gender("M")
-                        .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build())).build())
-                .patientId(User.builder()
-                        .userId(2)
-                        .firstName("test first name")
-                        .lastName("test last name")
-                        .age(25)
-                        .gender("M")
-                        .roles(Set.of(Role.builder().name(RoleType.PATIENT).build())).build())
-                .timeslotId(Timeslot.builder()
-                        .timeslotId(1)
-                        .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
-                        .date(Instant.parse("2021-04-09T15:30:45.123Z"))
-                        .office(505)
-                        .build())
+                .doctorId(1)
+                .patientId(1)
+                .timeslotId(1)
                 .build();
 
         //when
         when(visitService.updateVisit(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         // then
-        MvcResult mvcResult = mockMvc.perform(put("/med/visits/{id}", 1)
+        MvcResult mvcResult = mockMvc.perform(put("/med/visits", 1)
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())

@@ -1,8 +1,9 @@
 package com.itrex.java.lab.dto;
 
 import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Set;
@@ -20,6 +21,7 @@ public class CreateDoctorDTO {
     private String password;
     private String gender;
     private Integer phoneNum;
+    //TODO удалить сет ролей, и задавать роль при создании
     private Set<Role> roles;
 
 }

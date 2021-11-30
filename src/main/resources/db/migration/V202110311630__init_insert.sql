@@ -47,5 +47,9 @@ INSERT INTO visit (visit_id, doctor_id, patient_id, timeslot_id, comment)
 VALUES ('2', '5', '3', '2', 'the patient is healthy');
 INSERT INTO visit (visit_id, doctor_id, patient_id, timeslot_id, comment)
 VALUES ('3', '5', '6', '3', 'the patient is prescribed procedures');
+INSERT INTO visit (visit_id, doctor_id)
+VALUES ('4', '5');
+INSERT INTO visit (visit_id)
+VALUES ('5');
 
 COMMIT;

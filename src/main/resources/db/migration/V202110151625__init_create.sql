@@ -50,8 +50,8 @@ CREATE TABLE IF NOT EXISTS timeslot
 CREATE TABLE IF NOT EXISTS visit
 (
     visit_id    INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    doctor_id   INT NOT NULL,
-    patient_id  INT NOT NULL,
+    doctor_id   INT,
+    patient_id  INT,
     timeslot_id INT,
     comment     VARCHAR(255)
 );

@@ -1,12 +1,22 @@
 package com.itrex.java.lab.controller;
 
-import com.itrex.java.lab.dto.*;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitDTO;
+import com.itrex.java.lab.dto.VisitHistoryDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,9 +29,9 @@ public class VisitController {
     private final VisitService visitService;
 
     @PostMapping("/add")
-    public ResponseEntity<CreateVisitDTO> createVisit(@RequestBody CreateVisitDTO createVisitDTO) throws ServiceException {
+    public ResponseEntity<VisitDTO> createVisit(@RequestBody CreateVisitDTO createVisitDTO) throws ServiceException {
 
-        CreateVisitDTO addVisit = visitService.createVisit(createVisitDTO);
+        VisitDTO addVisit = visitService.createVisit(createVisitDTO);
 
         return (addVisit != null)
                 ? new ResponseEntity<>(addVisit, HttpStatus.OK)
@@ -39,7 +49,7 @@ public class VisitController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VisitViewDTO>> getAllVisit() throws ServiceException {
+    public ResponseEntity<List<VisitViewDTO>> getAllVisits() throws ServiceException {
 
         List<VisitViewDTO> visits = visitService.getAllVisit();
 
@@ -87,8 +97,8 @@ public class VisitController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<VisitDTO> updateVisit(@RequestBody VisitDTO visitDTO, @PathVariable String id) throws ServiceException {
+    @PutMapping
+    public ResponseEntity<VisitDTO> updateVisit(@RequestBody VisitDTO visitDTO) throws ServiceException {
 
         VisitDTO updatedVisit = visitService.updateVisit(visitDTO);
 
@@ -97,8 +107,8 @@ public class VisitController {
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 
-    @PutMapping("/{id}/History")
-    public ResponseEntity<VisitHistoryDTO> updateVisitHistory(@RequestBody VisitDTO visitDTO, @PathVariable String id) throws ServiceException {
+    @PutMapping("/history")
+    public ResponseEntity<VisitHistoryDTO> updateVisitHistory(@RequestBody VisitDTO visitDTO) throws ServiceException {
 
         VisitHistoryDTO updatedVisitHistory = visitService.updateVisitHistory(visitDTO);
 

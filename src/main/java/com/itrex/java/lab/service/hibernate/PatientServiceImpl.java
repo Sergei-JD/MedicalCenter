@@ -1,21 +1,19 @@
 package com.itrex.java.lab.service.hibernate;
 
-import lombok.RequiredArgsConstructor;
+import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
-import org.springframework.stereotype.Service;
-import com.itrex.java.lab.dto.CreatePatientDTO;
-import com.itrex.java.lab.service.PatientService;
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.util.UserConversionUtils;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.repository.UserRepository;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.data.UserRepository;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.service.PatientService;
+import com.itrex.java.lab.util.UserConversionUtils;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,25 +28,26 @@ public class PatientServiceImpl implements PatientService {
     @Transactional
     public CreatePatientDTO createPatient(CreatePatientDTO patientDTO) {
         try {
-            User user = UserConversionUtils.toUser(patientDTO);
+            User newPatient = User.builder()
+                    .firstName(patientDTO.getFirstName())
+                    .lastName(patientDTO.getLastName())
+                    .age(patientDTO.getAge())
+                    .email(patientDTO.getEmail())
+                    .password(patientDTO.getPassword())
+                    .gender(patientDTO.getGender())
+                    .phoneNum(patientDTO.getPhoneNum())
+                    .build();
 
-            user.setRoles(Set.of(Role.builder()
-                    .name(RoleType.PATIENT)
-                    .build()));
-
-            userRepository.add(user);
+            return UserConversionUtils.toPatientDTO(userRepository.save(newPatient));
         } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to create patient.\n" + ex);
+            throw new ServiceException("Failed to create doctor.\n" + ex);
         }
-
-        return patientDTO;
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<PatientViewDTO> getAllPatients() {
         try {
-            List<User> patients = userRepository.getAllUsersByRole(RoleType.PATIENT);
+            List<User> patients = userRepository.findAllByRolesName(RoleType.PATIENT);
 
             return patients.stream()
                     .map(UserConversionUtils::toPatientViewDTO)
@@ -59,16 +58,12 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Optional<PatientViewDTO> getPatientById(int patientId) {
         PatientViewDTO patientDTO = null;
-        try {
-            Optional<User> patient = userRepository.getUserById(patientId);
-            if (patient.isPresent()) {
-                patientDTO = UserConversionUtils.toPatientViewDTO(patient.get());
-            }
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get patient by id " + patientId + ".\n" + ex);
+
+        Optional<User> patient = userRepository.findById(patientId);
+        if (patient.isPresent()) {
+            patientDTO = UserConversionUtils.toPatientViewDTO(patient.get());
         }
 
         return Optional.ofNullable(patientDTO);
@@ -77,11 +72,9 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional
     public boolean deletePatient(int patientId) {
-        try {
-            return userRepository.deleteUserById(patientId);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to delete patient by id" + patientId + ".\n" + ex);
-        }
+        userRepository.deleteById(patientId);
+
+        return userRepository.findById(patientId).isEmpty();
     }
 
     @Override
@@ -90,7 +83,7 @@ public class PatientServiceImpl implements PatientService {
         if (!isValidPatientDTO(patientDTO) || patientDTO.getUserId() == null) {
             throw new ServiceException("Failed to update patient. Not valid patientDTO.");
         }
-        User patient = userRepository.getUserById(patientDTO.getUserId())
+        User patient = userRepository.findById(patientDTO.getUserId())
                 .orElseThrow(() -> new ServiceException("Failed to update patient no such patient"));
 
         patient.setFirstName(patientDTO.getFirstName());
@@ -101,11 +94,7 @@ public class PatientServiceImpl implements PatientService {
         patient.setGender(patientDTO.getGender());
         patient.setPhoneNum(patientDTO.getPhoneNum());
 
-        try {
-            userRepository.update(patient);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to update patient.\n" + ex);
-        }
+        userRepository.save(patient);
 
         return UserConversionUtils.toPatientDTO(patient);
     }

@@ -2,10 +2,10 @@ package com.itrex.java.lab.advice;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import org.aspectj.lang.annotation.AfterReturning;
 
 @Slf4j
 @Aspect
