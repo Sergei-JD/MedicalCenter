@@ -1,34 +1,39 @@
-package com.itrex.java.lab.service.hibernate;
+package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.dto.*;
-import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.dto.CreatePatientDTO;
+import com.itrex.java.lab.dto.PatientDTO;
+import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.data.UserRepository;
-
-import org.mockito.Mock;
-import org.mockito.InjectMocks;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
+import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.persistence.entity.User;
 import org.junit.jupiter.api.Test;
-import org.mockito.quality.Strictness;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import java.util.Set;
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalMatchers.not;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-public class PatientServiceImplTest {
+class PatientServiceImplTest {
 
     private final static String TEST_USER_FIRST_NAME = "test name";
     private final static String TEST_USER_LAST_NAME = "test last name";
@@ -41,6 +46,7 @@ public class PatientServiceImplTest {
 
     @InjectMocks
     private PatientServiceImpl patientService;
+
     @Mock
     private UserRepository userRepository;
 
@@ -79,30 +85,31 @@ public class PatientServiceImplTest {
     @Test
     void createPatient_repositoryThrowError_shouldThrowServiceException() {
         //given
-        PatientDTO patientDTO = PatientDTO.builder().build();
+        CreatePatientDTO patientDTO = CreatePatientDTO.builder().build();
 
         //when
         when(patientService.createPatient(patientDTO)).thenThrow(new RepositoryException("some msg"));
 
         //then
-        assertThrows(ServiceException.class, () -> patientService.createPatient(patientDTO));
+        assertThrows(RepositoryException.class, () -> patientService.createPatient(patientDTO));
     }
 
     @Test
     void getAllPatients_validData_shouldReturnPatientsList() {
         //given
         Integer expectedListSize = 2;
-        User patient1 = initUser(1);
-        User patient2 = initUser(2);
+        User firstPatient = initUser(1);
+        User secondPatient = initUser(2);
         when(userRepository.findAllByRolesName(RoleType.PATIENT))
-                .thenReturn(Arrays.asList(patient1, patient2));
+                .thenReturn(Arrays.asList(firstPatient, secondPatient));
 
         //when
         List<PatientViewDTO> result = patientService.getAllPatients();
 
         //then
         assertEquals(expectedListSize, result.size());
-        assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME) && doctor.getLastName().equals(TEST_USER_LAST_NAME)));
+        assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME) &&
+                doctor.getLastName().equals(TEST_USER_LAST_NAME)));
         verify(userRepository, times(1)).findAllByRolesName(eq(TEST_USER_ROLE));
     }
 
@@ -112,39 +119,28 @@ public class PatientServiceImplTest {
         when(userRepository.findAllByRolesName(RoleType.PATIENT)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> patientService.getAllPatients());
+        assertThrows(RepositoryException.class, () -> patientService.getAllPatients());
     }
 
-//    @Test
-//    void deletePatientById_existPatient_shouldDeletePatient() {
-//        //given
-//        when(userRepository.deleteUserById(1)).thenReturn(true);
-//        when(userRepository.deleteUserById(not(eq(1)))).thenReturn(false);
-//
-//        //when
-//        boolean result = patientService.deletePatient(1);
-//
-//        //then
-//        assertTrue(result);
-//        verify(userRepository, times(1)).deleteUserById(eq(1));
-//    }
-//
-//    @Test
-//    void deletePatientById_repositoryThrowError_shouldThrowServiceException() {
-//        //given
-//        when(userRepository.deleteUserById(1)).thenThrow(new RepositoryException("some msg"));
-//
-//        //when && then
-//        assertThrows(ServiceException.class, () -> patientService.deletePatient(1)) ;
-//    }
+    @Test
+    void deletePatientById_existPatient_shouldDeletePatient() {
+        //given
+        Integer patientId = 1;
+
+        //when
+        boolean result = patientService.deletePatient(patientId);
+
+        //then
+        assertTrue(result);
+        verify(userRepository, times(patientId)).deleteById(eq(1));
+    }
 
     @Test
     void getPatientById_validData_shouldReturnThePatientById() {
         //given
         User addedPatient = initUser(1);
 
-        when(userRepository.findById(1))
-                .thenReturn(Optional.of(addedPatient));
+        when(userRepository.findById(1)).thenReturn(Optional.of(addedPatient));
 
         //when
         Optional<PatientViewDTO> result = patientService.getPatientById(1);
@@ -162,7 +158,7 @@ public class PatientServiceImplTest {
         when(userRepository.findById(1)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> patientService.getPatientById(1)) ;
+        assertThrows(RepositoryException.class, () -> patientService.getPatientById(1)) ;
     }
 
     @Test
@@ -188,4 +184,5 @@ public class PatientServiceImplTest {
                 .roles(Set.of(Role.builder().name(TEST_USER_ROLE).build()))
                 .build();
     }
+
 }

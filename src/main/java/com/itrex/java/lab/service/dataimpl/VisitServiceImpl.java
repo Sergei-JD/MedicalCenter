@@ -1,4 +1,4 @@
-package com.itrex.java.lab.service.hibernate;
+package com.itrex.java.lab.service.dataimpl;
 
 import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitDTO;
@@ -6,9 +6,9 @@ import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.data.TimeslotRepository;
-import com.itrex.java.lab.persistence.data.UserRepository;
-import com.itrex.java.lab.persistence.data.VisitRepository;
+import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
+import com.itrex.java.lab.persistence.dataimpl.VisitRepository;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Visit;
@@ -109,13 +109,10 @@ public class VisitServiceImpl implements VisitService {
     @Override
     @Transactional
     public boolean deleteVisit(int visitId) {
-        try {
-            visitRepository.deleteById(visitId);
+        visitRepository.deleteById(visitId);
 
-            return true;
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to delete visit by id" + visitId + ".\n" + ex);
-        }
+        return visitRepository.findById(visitId).isEmpty();
+
     }
 
     @Override
@@ -140,11 +137,7 @@ public class VisitServiceImpl implements VisitService {
         visit.setTimeslot(timeslot);
         visit.setComment(visitDTO.getComment());
 
-        try {
-            visitRepository.save(visit);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to update visit.\n" + ex);
-        }
+        visitRepository.save(visit);
 
         return VisitConversionUtils.toVisitDTO(visit);
     }
@@ -155,22 +148,21 @@ public class VisitServiceImpl implements VisitService {
         if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit history. Not valid visitDTO.");
         }
+
         Visit visit = visitRepository.findById(visitDTO.getVisitId())
                 .orElseThrow(() -> new ServiceException("Failed to update visit history no such visit"));
 
         visit.setComment(visitDTO.getComment());
 
-        try {
-            visitRepository.save(visit);
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to update visit history.\n" + ex);
-        }
+        visitRepository.save(visit);
 
         return VisitConversionUtils.toVisitHistoryDTO(visit);
     }
 
     private boolean isValidVisitDTO(CreateVisitDTO visitDTO) {
-        return visitDTO != null && visitDTO.getDoctorId() != null && visitDTO.getPatientId() != null;
+        return visitDTO != null &&
+                visitDTO.getDoctorId() != null &&
+                visitDTO.getPatientId() != null;
     }
 
 }

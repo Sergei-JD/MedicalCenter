@@ -26,19 +26,24 @@ public class VisitConversionUtils {
     }
 
     public static VisitDTO toVisitDTO(Visit visit) {
-        return VisitDTO.builder()
-                .visitId(visit.getVisitId())
-                .patientId(visit.getPatient().getUserId())
-                .doctorId(visit.getDoctor().getUserId())
-                .timeslotId(visit.getTimeslot().getTimeslotId())
-                .comment(visit.getComment())
-                .build();
+        return Optional.ofNullable(visit)
+                .map(existVisit -> VisitDTO.builder()
+                        .visitId(visit.getVisitId())
+                        .patientId(visit.getPatient().getUserId())
+                        .doctorId(visit.getDoctor().getUserId())
+                        .timeslotId(visit.getTimeslot().getTimeslotId())
+                        .comment(visit.getComment())
+                        .build())
+                .orElse(null);
     }
 
     public static VisitHistoryDTO toVisitHistoryDTO(Visit visit) {
-        return VisitHistoryDTO.builder()
-                .comment(visit.getComment())
-                .build();
+        return Optional.ofNullable(visit)
+                .map(existVisit -> VisitHistoryDTO.builder()
+                        .visitId(visit.getVisitId())
+                        .comment(visit.getComment())
+                        .build())
+                .orElse(null);
     }
 
 }

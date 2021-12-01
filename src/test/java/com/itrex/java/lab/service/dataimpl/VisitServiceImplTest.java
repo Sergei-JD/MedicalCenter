@@ -1,32 +1,45 @@
-package com.itrex.java.lab.service.hibernate;
+package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.dto.*;
-import com.itrex.java.lab.persistence.entity.*;
-
-import org.mockito.Mock;
-import org.mockito.InjectMocks;
-import org.junit.jupiter.api.Test;
-import org.mockito.quality.Strictness;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.junit.jupiter.api.extension.ExtendWith;
-import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.DoctorDTO;
+import com.itrex.java.lab.dto.PatientDTO;
+import com.itrex.java.lab.dto.TimeslotDTO;
+import com.itrex.java.lab.dto.VisitDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.data.VisitRepository;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.dataimpl.VisitRepository;
+import com.itrex.java.lab.persistence.entity.Role;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.persistence.entity.Visit;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
 import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.List;
-import java.util.Arrays;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.AdditionalMatchers.not;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
-public class VisitServiceImplTest {
+class VisitServiceImplTest {
 
     private final static Integer TEST_VISIT_DOCTOR_ID = 1;
     private final static Integer TEST_VISIT_PATIENT_ID = 2;
@@ -45,13 +58,14 @@ public class VisitServiceImplTest {
 
     @InjectMocks
     private VisitServiceImpl visitService;
+
     @Mock
     private VisitRepository visitRepository;
 
     @Test
     void createVisit_validData_shouldCreateVisit() {
         //given
-        VisitDTO visitDTO = VisitDTO.builder()
+        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
                 .doctorId(1)
                 .patientId(1)
                 .timeslotId(1)
@@ -63,21 +77,37 @@ public class VisitServiceImplTest {
         CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
 
         //then
-//        assertAll(
-//                () -> assertEquals(visit.getDoctor().getUserId(), actualVisitDTO.getDoctorId().getFirstName()),
-//                () -> assertEquals(visit.getDoctor().getLastName(), actualVisitDTO.getDoctorId().getLastName()),
-//                () -> assertEquals(visit.getPatient().getFirstName(), actualVisitDTO.getPatientId().getFirstName()),
-//                () -> assertEquals(visit.getPatient().getLastName(), actualVisitDTO.getPatientId().getLastName()),
-//                () -> assertEquals(visit.getTimeslot().getStartTime(), actualVisitDTO.getTimeslotId().getStartTime()),
-//                () -> assertEquals(visit.getTimeslot().getDate(), actualVisitDTO.getTimeslotId().getDate()),
-//                () -> assertEquals(visit.getTimeslot().getOffice(), actualVisitDTO.getTimeslotId().getOffice())
-//        );
+        assertAll(
+                () -> assertEquals(visit.getDoctor().getUserId(), actualVisitDTO.getDoctorId()),
+                () -> assertEquals(visit.getPatient().getUserId(), actualVisitDTO.getPatientId()),
+                () -> assertEquals(visit.getTimeslot().getTimeslotId(), actualVisitDTO.getTimeslotId())
+        );
     }
 
     @Test
     void createVisit_repositoryThrowError_shouldThrowServiceException() {
         //given
-        VisitDTO visitDTO = VisitDTO.builder().build();
+        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
+                .doctorId(DoctorDTO.builder()
+                        .firstName("M")
+                        .lastName("M")
+                        .age(25)
+                        .gender("M")
+                        .build()
+                        .getUserId())
+                .patientId(PatientDTO.builder()
+                        .firstName("F")
+                        .lastName("F")
+                        .age(28)
+                        .gender("M")
+                        .build().getUserId())
+                .timeslotId(TimeslotDTO.builder()
+                        .startTime(Instant.now())
+                        .date(Instant.now())
+                        .office(505)
+                        .build()
+                        .getTimeslotId())
+                .build();
 
         //when
         when(visitService.createVisit(visitDTO)).thenThrow(new RepositoryException("some msg"));
@@ -90,11 +120,11 @@ public class VisitServiceImplTest {
     void getAllVisits_validData_shouldReturnVisitsList() {
         //given
         Integer expectedListSize = 2;
-        Visit visit1 = initVisit(1);
-        Visit visit2 = initVisit(2);
+        Visit firstVisit = initVisit(1);
+        Visit secondVisit = initVisit(2);
 
         when(visitRepository.findAll())
-                .thenReturn(Arrays.asList(visit1, visit2));
+                .thenReturn(Arrays.asList(firstVisit, secondVisit));
 
         //when
         List<VisitViewDTO> result = visitService.getAllVisit();
@@ -113,33 +143,33 @@ public class VisitServiceImplTest {
         when(visitRepository.findAll()).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> visitService.getAllVisit());
+        assertThrows(RepositoryException.class, () -> visitService.getAllVisit());
     }
 
-//    @Test
-//    void getAllFreeVisits_validData_shouldReturnVisitsList() {
-//        //given
-//        Integer expectedListSize = 1;
-//        Visit visit1 = initVisit(1);
-//        Visit visit2 = Visit.builder()
-//                .visitId(2)
-//                .timeslot(Timeslot.builder()
-//                        .startTime(TEST_START_TIME)
-//                        .date(TEST_DATE)
-//                        .office(TEST_OFFICE).build())
-//                .build();
-//
-//        when(visitRepository.findAll())
-//                .thenReturn(Arrays.asList(visit1, visit2));
-//
-//        //when
-//        List<VisitViewDTO> result = visitService.getAllFreeVisits();
-//
-//        //then
-//        assertEquals(expectedListSize, result.size());
-//        assertTrue(result.stream().allMatch(visit -> visit.getDoctor() == null
-//                && visit.getPatient() == null));
-//    }
+    @Test
+    void getAllFreeVisits_validData_shouldReturnVisitsList() {
+        //given
+        Integer expectedListSize = 1;
+        Visit firstVisit = initVisit(1);
+        Visit secondVisit = Visit.builder()
+                .visitId(2)
+                .timeslot(Timeslot.builder()
+                        .startTime(TEST_START_TIME)
+                        .date(TEST_DATE)
+                        .office(TEST_OFFICE).build())
+                .build();
+
+        when(visitRepository.findAll())
+                .thenReturn(Arrays.asList(firstVisit, secondVisit));
+
+        //when
+        List<VisitViewDTO> result = visitService.getAllFreeVisits();
+
+        //then
+        assertEquals(expectedListSize, result.size());
+        assertTrue(result.stream().allMatch(visit -> visit.getDoctor() == null
+                && visit.getPatient() == null));
+    }
 
     @Test
     void getAllFreeVisits_repositoryThrowError_shouldThrowServiceException() {
@@ -147,15 +177,15 @@ public class VisitServiceImplTest {
         when(visitRepository.findAll()).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> visitService.getAllFreeVisits());
+        assertThrows(RepositoryException.class, () -> visitService.getAllFreeVisits());
     }
 
     @Test
     void getAllFreeVisitsForDoctorId_validData_shouldReturnVisitsList() {
         //given
         Integer expectedListSize = 1;
-        Visit visit1 = initVisit(1);
-        Visit visit2 = Visit.builder()
+        Visit firstVisit = initVisit(1);
+        Visit secondVisit = Visit.builder()
                 .visitId(2)
                 .doctor(User.builder()
                         .userId(TEST_VISIT_DOCTOR_ID)
@@ -169,7 +199,7 @@ public class VisitServiceImplTest {
                 .build();
 
         when(visitRepository.findAll())
-                .thenReturn(Arrays.asList(visit1, visit2));
+                .thenReturn(Arrays.asList(firstVisit, secondVisit));
 
         //when
         List<VisitViewDTO> result = visitService.getAllFreeVisitsForDoctorById(TEST_VISIT_DOCTOR_ID);
@@ -186,15 +216,15 @@ public class VisitServiceImplTest {
         when(visitRepository.findAll()).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> visitService.getAllFreeVisitsForDoctorById(1));
+        assertThrows(RepositoryException.class, () -> visitService.getAllFreeVisitsForDoctorById(1));
     }
 
     @Test
     void getAllVisitsForPatientById_validData_shouldReturnVisitsList() {
         //given
         Integer expectedListSize = 1;
-        Visit visit1 = initVisit(1);
-        Visit visit2 = Visit.builder()
+        Visit firstVisit = initVisit(1);
+        Visit secondVisit = Visit.builder()
                 .visitId(2)
                 .timeslot(Timeslot.builder()
                         .startTime(TEST_START_TIME)
@@ -203,7 +233,7 @@ public class VisitServiceImplTest {
                 .build();
 
         when(visitRepository.findAll())
-                .thenReturn(Arrays.asList(visit1, visit2));
+                .thenReturn(Arrays.asList(firstVisit, secondVisit));
 
         //when
         List<VisitViewDTO> result = visitService.getAllVisitsForPatientDyId(TEST_VISIT_PATIENT_ID);
@@ -218,31 +248,21 @@ public class VisitServiceImplTest {
         when(visitRepository.findAll()).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> visitService.getAllVisitsForPatientDyId(1));
+        assertThrows(RepositoryException.class, () -> visitService.getAllVisitsForPatientDyId(1));
     }
 
-//    @Test
-//    void deleteVisitById_existVisit_shouldDeleteVisit() {
-//        //given
-//        when(visitRepository.deleteVisitById(1)).thenReturn(true);
-//        when(visitRepository.deleteVisitById(not(eq(1)))).thenReturn(false);
-//
-//        //when
-//        boolean result = visitService.deleteVisit(1);
-//
-//        //then
-//        assertTrue(result);
-//        verify(visitRepository, times(1)).deleteVisitById(eq(1));
-//    }
-//
-//    @Test
-//    void deleteVisitById_repositoryThrowError_shouldThrowServiceException() {
-//        //given
-//        when(visitRepository.deleteVisitById(1)).thenThrow(new RepositoryException("some msg"));
-//
-//        //when && then
-//        assertThrows(ServiceException.class, () -> visitService.deleteVisit(1));
-//    }
+    @Test
+    void deleteVisitById_existVisit_shouldDeleteVisit() {
+        //given
+        Integer visitId = 1;
+
+        //when
+        boolean result = visitService.deleteVisit(visitId);
+
+        //then
+        assertTrue(result);
+        verify(visitRepository, times(visitId)).deleteById(eq(1));
+    }
 
     @Test
     void getVisitById_validData_shouldReturnTheVisitById() {
@@ -257,11 +277,11 @@ public class VisitServiceImplTest {
 
         //then
         verify(visitRepository, times(1)).findById(eq(1));
-        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getFirstName().equals(TEST_USER_FIRST_NAME)
-                && visit.getDoctor().getLastName().equals(TEST_USER_LAST_NAME)
-                && visit.getTimeslot().getStartTime().equals(TEST_START_TIME)
-                && visit.getTimeslot().getDate().equals(TEST_DATE)
-                && visit.getTimeslot().getOffice().equals(TEST_OFFICE)
+        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getFirstName().equals(TEST_USER_FIRST_NAME) &&
+                visit.getDoctor().getLastName().equals(TEST_USER_LAST_NAME) &&
+                visit.getTimeslot().getStartTime().equals(TEST_START_TIME) &&
+                visit.getTimeslot().getDate().equals(TEST_DATE) &&
+                visit.getTimeslot().getOffice().equals(TEST_OFFICE)
         ));
     }
 
@@ -271,7 +291,7 @@ public class VisitServiceImplTest {
         when(visitRepository.findById(1)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(ServiceException.class, () -> visitService.getVisitById(1)) ;
+        assertThrows(RepositoryException.class, () -> visitService.getVisitById(1)) ;
     }
 
     @Test
@@ -323,4 +343,5 @@ public class VisitServiceImplTest {
                 .office(TEST_OFFICE).build())
         .build();
     }
+
 }

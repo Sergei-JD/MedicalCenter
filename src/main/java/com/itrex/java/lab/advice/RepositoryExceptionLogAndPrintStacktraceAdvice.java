@@ -11,13 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RepositoryExceptionLogAndPrintStacktraceAdvice {
 
-    private static final String EXCEPTION_MESSAGE_LOG =
-            "This method broke: %s with the message: %s";
+    private static final String EXCEPTION_MESSAGE_LOG = "This method broke: %s with the message: %s";
 
-    @AfterThrowing(value = "execution(* com.itrex.java.lab.persistence.hibernateimpl.*.*(..))",
-            throwing = "ex")
+    @AfterThrowing(value = "execution(* com.itrex.java.lab.persistence.dataimpl.*.*(..))", throwing = "ex")
     public void logException(JoinPoint joinPoint, Exception ex) {
-
         log.error(String.format(EXCEPTION_MESSAGE_LOG, joinPoint.getSignature().getName(),
                 ex.getMessage()), ex);
     }

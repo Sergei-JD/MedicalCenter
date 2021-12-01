@@ -1,26 +1,28 @@
 package com.itrex.java.lab.controller.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itrex.java.lab.controller.BaseControllerTest;
-import com.itrex.java.lab.dto.CreatePatientDTO;
+import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
+import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.test.web.servlet.MockMvc;
+import com.itrex.java.lab.persistence.entity.RoleType;
 import org.springframework.test.web.servlet.MvcResult;
+import com.itrex.java.lab.controller.BaseControllerTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
 
 class PatientControllerTest extends BaseControllerTest {

@@ -1,11 +1,10 @@
-package com.itrex.java.lab.service.hibernate;
+package com.itrex.java.lab.service.dataimpl;
 
 import com.itrex.java.lab.dto.CreateDoctorDTO;
 import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
-import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.data.UserRepository;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.service.DoctorService;
@@ -42,11 +41,11 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public List<DoctorViewDTO> getAllDoctors() {
-            List<User> doctors = userRepository.findAllByRolesName(RoleType.DOCTOR);
+        List<User> doctors = userRepository.findAllByRolesName(RoleType.DOCTOR);
 
-            return doctors.stream()
-                    .map(UserConversionUtils::toDoctorViewDTO)
-                    .collect(Collectors.toList());
+        return doctors.stream()
+                .map(UserConversionUtils::toDoctorViewDTO)
+                .collect(Collectors.toList());
 
     }
 
@@ -87,15 +86,17 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setGender(doctorDTO.getGender());
         doctor.setPhoneNum(doctorDTO.getPhoneNum());
 
-
         userRepository.save(doctor);
 
         return UserConversionUtils.toDoctorDTO(doctor);
     }
 
     private boolean isValidDoctorDTO(CreateDoctorDTO doctorDTO) {
-        return doctorDTO != null && doctorDTO.getFirstName() != null && doctorDTO.getLastName() != null
-                && doctorDTO.getAge() != null && doctorDTO.getGender() != null;
+        return doctorDTO != null &&
+                doctorDTO.getFirstName() != null &&
+                doctorDTO.getLastName() != null &&
+                doctorDTO.getAge() != null &&
+                doctorDTO.getGender() != null;
     }
 
 }

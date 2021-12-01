@@ -1,11 +1,11 @@
-package com.itrex.java.lab.service.hibernate;
+package com.itrex.java.lab.service.dataimpl;
 
 
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.data.TimeslotRepository;
+import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.service.TimeslotService;
 import com.itrex.java.lab.util.TimeslotConversionUtils;
@@ -26,30 +26,22 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     public TimeslotDTO createTimeslot(CreateTimeslotDTO timeslotDTO) {
-        try {
-            Timeslot newTimeslot = Timeslot.builder()
-                    .startTime(timeslotDTO.getStartTime())
-                    .date(timeslotDTO.getDate())
-                    .office(timeslotDTO.getOffice())
-                    .build();
+        Timeslot newTimeslot = Timeslot.builder()
+                .startTime(timeslotDTO.getStartTime())
+                .date(timeslotDTO.getDate())
+                .office(timeslotDTO.getOffice())
+                .build();
 
-            return TimeslotConversionUtils.toTimeslotDTO(timeslotRepository.save(newTimeslot));
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to create timeslot.\n" + ex);
-        }
+        return TimeslotConversionUtils.toTimeslotDTO(timeslotRepository.save(newTimeslot));
     }
 
     @Override
     public List<CreateTimeslotDTO> getAllTimeslot() {
-        try {
-            List<Timeslot> timeslots = timeslotRepository.findAll();
+        List<Timeslot> timeslots = timeslotRepository.findAll();
 
-            return timeslots.stream()
-                    .map(TimeslotConversionUtils::toTimeslotDTO)
-                    .collect(Collectors.toList());
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get all timeslots.\n" + ex);
-        }
+        return timeslots.stream()
+                .map(TimeslotConversionUtils::toTimeslotDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -91,8 +83,10 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     private boolean isValidTimeslotDTO(CreateTimeslotDTO timeslotDTO) {
-        return timeslotDTO != null && timeslotDTO.getDate() != null && timeslotDTO.getStartTime() != null
-                && timeslotDTO.getOffice() != null;
+        return timeslotDTO != null &&
+                timeslotDTO.getDate() != null &&
+                timeslotDTO.getStartTime() != null &&
+                timeslotDTO.getOffice() != null;
     }
 
 }

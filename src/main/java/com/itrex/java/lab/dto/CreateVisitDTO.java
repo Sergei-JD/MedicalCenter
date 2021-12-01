@@ -11,8 +11,8 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class CreateVisitDTO {
 
-    private Integer patientId;
     private Integer doctorId;
+    private Integer patientId;
     private Integer timeslotId;
     private String comment;
 

@@ -1,11 +1,11 @@
-package com.itrex.java.lab.service.hibernate;
+package com.itrex.java.lab.service.dataimpl;
 
 import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.data.UserRepository;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.service.PatientService;
@@ -27,34 +27,27 @@ public class PatientServiceImpl implements PatientService {
     @Override
     @Transactional
     public CreatePatientDTO createPatient(CreatePatientDTO patientDTO) {
-        try {
-            User newPatient = User.builder()
-                    .firstName(patientDTO.getFirstName())
-                    .lastName(patientDTO.getLastName())
-                    .age(patientDTO.getAge())
-                    .email(patientDTO.getEmail())
-                    .password(patientDTO.getPassword())
-                    .gender(patientDTO.getGender())
-                    .phoneNum(patientDTO.getPhoneNum())
-                    .build();
+        User newPatient = User.builder()
+                .firstName(patientDTO.getFirstName())
+                .lastName(patientDTO.getLastName())
+                .age(patientDTO.getAge())
+                .email(patientDTO.getEmail())
+                .password(patientDTO.getPassword())
+                .gender(patientDTO.getGender())
+                .phoneNum(patientDTO.getPhoneNum())
+                .build();
 
-            return UserConversionUtils.toPatientDTO(userRepository.save(newPatient));
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to create doctor.\n" + ex);
-        }
+        return UserConversionUtils.toPatientDTO(userRepository.save(newPatient));
     }
 
     @Override
     public List<PatientViewDTO> getAllPatients() {
-        try {
-            List<User> patients = userRepository.findAllByRolesName(RoleType.PATIENT);
 
-            return patients.stream()
-                    .map(UserConversionUtils::toPatientViewDTO)
-                    .collect(Collectors.toList());
-        } catch (RepositoryException ex) {
-            throw new ServiceException("Failed to get all patients.\n" + ex);
-        }
+        List<User> patients = userRepository.findAllByRolesName(RoleType.PATIENT);
+
+        return patients.stream()
+                .map(UserConversionUtils::toPatientViewDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -100,7 +93,10 @@ public class PatientServiceImpl implements PatientService {
     }
 
     private boolean isValidPatientDTO(CreatePatientDTO patientDTO) {
-        return patientDTO != null && patientDTO.getFirstName() != null && patientDTO.getLastName() != null
-                && patientDTO.getAge() != null && patientDTO.getGender() != null;
+        return patientDTO != null &&
+                patientDTO.getFirstName() != null &&
+                patientDTO.getLastName() != null &&
+                patientDTO.getAge() != null &&
+                patientDTO.getGender() != null;
     }
 }

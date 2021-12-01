@@ -1,4 +1,4 @@
-package com.itrex.java.lab.persistence.data;
+package com.itrex.java.lab.persistence.dataimpl;
 
 import com.itrex.java.lab.persistence.entity.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
