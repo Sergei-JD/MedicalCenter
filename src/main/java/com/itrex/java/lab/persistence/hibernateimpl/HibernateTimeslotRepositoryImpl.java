@@ -1,13 +1,12 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
-
+import lombok.RequiredArgsConstructor;
 import javax.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +25,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
         try {
             timeslots = entityManager.createQuery(FIND_ALL_TIMESLOT_QUERY, Timeslot.class).getResultList();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get all timeslots.\n" + ex);
+            throw new RepositoryException("Failed to get all timeslots!", ex);
         }
 
         return timeslots;
@@ -38,7 +37,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
         try {
             timeslot = entityManager.find(Timeslot.class, timeslotId);
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get timeslot by id " + timeslotId + ".\n" + ex);
+            throw new RepositoryException(String.format("Failed to get timeslot by id: %d!", timeslotId), ex);
         }
 
         return Optional.ofNullable(timeslot);
@@ -52,7 +51,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
             return session.find(Timeslot.class, newTimeslotId);
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to add timeslot.\n" + ex);
+            throw new RepositoryException("Failed to add timeslot!", ex);
         }
     }
 
@@ -64,7 +63,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
 
             return updateTimeslot;
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to update timeslot.\n" + ex);
+            throw new RepositoryException("Failed to update timeslot!", ex);
         }
     }
 
@@ -79,7 +78,7 @@ public class HibernateTimeslotRepositoryImpl implements TimeslotRepository {
                 isDeleted = true;
             }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to delete timeslot by id " + timeslotId + ".\n" + ex);
+            throw new RepositoryException(String.format("Failed to get delete by id: %d!", timeslotId), ex);
         }
 
         return isDeleted;

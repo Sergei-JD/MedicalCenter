@@ -1,23 +1,21 @@
 package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
-import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
 import com.itrex.java.lab.persistence.dataimpl.UserRepository;
 import com.itrex.java.lab.persistence.dataimpl.VisitRepository;
-import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Visit;
+import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.service.VisitService;
 import com.itrex.java.lab.util.VisitConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

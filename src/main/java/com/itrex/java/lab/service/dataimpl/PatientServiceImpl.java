@@ -1,19 +1,17 @@
 package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.dataimpl.UserRepository;
-import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
 import com.itrex.java.lab.service.PatientService;
 import com.itrex.java.lab.util.UserConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

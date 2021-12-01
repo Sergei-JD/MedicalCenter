@@ -1,13 +1,12 @@
 package com.itrex.java.lab.util;
 
+import com.itrex.java.lab.dto.VisitDTO;
+import com.itrex.java.lab.dto.TimeslotDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
-import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.dto.VisitDTO;
 import com.itrex.java.lab.dto.VisitHistoryDTO;
-import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.persistence.entity.Visit;
-
 import java.util.Optional;
 
 public class VisitConversionUtils {

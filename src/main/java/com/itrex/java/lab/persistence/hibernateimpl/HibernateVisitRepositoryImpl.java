@@ -1,15 +1,15 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.entity.Visit;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
-import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+
 
 @Deprecated
 @Repository
@@ -26,7 +26,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
         try {
             visits = entityManager.createQuery(FIND_ALL_VISIT_QUERY, Visit.class).getResultList();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get all visits.\n" + ex);
+            throw new RepositoryException("Failed to get all visits!", ex);
         }
 
         return visits;
@@ -37,7 +37,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
         try {
             return Optional.ofNullable(entityManager.find(Visit.class, visitId));
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get timeslot by id " + visitId + ".\n" + ex);
+            throw new RepositoryException(String.format("Failed to get visit by id: %d!", visitId), ex);
         }
     }
 
@@ -49,7 +49,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
 
             return session.find(Visit.class, newVisitId);
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to add visit.\n" + ex);
+            throw new RepositoryException("Failed to add visit!", ex);
         }
     }
 
@@ -64,7 +64,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
                 isDeleted = true;
             }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to delete timeslot by id " + visitId + ".\n" + ex);
+            throw new RepositoryException(String.format("Failed to delete timeslot by id: %d!", visitId), ex);
         }
 
         return isDeleted;
@@ -78,7 +78,7 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
 
             return updateVisit;
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to update visit.\n" + ex);
+            throw new RepositoryException("Failed to update visit!", ex);
         }
     }
 

@@ -1,18 +1,15 @@
 package com.itrex.java.lab.service.dataimpl;
 
-
-import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
 import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
 import com.itrex.java.lab.service.TimeslotService;
 import com.itrex.java.lab.util.TimeslotConversionUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

@@ -1,8 +1,7 @@
 package com.itrex.java.lab.service;
 
-import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
-
+import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import java.util.List;
 import java.util.Optional;
 

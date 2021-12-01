@@ -1,0 +1,608 @@
+{
+	"info": {
+		"_postman_id": "95e3fd6c-9955-4b5a-a03d-47ce7b6d7199",
+		"name": "MedicalCenter",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAllDoctors",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/doctors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"doctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllPatients",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllTimeslots",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/timeslots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"timeslots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllVisits",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/visits",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDoctorById/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/doctors/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"doctors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPatientById/2",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/patients/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"patients",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTimeslotById/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/timeslots/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"timeslots",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getVisitById/1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/visits/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteDoctor/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/doctors/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"doctors",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deletePatient/2",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/patients/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"patients",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteTimeslot/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/timeslots/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"timeslots",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteVisit/1",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/visits/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createDoctor",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Sergei\",\r\n    \"lastName\": \"Shlyazhko\",\r\n    \"age\": 28,\r\n    \"email\": \"my@email\",\r\n    \"password\": \"password\",\r\n    \"gender\": \"M\",\r\n    \"phoneNum\": \"9379992\",\r\n    \"RoleType\": \"DOCTOR\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/doctors/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"doctors",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createPatient",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"Sergei\",\r\n    \"lastName\": \"Shlyazhko\",\r\n    \"age\": 28,\r\n    \"email\": \"my@email\",\r\n    \"password\": \"password\",\r\n    \"gender\": \"M\",\r\n    \"phoneNum\": 9379992,\r\n    \"RoleType\": \"PATIENT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/patients/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"patients",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createTimeslot",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"startTime\": \"2021-04-09T15:30:45.123Z\",\r\n    \"date\": \"2021-04-09T15:30:45.123Z\",\r\n    \"office\": 505\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/timeslots/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"timeslots",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "createVisit",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\r\n        \"doctorId\": 1,\r\n        \"patientId\": 2,\r\n        \"timeslotId\": 1,\r\n        \"comment\": \"some comment\"\r\n    }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/visits/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllFreeVisits",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/med/visits/free",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"free"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllFreeVisitsForDoctorById/5",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/visits/doctors/free/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"doctors",
+						"free",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getAllVisitsForPatientById/3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/visits/patients/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"patients",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateDoctor",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 5,\r\n    \"firstName\": \"Sergei\",\r\n    \"lastName\": \"Shlyazhko\",\r\n    \"age\": 28,\r\n    \"email\": \"my@email\",\r\n    \"password\": \"password\",\r\n    \"gender\": \"M\",\r\n    \"phoneNum\": 9379992\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/doctors",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"doctors"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updatePatient",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userId\": 1,\r\n    \"firstName\": \"Sergei\",\r\n    \"lastName\": \"Shlyazhko\",\r\n    \"age\": 28,\r\n    \"email\": \"my@email\",\r\n    \"password\": \"password\",\r\n    \"gender\": \"M\",\r\n    \"phoneNum\": 9379992\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateTimeslot",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"timeslotId\": 1,\r\n    \"startTime\": \"2021-04-09T15:30:45.123Z\",\r\n    \"date\": \"2021-04-09T15:30:45.123Z\",\r\n    \"office\": 505\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/timeslots",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"timeslots"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateVisit",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"visitId\": 1,\r\n        \"doctorId\": 1,\r\n        \"patientId\": 2,\r\n        \"timeslotId\": 1,\r\n        \"comment\": \"some text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/visits",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateVisitHistory",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n        \"visitId\": 1,\r\n        \"doctorId\": 1,\r\n        \"patientId\": 2,\r\n        \"timeslotId\": 1,\r\n        \"comment\": \"some text\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/med/visits/history",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"med",
+						"visits",
+						"history"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

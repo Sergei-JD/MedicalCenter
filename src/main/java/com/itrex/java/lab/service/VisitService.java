@@ -1,10 +1,9 @@
 package com.itrex.java.lab.service;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
-
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitHistoryDTO;
 import java.util.List;
 import java.util.Optional;
 

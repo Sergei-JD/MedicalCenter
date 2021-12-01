@@ -1,19 +1,18 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.entity.Role;
-import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.User;
+import com.itrex.java.lab.persistence.entity.RoleType;
+import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.Session;
-import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
-
-import javax.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.Optional;
+import javax.persistence.EntityManager;
 
 
 @Deprecated
@@ -34,7 +33,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try {
             users = entityManager.createQuery(FIND_ALL_USERS_QUERY, User.class).getResultList();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get all users.\n" + ex);
+            throw new RepositoryException("Failed to get all users!", ex);
         }
 
         return users;
@@ -46,7 +45,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try {
             users = entityManager.createQuery(SELECT_USER_BY_ROLE_QUERY, User.class).setParameter("name", role).getResultList();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get all users by role.\n" + role);
+            throw new RepositoryException("Failed to get all users by role! " + role, ex);
         }
 
         return users;
@@ -58,7 +57,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         try {
             user = entityManager.find(User.class, userId);
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get user by id " + userId + ".\n" + ex);
+            throw new RepositoryException("Failed to get user by id! " + userId, ex);
         }
 
         return Optional.ofNullable(user);
@@ -75,7 +74,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
                 user = users.get(0);
             }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get user by email " + email + ".\n" + ex);
+            throw new RepositoryException("Failed to get user by email! " + email, ex);
         }
 
         return Optional.ofNullable(user);
@@ -95,7 +94,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
                 isDeleted = true;
             }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to delete user by id " + userId + ".\n" + ex);
+            throw new RepositoryException("Failed to delete user by id! " + userId, ex);
         }
 
         return isDeleted;
@@ -109,7 +108,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
             return session.find(User.class, newUserId);
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to add user.\n" + ex);
+            throw new RepositoryException("Failed to add user!", ex);
         }
     }
 
@@ -127,7 +126,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
             return true;
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to add role to user.\n" + ex);
+            throw new RepositoryException("Failed to add role to user!", ex);
         }
     }
 
@@ -140,7 +139,7 @@ public class HibernateUserRepositoryImpl implements UserRepository {
 
             return updateUser;
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to update user.\n" + ex);
+            throw new RepositoryException("Failed to update user", ex);
         }
     }
 

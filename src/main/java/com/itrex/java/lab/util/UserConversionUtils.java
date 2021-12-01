@@ -1,11 +1,10 @@
 package com.itrex.java.lab.util;
 
 import com.itrex.java.lab.dto.DoctorDTO;
-import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.PatientDTO;
+import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.persistence.entity.User;
-
 import java.util.Optional;
 
 
