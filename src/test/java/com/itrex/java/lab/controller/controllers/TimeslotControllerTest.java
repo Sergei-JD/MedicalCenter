@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.dto.CreateTimeslotDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.itrex.java.lab.controller.BaseControllerTest;
@@ -55,15 +60,27 @@ class TimeslotControllerTest extends BaseControllerTest {
     @Test
     void getAllTimeslots_validData_shouldReturnTimeslotsList() throws Exception {
         //given
-        CreateTimeslotDTO createTimeslotDTO = CreateTimeslotDTO.builder().build();
+        CreateTimeslotDTO firstTimeslotDTO = CreateTimeslotDTO.builder()
+                .startTime(Instant.now())
+                .date(Instant.now())
+                .office(1).build();
+        CreateTimeslotDTO secondTimeslotDTO = CreateTimeslotDTO.builder()
+                .startTime(Instant.now())
+                .date(Instant.now())
+                .office(2).build();
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("office").descending());
 
         // when
-        List<CreateTimeslotDTO> expectedResponseBody = Arrays.asList(createTimeslotDTO,  createTimeslotDTO);
-        when(timeslotService.getAllTimeslot()).thenReturn(expectedResponseBody);
+        Page<CreateTimeslotDTO> expectedResponseBody =
+                new PageImpl<>(Arrays.asList(firstTimeslotDTO,  secondTimeslotDTO));
+        when(timeslotService.getAllTimeslot(pageable)).thenReturn(expectedResponseBody);
 
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/timeslots")
-                        .contentType("application/json"))
+                        .contentType("application/json")
+                        .param("page", "1")
+                        .param("size", "2")
+                        .param("sort", "office, desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 

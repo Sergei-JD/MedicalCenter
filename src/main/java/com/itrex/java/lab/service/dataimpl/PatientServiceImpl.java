@@ -10,6 +10,9 @@ import com.itrex.java.lab.persistence.dataimpl.UserRepository;
 import com.itrex.java.lab.service.PatientService;
 import com.itrex.java.lab.util.UserConversionUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -39,13 +42,14 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<PatientViewDTO> getAllPatients() {
+    public Page<PatientViewDTO> getAllPatients(Pageable pageable) {
+        Page<User> pagePatients = userRepository.findAllByRolesName(RoleType.PATIENT, pageable);
 
-        List<User> patients = userRepository.findAllByRolesName(RoleType.PATIENT);
-
-        return patients.stream()
+        List<PatientViewDTO> patients = pagePatients.stream()
                 .map(UserConversionUtils::toPatientViewDTO)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(patients);
     }
 
     @Override

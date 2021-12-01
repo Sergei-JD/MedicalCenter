@@ -13,6 +13,11 @@ import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.persistence.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.itrex.java.lab.persistence.entity.Timeslot;
@@ -73,14 +78,18 @@ class VisitControllerTest extends BaseControllerTest {
     void getAllVisits_validData_shouldReturnVisitsList() throws Exception {
         //given
         VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("timeslot").descending());
 
         // when
-        List<VisitViewDTO> expectedResponseBody = Arrays.asList(visitViewDTO,  visitViewDTO);
-        when(visitService.getAllVisit()).thenReturn(expectedResponseBody);
+        Page<VisitViewDTO> expectedResponseBody = new PageImpl<>(Arrays.asList(visitViewDTO,  visitViewDTO));
+        when(visitService.getAllVisit(pageable)).thenReturn(expectedResponseBody);
 
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/visits")
-                        .contentType("application/json"))
+                        .contentType("application/json")
+                        .param("page", "1")
+                        .param("size", "2")
+                        .param("sort", "timeslot, desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -93,14 +102,18 @@ class VisitControllerTest extends BaseControllerTest {
     void getAllFreeVisits_validData_shouldReturnVisitsList() throws Exception {
         //given
         VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("timeslot").descending());
 
         // when
-        List<VisitViewDTO> expectedResponseBody = Arrays.asList(visitViewDTO,  visitViewDTO);
-        when(visitService.getAllFreeVisits()).thenReturn(expectedResponseBody);
+        Page<VisitViewDTO> expectedResponseBody = new PageImpl<>(Arrays.asList(visitViewDTO,  visitViewDTO));
+        when(visitService.getAllFreeVisits(pageable)).thenReturn(expectedResponseBody);
 
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/visits/free")
-                        .contentType("application/json"))
+                        .contentType("application/json")
+                        .param("page", "1")
+                        .param("size", "2")
+                        .param("sort", "timeslot, desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 

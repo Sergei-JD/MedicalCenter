@@ -5,6 +5,8 @@ import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.TimeslotService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,7 +30,6 @@ public class TimeslotController {
 
     @PostMapping("/add")
     public ResponseEntity<CreateTimeslotDTO> createTimeslot(@RequestBody CreateTimeslotDTO createTimeslotDTO) throws ServiceException {
-
         CreateTimeslotDTO addTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
 
         return (addTimeslot != null)
@@ -38,7 +39,6 @@ public class TimeslotController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteTimeslot(@PathVariable(name = "id") int id) throws ServiceException {
-
         boolean result = timeslotService.deleteTimeslot(id);
 
         return result
@@ -47,9 +47,8 @@ public class TimeslotController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CreateTimeslotDTO>> getAllTimeslot() throws ServiceException {
-
-        List<CreateTimeslotDTO> timeslots = timeslotService.getAllTimeslot();
+    public ResponseEntity<Page<CreateTimeslotDTO>> getAllTimeslot(Pageable pageable) throws ServiceException {
+        Page<CreateTimeslotDTO> timeslots = timeslotService.getAllTimeslot(pageable);
 
         return timeslots != null && !timeslots.isEmpty()
                 ? new ResponseEntity<>(timeslots, HttpStatus.OK)
@@ -58,7 +57,6 @@ public class TimeslotController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CreateTimeslotDTO> getTimeslotById(@PathVariable(name = "id") int id) throws ServiceException {
-
         Optional<CreateTimeslotDTO> timeslotDTO = timeslotService.getTimeslotById(id);
 
         return timeslotDTO.map(createTimeslotDTO -> new ResponseEntity<>(createTimeslotDTO, HttpStatus.OK))
@@ -67,7 +65,6 @@ public class TimeslotController {
 
     @PutMapping
     public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) throws ServiceException {
-
         TimeslotDTO updatedTimeslot = timeslotService.updateTimeslot(timeslotDTO);
 
         return updatedTimeslot != null

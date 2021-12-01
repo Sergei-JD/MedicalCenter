@@ -14,6 +14,9 @@ import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.service.VisitService;
 import com.itrex.java.lab.util.VisitConversionUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -51,22 +54,27 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public List<VisitViewDTO> getAllVisit() {
-        List<Visit> visits = visitRepository.findAll();
+    public Page<VisitViewDTO> getAllVisit(Pageable pageable) {
+        Page<Visit> pageVisits = visitRepository.findAll(pageable);
 
-        return visits.stream()
+        List<VisitViewDTO> visits = pageVisits.stream()
                 .map(VisitConversionUtils::toVisitViewDTO)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(visits);
     }
 
     @Override
-    public List<VisitViewDTO> getAllFreeVisits() {
-        List<Visit> visits = visitRepository.findAll();
+    public Page<VisitViewDTO> getAllFreeVisits(Pageable pageable) {
+        Page<Visit> pageVisits = visitRepository.findAll(pageable);
 
-        return visits.stream()
+        List<VisitViewDTO> visits = pageVisits.stream()
                 .filter(visit -> (visit.getDoctor() == null && visit.getPatient() == null))
                 .map(VisitConversionUtils::toVisitViewDTO)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(visits);
+
     }
 
     @Override

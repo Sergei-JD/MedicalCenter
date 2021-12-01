@@ -21,6 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -122,15 +127,16 @@ class VisitServiceImplTest {
         Integer expectedListSize = 2;
         Visit firstVisit = initVisit(1);
         Visit secondVisit = initVisit(2);
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("visitId").descending());
 
         when(visitRepository.findAll())
                 .thenReturn(Arrays.asList(firstVisit, secondVisit));
 
         //when
-        List<VisitViewDTO> result = visitService.getAllVisit();
+        Page<VisitViewDTO> result = visitService.getAllVisit(pageable);
 
         //then
-        assertEquals(expectedListSize, result.size());
+        assertEquals(expectedListSize, result.getSize());
         assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(TEST_VISIT_DOCTOR_ID)
                 && visit.getDoctor().getFirstName().equals(TEST_USER_FIRST_NAME)
                 && visit.getDoctor().getLastName().equals(TEST_USER_LAST_NAME)
@@ -140,10 +146,11 @@ class VisitServiceImplTest {
     @Test
     void getAllVisits_repositoryThrowError_shouldThrowServiceException() {
         //given
-        when(visitRepository.findAll()).thenThrow(new RepositoryException("some msg"));
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("visitId").descending());
+        when(visitRepository.findAll(pageable)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(RepositoryException.class, () -> visitService.getAllVisit());
+        assertThrows(RepositoryException.class, () -> visitService.getAllVisit(pageable));
     }
 
     @Test
@@ -159,14 +166,16 @@ class VisitServiceImplTest {
                         .office(TEST_OFFICE).build())
                 .build();
 
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("visitId").descending());
+
         when(visitRepository.findAll())
                 .thenReturn(Arrays.asList(firstVisit, secondVisit));
 
         //when
-        List<VisitViewDTO> result = visitService.getAllFreeVisits();
+        Page<VisitViewDTO> result = visitService.getAllFreeVisits(pageable);
 
         //then
-        assertEquals(expectedListSize, result.size());
+        assertEquals(expectedListSize, result.getSize());
         assertTrue(result.stream().allMatch(visit -> visit.getDoctor() == null
                 && visit.getPatient() == null));
     }
@@ -174,10 +183,11 @@ class VisitServiceImplTest {
     @Test
     void getAllFreeVisits_repositoryThrowError_shouldThrowServiceException() {
         //given
-        when(visitRepository.findAll()).thenThrow(new RepositoryException("some msg"));
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("visitId").descending());
+        when(visitRepository.findAll(pageable)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(RepositoryException.class, () -> visitService.getAllFreeVisits());
+        assertThrows(RepositoryException.class, () -> visitService.getAllFreeVisits(pageable));
     }
 
     @Test

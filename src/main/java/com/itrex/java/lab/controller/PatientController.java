@@ -6,6 +6,8 @@ import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.PatientService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +31,6 @@ public class PatientController {
 
     @PostMapping("/add")
     public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) throws ServiceException {
-
         CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
 
         return (addPatient != null)
@@ -39,7 +40,6 @@ public class PatientController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deletePatient(@PathVariable(name = "id") int id) throws ServiceException {
-
         boolean result = patientService.deletePatient(id);
 
         return result
@@ -48,9 +48,8 @@ public class PatientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PatientViewDTO>> getAllPatients() throws ServiceException {
-
-        List<PatientViewDTO> patients = patientService.getAllPatients();
+    public ResponseEntity<Page<PatientViewDTO>> getAllPatients(Pageable pageable) throws ServiceException {
+        Page<PatientViewDTO> patients = patientService.getAllPatients(pageable);
 
         return patients != null && !patients.isEmpty()
                 ? new ResponseEntity<>(patients, HttpStatus.OK)
@@ -59,7 +58,6 @@ public class PatientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<PatientViewDTO> getPatientById(@PathVariable(name = "id") int id) throws ServiceException {
-
         Optional<PatientViewDTO> patientViewDTO = patientService.getPatientById(id);
 
         return patientViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
@@ -68,7 +66,6 @@ public class PatientController {
 
     @PutMapping
     public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) throws ServiceException {
-
         PatientDTO updatedPatient = patientService.updatePatient(patientDTO);
 
         return updatedPatient != null

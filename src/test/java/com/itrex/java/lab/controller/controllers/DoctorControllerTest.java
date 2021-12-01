@@ -10,6 +10,11 @@ import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.CreateDoctorDTO;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.web.servlet.MockMvc;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import org.springframework.test.web.servlet.MvcResult;
@@ -57,15 +62,21 @@ class DoctorControllerTest extends BaseControllerTest {
     @Test
     void getAllDoctors_validData_shouldReturnDoctorsList() throws Exception {
         //given
-        DoctorViewDTO doctorViewDTO = DoctorViewDTO.builder().build();
+        DoctorViewDTO firstDoctorViewDTO = DoctorViewDTO.builder().build();
+        DoctorViewDTO secondDoctorViewDTO = DoctorViewDTO.builder().build();
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("lastName").descending());
 
         // when
-        List<DoctorViewDTO> expectedResponseBody = Arrays.asList(doctorViewDTO, doctorViewDTO);
-        when(doctorService.getAllDoctors()).thenReturn(expectedResponseBody);
+        Page<DoctorViewDTO> expectedResponseBody =
+                new PageImpl<>(Arrays.asList(firstDoctorViewDTO, secondDoctorViewDTO));
+        when(doctorService.getAllDoctors(pageable)).thenReturn(expectedResponseBody);
 
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/doctors")
-                        .contentType("application/json"))
+                        .contentType("application/json")
+                        .param("page", "1")
+                        .param("size", "2")
+                        .param("sort", "lastName, desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 

@@ -8,6 +8,9 @@ import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
 import com.itrex.java.lab.service.TimeslotService;
 import com.itrex.java.lab.util.TimeslotConversionUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -33,12 +36,14 @@ public class TimeslotServiceImpl implements TimeslotService {
     }
 
     @Override
-    public List<CreateTimeslotDTO> getAllTimeslot() {
-        List<Timeslot> timeslots = timeslotRepository.findAll();
+    public Page<CreateTimeslotDTO> getAllTimeslot(Pageable pageable) {
+        Page<Timeslot> pageTimeslots = timeslotRepository.findAll(pageable);
 
-        return timeslots.stream()
+        List<CreateTimeslotDTO> timeslots = pageTimeslots.stream()
                 .map(TimeslotConversionUtils::toTimeslotDTO)
                 .collect(Collectors.toList());
+
+        return new PageImpl<>(timeslots);
     }
 
     @Override

@@ -16,6 +16,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Arrays;
 import java.util.List;
@@ -100,26 +105,28 @@ class PatientServiceImplTest {
         Integer expectedListSize = 2;
         User firstPatient = initUser(1);
         User secondPatient = initUser(2);
-        when(userRepository.findAllByRolesName(RoleType.PATIENT))
-                .thenReturn(Arrays.asList(firstPatient, secondPatient));
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("lastName").descending());
+        when(userRepository.findAllByRolesName(RoleType.PATIENT, pageable))
+                .thenReturn(new PageImpl<>(Arrays.asList(firstPatient, secondPatient)));
 
         //when
-        List<PatientViewDTO> result = patientService.getAllPatients();
+        Page<PatientViewDTO> result = patientService.getAllPatients(pageable);
 
         //then
-        assertEquals(expectedListSize, result.size());
+        assertEquals(expectedListSize, result.getSize());
         assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME) &&
                 doctor.getLastName().equals(TEST_USER_LAST_NAME)));
-        verify(userRepository, times(1)).findAllByRolesName(eq(TEST_USER_ROLE));
+        verify(userRepository, times(1)).findAllByRolesName(eq(TEST_USER_ROLE), pageable);
     }
 
     @Test
     void getAllPatients_repositoryThrowError_shouldThrowServiceException() {
         //given
-        when(userRepository.findAllByRolesName(RoleType.PATIENT)).thenThrow(new RepositoryException("some msg"));
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("lastName").descending());
+        when(userRepository.findAllByRolesName(RoleType.PATIENT, pageable)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(RepositoryException.class, () -> patientService.getAllPatients());
+        assertThrows(RepositoryException.class, () -> patientService.getAllPatients(pageable));
     }
 
     @Test

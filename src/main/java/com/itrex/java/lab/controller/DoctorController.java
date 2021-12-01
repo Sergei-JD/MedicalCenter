@@ -6,6 +6,8 @@ import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.DoctorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +31,6 @@ public class DoctorController {
 
     @PostMapping("/add")
     public ResponseEntity<CreateDoctorDTO> createDoctor(@RequestBody CreateDoctorDTO createDoctorDTO) throws ServiceException {
-
         CreateDoctorDTO addDoctor = doctorService.createDoctor(createDoctorDTO);
 
         return (addDoctor != null)
@@ -39,7 +40,6 @@ public class DoctorController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteDoctor(@PathVariable(name = "id") int id) throws ServiceException {
-
         boolean result = doctorService.deleteDoctor(id);
 
         return result
@@ -48,9 +48,8 @@ public class DoctorController {
     }
 
     @GetMapping
-    public ResponseEntity<List<DoctorViewDTO>> getAllDoctors() throws ServiceException {
-
-        List<DoctorViewDTO> doctors = doctorService.getAllDoctors();
+    public ResponseEntity<Page<DoctorViewDTO>> getAllDoctors(Pageable pageable) throws ServiceException {
+        Page<DoctorViewDTO> doctors = doctorService.getAllDoctors(pageable);
 
         return doctors != null && !doctors.isEmpty()
                 ? new ResponseEntity<>(doctors, HttpStatus.OK)
@@ -59,7 +58,6 @@ public class DoctorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorViewDTO> getDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
-
         Optional<DoctorViewDTO> doctorViewDTO = doctorService.getDoctorById(id);
 
         return doctorViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
@@ -68,7 +66,6 @@ public class DoctorController {
 
     @PutMapping
     public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO) throws ServiceException {
-
         DoctorDTO updatedDoctor = doctorService.updateDoctor(doctorDTO);
 
         return updatedDoctor != null

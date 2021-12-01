@@ -13,10 +13,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -87,15 +91,16 @@ class TimeslotServiceImplTest {
         Integer expectedListSize = 2;
         Timeslot firstTimeslot = initTimeslot(1);
         Timeslot secondTimeslot = initTimeslot(2);
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("office").descending());
 
-        when(timeslotRepository.findAll())
-                .thenReturn(Arrays.asList(firstTimeslot, secondTimeslot));
+        when(timeslotRepository.findAll(pageable))
+                .thenReturn(new PageImpl<>(Arrays.asList(firstTimeslot, secondTimeslot)));
 
         //when
-        List<CreateTimeslotDTO> result = timeslotService.getAllTimeslot();
+        Page<CreateTimeslotDTO> result = timeslotService.getAllTimeslot(pageable);
 
         //then
-        assertEquals(expectedListSize, result.size());
+        assertEquals(expectedListSize, result.getSize());
         assertTrue(result.stream().allMatch(timeslot -> timeslot.getStartTime().equals(TEST_START_TIME)
                 && timeslot.getDate().equals(TEST_DATE)
                 && timeslot.getOffice().equals(TEST_OFFICE)));
@@ -104,10 +109,11 @@ class TimeslotServiceImplTest {
     @Test
     void getAllTimeslots_repositoryThrowError_shouldThrowServiceException() {
         //given
-        when(timeslotRepository.findAll()).thenThrow(new RepositoryException("some msg"));
+        Pageable pageable = PageRequest.of(1, 2, Sort.by("office").descending());
+        when(timeslotRepository.findAll(pageable)).thenThrow(new RepositoryException("some msg"));
 
         //when && then
-        assertThrows(RepositoryException.class, () -> timeslotService.getAllTimeslot());
+        assertThrows(RepositoryException.class, () -> timeslotService.getAllTimeslot(pageable));
     }
 
     @Test

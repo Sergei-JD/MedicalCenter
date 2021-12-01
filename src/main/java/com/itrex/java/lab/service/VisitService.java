@@ -4,6 +4,9 @@ import com.itrex.java.lab.dto.VisitDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitHistoryDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -13,9 +16,9 @@ public interface VisitService {
 
     boolean deleteVisit(int visitId);
 
-    List<VisitViewDTO> getAllVisit();
+    Page<VisitViewDTO> getAllVisit(Pageable pageable);
 
-    List<VisitViewDTO>getAllFreeVisits();
+    Page<VisitViewDTO>getAllFreeVisits(Pageable pageable);
 
     List<VisitViewDTO> getAllFreeVisitsForDoctorById(int doctorId);
 
