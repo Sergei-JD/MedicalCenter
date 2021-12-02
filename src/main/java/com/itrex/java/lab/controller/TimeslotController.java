@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ public class TimeslotController {
     private final TimeslotService timeslotService;
 
     @PostMapping("/add")
+    @RolesAllowed({"ADMIN", "DOCTOR"})
     public ResponseEntity<CreateTimeslotDTO> createTimeslot(@RequestBody CreateTimeslotDTO createTimeslotDTO) throws ServiceException {
         CreateTimeslotDTO addTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
 
@@ -38,6 +40,7 @@ public class TimeslotController {
     }
 
     @DeleteMapping("/{id}")
+    @RolesAllowed({"ADMIN", "DOCTOR"})
     public ResponseEntity<Boolean> deleteTimeslot(@PathVariable(name = "id") int id) throws ServiceException {
         boolean result = timeslotService.deleteTimeslot(id);
 
@@ -47,6 +50,7 @@ public class TimeslotController {
     }
 
     @GetMapping
+    @RolesAllowed({"ADMIN", "DOCTOR", "PATIENT"})
     public ResponseEntity<Page<CreateTimeslotDTO>> getAllTimeslot(Pageable pageable) throws ServiceException {
         Page<CreateTimeslotDTO> timeslots = timeslotService.getAllTimeslot(pageable);
 
@@ -56,6 +60,7 @@ public class TimeslotController {
     }
 
     @GetMapping("/{id}")
+    @RolesAllowed({"ADMIN", "DOCTOR", "PATIENT"})
     public ResponseEntity<CreateTimeslotDTO> getTimeslotById(@PathVariable(name = "id") int id) throws ServiceException {
         Optional<CreateTimeslotDTO> timeslotDTO = timeslotService.getTimeslotById(id);
 
@@ -64,6 +69,7 @@ public class TimeslotController {
     }
 
     @PutMapping
+    @RolesAllowed({"ADMIN", "DOCTOR", "PATIENT"})
     public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) throws ServiceException {
         TimeslotDTO updatedTimeslot = timeslotService.updateTimeslot(timeslotDTO);
 

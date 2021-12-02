@@ -65,6 +65,18 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public Optional<PatientDTO> getPatientByEmail(String email) {
+        PatientDTO patientDTO = null;
+
+        Optional<User> patient = userRepository.findUserByEmail(email);
+        if (patient.isPresent()) {
+            patientDTO = UserConversionUtils.toPatientDTO(patient.get());
+        }
+
+        return Optional.ofNullable(patientDTO);
+    }
+
+    @Override
     @Transactional
     public boolean deletePatient(int patientId) {
         userRepository.deleteById(patientId);

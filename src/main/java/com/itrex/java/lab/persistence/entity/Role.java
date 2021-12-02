@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
@@ -20,7 +22,7 @@ import javax.persistence.GeneratedValue;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "role")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,5 +32,10 @@ public class Role {
     @Column(name = "name")
     @Enumerated(EnumType.STRING)
     private RoleType name;
+
+    @Override
+    public String getAuthority() {
+        return name.name();
+    }
 
 }

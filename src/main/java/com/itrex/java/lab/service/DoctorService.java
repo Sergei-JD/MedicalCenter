@@ -6,7 +6,6 @@ import com.itrex.java.lab.dto.CreateDoctorDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface DoctorService {
@@ -18,6 +17,8 @@ public interface DoctorService {
     Page<DoctorViewDTO> getAllDoctors(Pageable pageable);
 
     Optional<DoctorViewDTO> getDoctorById(int doctorId);
+
+    Optional<DoctorDTO> getDoctorByEmail(String email);
 
     DoctorDTO updateDoctor(DoctorDTO doctorDTO);
 

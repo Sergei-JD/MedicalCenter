@@ -66,6 +66,18 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public Optional<DoctorDTO> getDoctorByEmail(String email) {
+        DoctorDTO doctorDTO = null;
+
+        Optional<User> doctor = userRepository.findUserByEmail(email);
+        if (doctor.isPresent()) {
+            doctorDTO = UserConversionUtils.toDoctorDTO(doctor.get());
+        }
+
+        return Optional.ofNullable(doctorDTO);
+    }
+
+    @Override
     @Transactional
     public boolean deleteDoctor(int doctorId) {
         userRepository.deleteById(doctorId);

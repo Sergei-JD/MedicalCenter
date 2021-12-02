@@ -17,9 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import java.util.Optional;
 
 @RestController
@@ -30,6 +31,7 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @PostMapping("/add")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<CreateDoctorDTO> createDoctor(@RequestBody CreateDoctorDTO createDoctorDTO) throws ServiceException {
         CreateDoctorDTO addDoctor = doctorService.createDoctor(createDoctorDTO);
 
@@ -39,6 +41,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/{id}")
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<Boolean> deleteDoctor(@PathVariable(name = "id") int id) throws ServiceException {
         boolean result = doctorService.deleteDoctor(id);
 
@@ -48,6 +51,7 @@ public class DoctorController {
     }
 
     @GetMapping
+    @RolesAllowed({"ADMIN", "DOCTOR"})
     public ResponseEntity<Page<DoctorViewDTO>> getAllDoctors(Pageable pageable) throws ServiceException {
         Page<DoctorViewDTO> doctors = doctorService.getAllDoctors(pageable);
 
@@ -57,6 +61,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
+    @RolesAllowed({"ADMIN", "DOCTOR"})
     public ResponseEntity<DoctorViewDTO> getDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
         Optional<DoctorViewDTO> doctorViewDTO = doctorService.getDoctorById(id);
 
@@ -64,7 +69,17 @@ public class DoctorController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/email")
+    @RolesAllowed({"ADMIN", "DOCTOR"})
+    public ResponseEntity<DoctorDTO> getDoctorByEmail(@RequestParam(name = "email") String email) throws ServiceException {
+        Optional<DoctorDTO> doctorDTO = doctorService.getDoctorByEmail(email);
+
+        return doctorDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
     @PutMapping
+    @RolesAllowed({"ADMIN"})
     public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO) throws ServiceException {
         DoctorDTO updatedDoctor = doctorService.updateDoctor(doctorDTO);
 
