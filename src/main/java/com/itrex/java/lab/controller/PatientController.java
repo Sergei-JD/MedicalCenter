@@ -33,7 +33,7 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping("/add")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"ADMIN", "doctor"})
     public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) throws ServiceException {
         CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
 
@@ -53,7 +53,7 @@ public class PatientController {
     }
 
     @GetMapping
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"ADMIN", "doctor"})
     public ResponseEntity<Page<PatientViewDTO>> getAllPatients(Pageable pageable) throws ServiceException {
         Page<PatientViewDTO> patients = patientService.getAllPatients(pageable);
 

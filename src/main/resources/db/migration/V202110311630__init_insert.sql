@@ -2,7 +2,7 @@
 -- Insert table user
 -- -----------------------------------------------------
 INSERT INTO user (user_id, first_name, last_name, age, email, password, gender, phone_num)
-VALUES (1, 'Ivan', 'Ivanov', 46, 'ivan@email.com', '$2a$12$QRjJYLHH8yfP6uoTC.Sv6etP/l5BVIg4bMAiWFUeD4j1G/wivqds.', 'M', 9379992);
+VALUES (1, 'Ivan', 'Ivanov', 46, 'ivan@email.com', '$2a$12$avXI/5Pu8ppdItkRe8bwJ.Fze8LnTDYtItnKBm0vrrrvo5VIIxCVu', 'M', 9379992);
 INSERT INTO user (user_id, first_name, last_name, age, email, password, gender, phone_num)
 VALUES (2, 'Petr', 'Petrov', 34, 'petr@email.com', '$2a$12$VfZKT01Rhwn1Mjlgv.tEm.xijPyiE5YBazz/PcZmGVrmEQIsYGciC', 'M', 9565941);
 INSERT INTO user (user_id, first_name, last_name, age, email, password, gender, phone_num)
@@ -26,6 +26,7 @@ INSERT INTO role(role_id, name) VALUES (3, 'ADMIN');
 -- -----------------------------------------------------
 INSERT INTO user_role (user_id, role_id) VALUES ('1', '1');
 INSERT INTO user_role (user_id, role_id) VALUES ('1', '2');
+INSERT INTO user_role (user_id, role_id) VALUES ('1', '3');
 INSERT INTO user_role (user_id, role_id) VALUES ('2', '1');
 INSERT INTO user_role (user_id, role_id) VALUES ('3', '2');
 INSERT INTO user_role (user_id, role_id) VALUES ('4', '2');

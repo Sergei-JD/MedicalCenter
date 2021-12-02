@@ -21,7 +21,5 @@ public class CreateDoctorDTO {
     private String password;
     private String gender;
     private Integer phoneNum;
-    //TODO удалить сет ролей, и задавать роль при создании
-    private Set<Role> roles;
 
 }

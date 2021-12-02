@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS user
     last_name  VARCHAR(100) NOT NULL,
     age        INT          NOT NULL,
     email      VARCHAR(64),
-    password   VARCHAR(8),
+    password   VARCHAR(256),
     gender     VARCHAR(5)   NOT NULL,
     phone_num  INT(12)
 );

@@ -21,6 +21,5 @@ public class CreatePatientDTO {
     private String password;
     private String gender;
     private Integer phoneNum;
-    private Set<Role> roles;
 
 }

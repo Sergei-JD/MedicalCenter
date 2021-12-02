@@ -37,13 +37,18 @@ public class AuthController {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
             Optional<DoctorDTO> doctor = doctorService.getDoctorByEmail(request.getEmail());
-            Optional<PatientDTO> patient = patientService.getPatientByEmail(request.getEmail());
-            if (doctor.isEmpty() || patient.isEmpty()) {
-                return new ResponseEntity<>("User doesn't exists", HttpStatus.NOT_FOUND);
+            String token;
+            if (doctor.isPresent()) {
+                token = jwtTokenProvider.createToken(request.getEmail(), doctor.get().getRoles());
+            } else {
+                Optional<PatientDTO> patient = patientService.getPatientByEmail(request.getEmail());
+                if (patient.isPresent()) {
+                    token = jwtTokenProvider.createToken(request.getEmail(), patient.get().getRoles());
+                } else {
+                    return new ResponseEntity<>("User doesn't exists", HttpStatus.NOT_FOUND);
+                }
             }
-            String token = jwtTokenProvider.createToken(request.getEmail(), doctor.get().getRole().getName() || patient.get().getRole().getName());
             Map<Object, Object> response = new HashMap<>();
-            response.put("login", request.getEmail());
             response.put("token", token);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {

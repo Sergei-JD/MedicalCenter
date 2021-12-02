@@ -3,6 +3,8 @@ package com.itrex.java.lab.service.dataimpl;
 import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.CreatePatientDTO;
+import com.itrex.java.lab.persistence.dataimpl.RoleRepository;
+import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,9 +28,13 @@ public class PatientServiceImpl implements PatientService {
 
     private final UserRepository userRepository;
 
+    private final RoleRepository roleRepository;
+
     @Override
     @Transactional
     public CreatePatientDTO createPatient(CreatePatientDTO patientDTO) {
+        Role rolePatient = roleRepository.findRoleByName(RoleType.PATIENT)
+                .orElseThrow(() -> new ServiceException("Failed to create patient no such role"));
         User newPatient = User.builder()
                 .firstName(patientDTO.getFirstName())
                 .lastName(patientDTO.getLastName())
@@ -36,6 +43,7 @@ public class PatientServiceImpl implements PatientService {
                 .password(patientDTO.getPassword())
                 .gender(patientDTO.getGender())
                 .phoneNum(patientDTO.getPhoneNum())
+                .roles(Set.of(rolePatient))
                 .build();
 
         return UserConversionUtils.toPatientDTO(userRepository.save(newPatient));
