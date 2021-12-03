@@ -66,7 +66,6 @@ class DoctorServiceImplTest {
                 .password(TEST_USER_PASSWORD)
                 .gender(TEST_USER_GENDER)
                 .phoneNum(TEST_USER_NUMBER_PHONE)
-                .roles(Set.of(Role.builder().name(TEST_USER_ROLE).build()))
                 .build();
         User doctor = initUser(1);
 

@@ -36,8 +36,8 @@ public class AuthController {
     public ResponseEntity<?> login(@RequestBody AuthenticationRequestDTO request) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-            Optional<DoctorDTO> doctor = doctorService.getDoctorByEmail(request.getEmail());
             String token;
+            Optional<DoctorDTO> doctor = doctorService.getDoctorByEmail(request.getEmail());
             if (doctor.isPresent()) {
                 token = jwtTokenProvider.createToken(request.getEmail(), doctor.get().getRoles());
             } else {

@@ -33,7 +33,7 @@ public class PatientController {
     private final PatientService patientService;
 
     @PostMapping("/add")
-    @RolesAllowed({"ADMIN", "doctor"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) throws ServiceException {
         CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
 
@@ -43,7 +43,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Boolean> deletePatient(@PathVariable(name = "id") int id) throws ServiceException {
         boolean result = patientService.deletePatient(id);
 
@@ -53,7 +53,7 @@ public class PatientController {
     }
 
     @GetMapping
-    @RolesAllowed({"ADMIN", "doctor"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Page<PatientViewDTO>> getAllPatients(Pageable pageable) throws ServiceException {
         Page<PatientViewDTO> patients = patientService.getAllPatients(pageable);
 
@@ -63,7 +63,7 @@ public class PatientController {
     }
 
     @GetMapping("/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<PatientViewDTO> getPatientById(@PathVariable(name = "id") int id) throws ServiceException {
         Optional<PatientViewDTO> patientViewDTO = patientService.getPatientById(id);
 
@@ -72,7 +72,7 @@ public class PatientController {
     }
 
     @GetMapping("/email")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<PatientDTO> getPatientByEmail(@RequestParam(name = "email") String email) throws ServiceException {
         Optional<PatientDTO> patientDTO = patientService.getPatientByEmail(email);
 
@@ -81,7 +81,7 @@ public class PatientController {
     }
 
     @PutMapping
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) throws ServiceException {
         PatientDTO updatedPatient = patientService.updatePatient(patientDTO);
 

@@ -32,7 +32,7 @@ public class VisitController {
     private final VisitService visitService;
 
     @PostMapping("/add")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<VisitDTO> createVisit(@RequestBody CreateVisitDTO createVisitDTO) throws ServiceException {
         VisitDTO addVisit = visitService.createVisit(createVisitDTO);
 
@@ -42,7 +42,7 @@ public class VisitController {
     }
 
     @DeleteMapping("/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Boolean> deleteVisit(@PathVariable(name = "id") int id) throws ServiceException {
         boolean result = visitService.deleteVisit(id);
 
@@ -52,7 +52,7 @@ public class VisitController {
     }
 
     @GetMapping
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Page<VisitViewDTO>> getAllVisits(Pageable pageable) throws ServiceException {
         Page<VisitViewDTO> visits = visitService.getAllVisit(pageable);
 
@@ -62,7 +62,7 @@ public class VisitController {
     }
 
     @GetMapping("/free")
-    @RolesAllowed({"ADMIN", "DOCTOR", "PATIENT"})
+    @RolesAllowed({"admin", "doctor", "patient"})
     public ResponseEntity<Page<VisitViewDTO>> getAllFreeVisits(Pageable pageable) throws ServiceException {
         Page<VisitViewDTO> visits = visitService.getAllFreeVisits(pageable);
 
@@ -72,7 +72,7 @@ public class VisitController {
     }
 
     @GetMapping("/doctors/free/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<List<VisitViewDTO>> getAllFreeVisitsForDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
         List<VisitViewDTO> visits = visitService.getAllFreeVisitsForDoctorById(id);
 
@@ -82,7 +82,7 @@ public class VisitController {
     }
 
     @GetMapping("/patients/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<List<VisitViewDTO>> getAllVisitsForPatientDyId(@PathVariable(name = "id") int id) throws ServiceException {
         List<VisitViewDTO> visits = visitService.getAllVisitsForPatientDyId(id);
 
@@ -92,7 +92,7 @@ public class VisitController {
     }
 
     @GetMapping("/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<VisitViewDTO> getVisitById(@PathVariable(name = "id") int id) throws ServiceException {
         Optional<VisitViewDTO> visitViewDTO = visitService.getVisitById(id);
 
@@ -101,7 +101,7 @@ public class VisitController {
     }
 
     @PutMapping
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<VisitDTO> updateVisit(@RequestBody VisitDTO visitDTO) throws ServiceException {
         VisitDTO updatedVisit = visitService.updateVisit(visitDTO);
 
@@ -111,7 +111,7 @@ public class VisitController {
     }
 
     @PutMapping("/history")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<VisitHistoryDTO> updateVisitHistory(@RequestBody VisitDTO visitDTO) throws ServiceException {
         VisitHistoryDTO updatedVisitHistory = visitService.updateVisitHistory(visitDTO);
 

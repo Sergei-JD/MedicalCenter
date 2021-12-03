@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS user
     first_name VARCHAR(100) NOT NULL,
     last_name  VARCHAR(100) NOT NULL,
     age        INT          NOT NULL,
-    email      VARCHAR(64),
+    email      VARCHAR(256),
     password   VARCHAR(256),
     gender     VARCHAR(5)   NOT NULL,
     phone_num  INT(12)
@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS user
 CREATE TABLE IF NOT EXISTS role
 (
     role_id INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name    VARCHAR(100) NOT NULL
+    name    VARCHAR(64) NOT NULL
 );
 
 -- -----------------------------------------------------

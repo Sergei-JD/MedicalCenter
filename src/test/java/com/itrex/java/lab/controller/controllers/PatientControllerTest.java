@@ -122,7 +122,7 @@ class PatientControllerTest extends BaseControllerTest {
                 .lastName("test lsat name")
                 .age(25)
                 .gender("M")
-                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
+//                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
                 .build();
 
         //when
@@ -149,7 +149,7 @@ class PatientControllerTest extends BaseControllerTest {
                 .lastName("test lsat name")
                 .age(25)
                 .gender("M")
-                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
+//                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
                 .build();
 
         //when

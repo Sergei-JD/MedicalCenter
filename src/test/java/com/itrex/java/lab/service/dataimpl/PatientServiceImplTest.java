@@ -66,7 +66,6 @@ class PatientServiceImplTest {
                 .password(TEST_USER_PASSWORD)
                 .gender(TEST_USER_GENDER)
                 .phoneNum(TEST_USER_NUMBER_PHONE)
-                .roles(Set.of(Role.builder().name(TEST_USER_ROLE).build()))
                 .build();
         User patient = initUser(1);
 
@@ -82,8 +81,7 @@ class PatientServiceImplTest {
                 () -> assertEquals(patient.getEmail(), actualPatientDTO.getEmail()),
                 () -> assertEquals(patient.getPassword(), actualPatientDTO.getPassword()),
                 () -> assertEquals(patient.getGender(), actualPatientDTO.getGender()),
-                () -> assertEquals(patient.getPhoneNum(), actualPatientDTO.getPhoneNum()),
-                () -> assertEquals(patient.getRoles(), actualPatientDTO.getRoles())
+                () -> assertEquals(patient.getPhoneNum(), actualPatientDTO.getPhoneNum())
         );
     }
 

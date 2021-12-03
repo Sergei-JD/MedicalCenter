@@ -48,6 +48,8 @@ dependencies {
     }
     implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 
+    implementation 'org.apache.commons:commons-lang3:3.0'
+
     implementation group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '2.3.3'
 }

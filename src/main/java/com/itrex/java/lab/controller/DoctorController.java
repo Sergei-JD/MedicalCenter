@@ -31,7 +31,7 @@ public class DoctorController {
     private final DoctorService doctorService;
 
     @PostMapping("/add")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"admin"})
     public ResponseEntity<CreateDoctorDTO> createDoctor(@RequestBody CreateDoctorDTO createDoctorDTO) throws ServiceException {
         CreateDoctorDTO addDoctor = doctorService.createDoctor(createDoctorDTO);
 
@@ -41,7 +41,7 @@ public class DoctorController {
     }
 
     @DeleteMapping("/{id}")
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"admin"})
     public ResponseEntity<Boolean> deleteDoctor(@PathVariable(name = "id") int id) throws ServiceException {
         boolean result = doctorService.deleteDoctor(id);
 
@@ -51,7 +51,7 @@ public class DoctorController {
     }
 
     @GetMapping
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Page<DoctorViewDTO>> getAllDoctors(Pageable pageable) throws ServiceException {
         Page<DoctorViewDTO> doctors = doctorService.getAllDoctors(pageable);
 
@@ -61,7 +61,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<DoctorViewDTO> getDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
         Optional<DoctorViewDTO> doctorViewDTO = doctorService.getDoctorById(id);
 
@@ -70,7 +70,7 @@ public class DoctorController {
     }
 
     @GetMapping("/email")
-    @RolesAllowed({"ADMIN", "DOCTOR"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<DoctorDTO> getDoctorByEmail(@RequestParam(name = "email") String email) throws ServiceException {
         Optional<DoctorDTO> doctorDTO = doctorService.getDoctorByEmail(email);
 
@@ -79,7 +79,7 @@ public class DoctorController {
     }
 
     @PutMapping
-    @RolesAllowed({"ADMIN"})
+    @RolesAllowed({"admin"})
     public ResponseEntity<DoctorDTO> updateDoctor(@RequestBody DoctorDTO doctorDTO) throws ServiceException {
         DoctorDTO updatedDoctor = doctorService.updateDoctor(doctorDTO);
 
