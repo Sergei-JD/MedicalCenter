@@ -72,7 +72,7 @@ public class VisitController {
     }
 
     @GetMapping("/doctors/free/{id}")
-    @RolesAllowed({"admin", "doctor"})
+    @RolesAllowed({"admin", "doctor", "patient"})
     public ResponseEntity<List<VisitViewDTO>> getAllFreeVisitsForDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
         List<VisitViewDTO> visits = visitService.getAllFreeVisitsForDoctorById(id);
 

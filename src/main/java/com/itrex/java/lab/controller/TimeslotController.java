@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.security.RolesAllowed;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -69,7 +68,7 @@ public class TimeslotController {
     }
 
     @PutMapping
-    @RolesAllowed({"admin", "doctor", "patient"})
+    @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) throws ServiceException {
         TimeslotDTO updatedTimeslot = timeslotService.updateTimeslot(timeslotDTO);
 

@@ -51,7 +51,7 @@ public class DoctorController {
     }
 
     @GetMapping
-    @RolesAllowed({"admin", "doctor"})
+    @RolesAllowed({"admin", "doctor", "patient"})
     public ResponseEntity<Page<DoctorViewDTO>> getAllDoctors(Pageable pageable) throws ServiceException {
         Page<DoctorViewDTO> doctors = doctorService.getAllDoctors(pageable);
 
