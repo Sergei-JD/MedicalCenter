@@ -1,6 +1,5 @@
 package com.itrex.java.lab.controller.controllers;
 
-import java.util.List;
 import java.util.Arrays;
 import java.time.Instant;
 import java.util.Optional;
@@ -13,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.itrex.java.lab.controller.BaseControllerTest;
@@ -35,29 +35,61 @@ class TimeslotControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void getTimeslotById_validData_shouldReturnTimeslotById() throws Exception {
+    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    void createTimeslot_validData_shouldReturnNewTimeslotDTO() throws Exception {
         //given
-        Integer timeslotId = 1;
         CreateTimeslotDTO expectedResponseBody = CreateTimeslotDTO.builder()
                 .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
-        // when
-        when(timeslotService.getTimeslotById(timeslotId)).thenReturn(Optional.of(expectedResponseBody));
+        //when
+        when(timeslotService.createTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
+
         //then
-        MvcResult mvcResult = mockMvc.perform(get("/med/timeslots/{id}", timeslotId)
-                        .contentType("application/json"))
+        MvcResult mvcResult = mockMvc.perform(post("/med/timeslots/add")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
                 .andExpect(status().isOk())
                 .andReturn();
-
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
     }
 
     @Test
+    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    void deleteTimeslot_validDate_shouldReturnTrue() throws Exception {
+        //given
+        Integer timeslotId = 1;
+
+        // when
+        when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(true);
+
+        //then
+        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    void deleteTimeslot_notValidDate_shouldReturnFalse() throws Exception {
+        //given
+        Integer timeslotId = 1;
+
+        // when
+        when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(false);
+
+        //then
+        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
+                        .contentType("application/json"))
+                .andExpect(status().isNotModified());
+    }
+
+    @Test
+    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor", "patient"})
     void getAllTimeslots_validData_shouldReturnTimeslotsList() throws Exception {
         //given
         CreateTimeslotDTO firstTimeslotDTO = CreateTimeslotDTO.builder()
@@ -90,57 +122,31 @@ class TimeslotControllerTest extends BaseControllerTest {
     }
 
     @Test
-    void deleteTimeslot_validDate_shouldReturnTrue() throws Exception {
+    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor", "patient"})
+    void getTimeslotById_validData_shouldReturnTimeslotById() throws Exception {
         //given
         Integer timeslotId = 1;
-
-        // when
-        when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(true);
-
-        //then
-        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
-                        .contentType("application/json"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    void deleteTimeslot_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer timeslotId = 1;
-
-        // when
-        when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
-    }
-
-    @Test
-    void createTimeslot_validData_shouldReturnNewTimeslotDTO() throws Exception {
-        //given
         CreateTimeslotDTO expectedResponseBody = CreateTimeslotDTO.builder()
                 .startTime(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .date(Instant.parse("2021-04-09T15:30:45.123Z"))
                 .office(505)
                 .build();
 
-        //when
-        when(timeslotService.createTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
-
+        // when
+        when(timeslotService.getTimeslotById(timeslotId)).thenReturn(Optional.of(expectedResponseBody));
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/timeslots/add")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+        MvcResult mvcResult = mockMvc.perform(get("/med/timeslots/{id}", timeslotId)
+                        .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andReturn();
+
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
     }
 
     @Test
+    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
     void updateTimeslot_validData_shouldReturnUpdatedTimeslotDTO() throws Exception {
         //given
         Integer timeslotId = 1;

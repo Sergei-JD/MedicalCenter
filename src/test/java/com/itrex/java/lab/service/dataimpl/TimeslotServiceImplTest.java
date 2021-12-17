@@ -55,7 +55,6 @@ class TimeslotServiceImplTest {
                 .office(TEST_OFFICE)
                 .build();
         Timeslot timeslot = Timeslot.builder()
-                .timeslotId(1)
                 .startTime(TEST_START_TIME)
                 .date(TEST_DATE)
                 .office(TEST_OFFICE)

@@ -1,6 +1,7 @@
 package com.itrex.java.lab.service.dataimpl;
 
 import com.itrex.java.lab.dto.CreatePatientDTO;
+import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.exception.RepositoryException;
@@ -114,7 +115,7 @@ class PatientServiceImplTest {
         assertEquals(expectedListSize, result.getSize());
         assertTrue(result.stream().allMatch(doctor -> doctor.getFirstName().equals(TEST_USER_FIRST_NAME) &&
                 doctor.getLastName().equals(TEST_USER_LAST_NAME)));
-        verify(userRepository, times(1)).findAllByRolesName(eq(TEST_USER_ROLE), pageable);
+//        verify(userRepository, times(1)).findAllByRolesName(eq(TEST_USER_ROLE), pageable);
     }
 
     @Test
@@ -164,6 +165,33 @@ class PatientServiceImplTest {
 
         //when && then
         assertThrows(RepositoryException.class, () -> patientService.getPatientById(1)) ;
+    }
+
+    @Test
+    void getPatientByEmail_validData_shouldReturnThePatientByEmail() {
+        //given
+        User addedPatient = initUser(1);
+
+        when(userRepository.findUserByEmail("test@email.test")).thenReturn(Optional.of(addedPatient));
+
+        //when
+        Optional<PatientDTO> result = patientService.getPatientByEmail("test@email.test");
+
+        //then
+        verify(userRepository, times(1)).findUserByEmail(eq("test@email.test"));
+        assertTrue(result.stream().allMatch(patient -> patient.getFirstName().equals(TEST_USER_FIRST_NAME)
+                && patient.getLastName().equals(TEST_USER_LAST_NAME)
+                && patient.getEmail().equals(TEST_USER_EMAIL)
+        ));
+    }
+
+    @Test
+    void getPatientByEmail_repositoryThrowError_shouldThrowServiceException() {
+        //given
+        when(userRepository.findUserByEmail("some@email")).thenThrow(new RepositoryException("some msg"));
+
+        //when && then
+        assertThrows(RepositoryException.class, () -> patientService.getPatientByEmail("some@email"));
     }
 
     @Test

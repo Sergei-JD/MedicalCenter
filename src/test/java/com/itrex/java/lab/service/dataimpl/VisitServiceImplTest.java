@@ -129,8 +129,8 @@ class VisitServiceImplTest {
         Visit secondVisit = initVisit(2);
         Pageable pageable = PageRequest.of(1, 2, Sort.by("visitId").descending());
 
-        when(visitRepository.findAll())
-                .thenReturn(Arrays.asList(firstVisit, secondVisit));
+        when(visitRepository.findAll(pageable))
+                .thenReturn(new PageImpl<>(Arrays.asList(firstVisit, secondVisit)));
 
         //when
         Page<VisitViewDTO> result = visitService.getAllVisit(pageable);
@@ -168,8 +168,8 @@ class VisitServiceImplTest {
 
         Pageable pageable = PageRequest.of(1, 2, Sort.by("visitId").descending());
 
-        when(visitRepository.findAll())
-                .thenReturn(Arrays.asList(firstVisit, secondVisit));
+        when(visitRepository.findAll(pageable))
+                .thenReturn(new PageImpl<>(Arrays.asList(firstVisit, secondVisit)));
 
         //when
         Page<VisitViewDTO> result = visitService.getAllFreeVisits(pageable);

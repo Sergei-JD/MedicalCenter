@@ -61,7 +61,7 @@ public class DoctorController {
     }
 
     @GetMapping("/{id}")
-    @RolesAllowed({"admin", "doctor"})
+    @RolesAllowed({"admin", "doctor", "patient"})
     public ResponseEntity<DoctorViewDTO> getDoctorById(@PathVariable(name = "id") int id) throws ServiceException {
         Optional<DoctorViewDTO> doctorViewDTO = doctorService.getDoctorById(id);
 

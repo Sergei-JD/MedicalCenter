@@ -83,7 +83,7 @@ public class VisitController {
 
     @GetMapping("/patients/{id}")
     @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<List<VisitViewDTO>> getAllVisitsForPatientDyId(@PathVariable(name = "id") int id) throws ServiceException {
+    public ResponseEntity<List<VisitViewDTO>> getAllVisitsForPatientById(@PathVariable(name = "id") int id) throws ServiceException {
         List<VisitViewDTO> visits = visitService.getAllVisitsForPatientDyId(id);
 
         return visits != null && !visits.isEmpty()
