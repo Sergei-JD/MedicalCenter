@@ -35,7 +35,7 @@ class TimeslotControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void createTimeslot_validData_shouldReturnNewTimeslotDTO() throws Exception {
         //given
         CreateTimeslotDTO expectedResponseBody = CreateTimeslotDTO.builder()
@@ -59,7 +59,7 @@ class TimeslotControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void deleteTimeslot_validDate_shouldReturnTrue() throws Exception {
         //given
         Integer timeslotId = 1;
@@ -74,7 +74,7 @@ class TimeslotControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void deleteTimeslot_notValidDate_shouldReturnFalse() throws Exception {
         //given
         Integer timeslotId = 1;
@@ -89,7 +89,7 @@ class TimeslotControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor", "patient"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor", "patient"})
     void getAllTimeslots_validData_shouldReturnTimeslotsList() throws Exception {
         //given
         CreateTimeslotDTO firstTimeslotDTO = CreateTimeslotDTO.builder()
@@ -112,7 +112,7 @@ class TimeslotControllerTest extends BaseControllerTest {
                         .contentType("application/json")
                         .param("page", "1")
                         .param("size", "2")
-                        .param("sort", "office, desc"))
+                        .param("sort", "office,desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -122,7 +122,7 @@ class TimeslotControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor", "patient"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor", "patient"})
     void getTimeslotById_validData_shouldReturnTimeslotById() throws Exception {
         //given
         Integer timeslotId = 1;
@@ -146,7 +146,7 @@ class TimeslotControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void updateTimeslot_validData_shouldReturnUpdatedTimeslotDTO() throws Exception {
         //given
         Integer timeslotId = 1;

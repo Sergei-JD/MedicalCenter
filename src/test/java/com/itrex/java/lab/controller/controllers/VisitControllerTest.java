@@ -42,7 +42,7 @@ class VisitControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void createVisit_validData_shouldReturnNewVisitDTO() throws Exception {
         //given
         VisitDTO expectedResponseBody = VisitDTO.builder()
@@ -72,7 +72,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void deleteVisit_validDate_shouldReturnTrue() throws Exception {
         //given
         Integer visitId = 1;
@@ -85,7 +85,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void deleteVisit_notValidDate_shouldReturnFalse() throws Exception {
         //given
         Integer visitId = 1;
@@ -100,7 +100,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void getAllVisits_validData_shouldReturnVisitsList() throws Exception {
         //given
         VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
@@ -115,7 +115,7 @@ class VisitControllerTest extends BaseControllerTest {
                         .contentType("application/json")
                         .param("page", "1")
                         .param("size", "2")
-                        .param("sort", "timeslot, desc"))
+                        .param("sort", "timeslot,desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -125,7 +125,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor", "patient"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor", "patient"})
     void getAllFreeVisits_validData_shouldReturnVisitsList() throws Exception {
         //given
         VisitViewDTO visitViewDTO = VisitViewDTO.builder().build();
@@ -140,7 +140,7 @@ class VisitControllerTest extends BaseControllerTest {
                         .contentType("application/json")
                         .param("page", "1")
                         .param("size", "2")
-                        .param("sort", "timeslot, desc"))
+                        .param("sort", "timeslot,desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -150,7 +150,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor", "patient"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor", "patient"})
     void getAllFreeVisitsForDoctorById_validData_shouldReturnVisitsList() throws Exception {
         //given
         Integer visitId = 1;
@@ -172,7 +172,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void getVisitById_validData_shouldReturnVisitById() throws Exception {
         //given
         Integer visitId = 1;
@@ -207,7 +207,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void getAllVisitsForPatientById_validData_shouldReturnVisitsList() throws Exception {
         //given
         Integer visitId = 1;
@@ -229,7 +229,7 @@ class VisitControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void updateVisit_validData_shouldReturnUpdatedVisitDTO() throws Exception {
         //given
         Integer visitId = 1;

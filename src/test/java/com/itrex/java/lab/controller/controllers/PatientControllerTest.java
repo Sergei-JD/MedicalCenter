@@ -37,7 +37,7 @@ class PatientControllerTest extends BaseControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void createPatient_validData_shouldReturnNewPatientDTO() throws Exception {
         //given
         CreatePatientDTO expectedResponseBody = CreatePatientDTO.builder()
@@ -63,7 +63,7 @@ class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void deletePatient_validDate_shouldReturnTrue() throws Exception {
         //given
         Integer patientId = 1;
@@ -78,7 +78,7 @@ class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void deletePatient_notValidDate_shouldReturnFalse() throws Exception {
         //given
         Integer patientId = 1;
@@ -93,7 +93,7 @@ class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void getAllPatients_validData_shouldReturnPatientsList() throws Exception {
         //given
         PatientViewDTO firstPatientViewDTO = PatientViewDTO.builder().build();
@@ -110,7 +110,7 @@ class PatientControllerTest extends BaseControllerTest {
                         .contentType("application/json")
                         .param("page", "1")
                         .param("size", "2")
-                        .param("sort", "lastName, desc"))
+                        .param("sort", "lastName,desc"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -120,7 +120,7 @@ class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void getPatientById_validData_shouldReturnPatientById() throws Exception {
         //given
         Integer patientId = 1;
@@ -143,7 +143,7 @@ class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void getPatientByEmail_validData_shouldReturnPatientByEmail() throws Exception {
         //given
         String patientEmail = "some@email";
@@ -170,7 +170,7 @@ class PatientControllerTest extends BaseControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "unnecessary", roles = {"admin", "doctor"})
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void updatePatient_validData_shouldReturnUpdatedPatientDTO() throws Exception {
         //given
         Integer patientId = 1;
