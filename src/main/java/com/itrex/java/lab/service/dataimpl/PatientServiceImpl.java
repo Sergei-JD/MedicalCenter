@@ -31,25 +31,6 @@ public class PatientServiceImpl implements PatientService {
     private final RoleRepository roleRepository;
 
     @Override
-    @Transactional
-    public CreatePatientDTO createPatient(CreatePatientDTO patientDTO) {
-        Role rolePatient = roleRepository.findRoleByName(RoleType.PATIENT)
-                .orElseThrow(() -> new ServiceException("Failed to create patient no such role"));
-        User newPatient = User.builder()
-                .firstName(patientDTO.getFirstName())
-                .lastName(patientDTO.getLastName())
-                .age(patientDTO.getAge())
-                .email(patientDTO.getEmail())
-                .password(patientDTO.getPassword())
-                .gender(patientDTO.getGender())
-                .phoneNum(patientDTO.getPhoneNum())
-                .roles(Set.of(rolePatient))
-                .build();
-
-        return UserConversionUtils.toPatientDTO(userRepository.save(newPatient));
-    }
-
-    @Override
     public Page<PatientViewDTO> getAllPatients(Pageable pageable) {
         Page<User> pagePatients = userRepository.findAllByRolesName(RoleType.PATIENT, pageable);
 
@@ -86,10 +67,21 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Transactional
-    public boolean deletePatient(int patientId) {
-        userRepository.deleteById(patientId);
+    public CreatePatientDTO createPatient(CreatePatientDTO patientDTO) {
+        Role rolePatient = roleRepository.findRoleByName(RoleType.PATIENT)
+                .orElseThrow(() -> new ServiceException("Failed to create patient no such role"));
+        User newPatient = User.builder()
+                .firstName(patientDTO.getFirstName())
+                .lastName(patientDTO.getLastName())
+                .age(patientDTO.getAge())
+                .email(patientDTO.getEmail())
+                .password(patientDTO.getPassword())
+                .gender(patientDTO.getGender())
+                .phoneNum(patientDTO.getPhoneNum())
+                .roles(Set.of(rolePatient))
+                .build();
 
-        return userRepository.findById(patientId).isEmpty();
+        return UserConversionUtils.toPatientDTO(userRepository.save(newPatient));
     }
 
     @Override
@@ -114,6 +106,14 @@ public class PatientServiceImpl implements PatientService {
         return UserConversionUtils.toPatientDTO(patient);
     }
 
+    @Override
+    @Transactional
+    public boolean deletePatient(int patientId) {
+        userRepository.deleteById(patientId);
+
+        return userRepository.findById(patientId).isEmpty();
+    }
+
     private boolean isValidPatientDTO(CreatePatientDTO patientDTO) {
         return patientDTO != null &&
                 patientDTO.getFirstName() != null &&
@@ -121,4 +121,5 @@ public class PatientServiceImpl implements PatientService {
                 patientDTO.getAge() != null &&
                 patientDTO.getGender() != null;
     }
+
 }

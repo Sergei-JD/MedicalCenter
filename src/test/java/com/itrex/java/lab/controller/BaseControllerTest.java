@@ -1,13 +1,13 @@
 package com.itrex.java.lab.controller;
 
-import com.itrex.java.lab.security.jwt.JwtConfigurer;
-import com.itrex.java.lab.security.jwt.JwtTokenProvider;
+import com.itrex.java.lab.service.VisitService;
 import com.itrex.java.lab.service.DoctorService;
 import com.itrex.java.lab.service.PatientService;
 import com.itrex.java.lab.service.TimeslotService;
-import com.itrex.java.lab.service.VisitService;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import com.itrex.java.lab.security.jwt.JwtConfigurer;
+import com.itrex.java.lab.security.jwt.JwtTokenProvider;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
 @WebMvcTest
 public abstract class BaseControllerTest {

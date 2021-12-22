@@ -1,12 +1,12 @@
 package com.itrex.java.lab.dto;
 
-import com.itrex.java.lab.persistence.entity.RoleType;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import com.itrex.java.lab.persistence.entity.RoleType;
 
 import java.util.Set;
 

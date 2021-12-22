@@ -10,14 +10,14 @@ import java.util.Optional;
 
 public interface TimeslotService {
 
-    CreateTimeslotDTO createTimeslot(CreateTimeslotDTO createTimeslotDTO);
-
-    boolean deleteTimeslot(int timeslotId);
-
     Page<CreateTimeslotDTO> getAllTimeslot(Pageable pageable);
 
     Optional<CreateTimeslotDTO> getTimeslotById(int timeslotId);
 
+    CreateTimeslotDTO createTimeslot(CreateTimeslotDTO createTimeslotDTO);
+
     TimeslotDTO updateTimeslot(TimeslotDTO timeslotDTO);
+
+    boolean deleteTimeslot(int timeslotId);
 
 }

@@ -1,20 +1,21 @@
 package com.itrex.java.lab.persistence.dataimpl;
 
-
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.BaseRepositoryTest;
-import com.itrex.java.lab.persistence.repository.TimeslotRepository;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
+import com.itrex.java.lab.persistence.repository.TimeslotRepository;
+
 import java.util.List;
 import java.time.Instant;
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

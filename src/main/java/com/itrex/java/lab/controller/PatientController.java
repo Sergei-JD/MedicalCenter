@@ -30,29 +30,9 @@ public class PatientController {
 
     private final PatientService patientService;
 
-    @PostMapping("/add")
-    @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) throws ServiceException {
-        CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
-
-        return (addPatient != null)
-                ? new ResponseEntity<>(addPatient, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    }
-
-    @DeleteMapping("/{id}")
-    @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<Boolean> deletePatient(@PathVariable(name = "id") int id) throws ServiceException {
-        boolean result = patientService.deletePatient(id);
-
-        return result
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
-
     @GetMapping
     @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<Page<PatientViewDTO>> getAllPatients(Pageable pageable) throws ServiceException {
+    public ResponseEntity<Page<PatientViewDTO>> getAllPatients(Pageable pageable) {
         Page<PatientViewDTO> patients = patientService.getAllPatients(pageable);
 
         return patients != null && !patients.isEmpty()
@@ -62,7 +42,7 @@ public class PatientController {
 
     @GetMapping("/{id}")
     @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<PatientViewDTO> getPatientById(@PathVariable(name = "id") int id) throws ServiceException {
+    public ResponseEntity<PatientViewDTO> getPatientById(@PathVariable(name = "id") int id) {
         Optional<PatientViewDTO> patientViewDTO = patientService.getPatientById(id);
 
         return patientViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
@@ -71,20 +51,40 @@ public class PatientController {
 
     @GetMapping("/email")
     @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<PatientDTO> getPatientByEmail(@RequestParam(name = "email") String email) throws ServiceException {
+    public ResponseEntity<PatientDTO> getPatientByEmail(@RequestParam(name = "email") String email) {
         Optional<PatientDTO> patientDTO = patientService.getPatientByEmail(email);
 
         return patientDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PostMapping
+    @RolesAllowed({"admin", "doctor"})
+    public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) {
+        CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
+
+        return (addPatient != null)
+                ? new ResponseEntity<>(addPatient, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+
     @PutMapping
     @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) throws ServiceException {
+    public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) {
         PatientDTO updatedPatient = patientService.updatePatient(patientDTO);
 
         return updatedPatient != null
                 ? new ResponseEntity<>(updatedPatient, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    @DeleteMapping("/{id}")
+    @RolesAllowed({"admin", "doctor"})
+    public ResponseEntity<Boolean> deletePatient(@PathVariable(name = "id") int id) {
+        boolean result = patientService.deletePatient(id);
+
+        return result
+                ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 

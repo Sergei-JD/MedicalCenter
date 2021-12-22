@@ -31,25 +31,6 @@ public class DoctorServiceImpl implements DoctorService {
     private final RoleRepository roleRepository;
 
     @Override
-    @Transactional
-    public CreateDoctorDTO createDoctor(CreateDoctorDTO doctorDTO) {
-        Role roleDoctor = roleRepository.findRoleByName(RoleType.DOCTOR)
-                .orElseThrow(() -> new ServiceException("Failed to create doctor no such role"));
-        User newDoctor = User.builder()
-                .firstName(doctorDTO.getFirstName())
-                .lastName(doctorDTO.getLastName())
-                .age(doctorDTO.getAge())
-                .email(doctorDTO.getEmail())
-                .password(doctorDTO.getPassword())
-                .gender(doctorDTO.getGender())
-                .phoneNum(doctorDTO.getPhoneNum())
-                .roles(Set.of(roleDoctor))
-                .build();
-
-        return UserConversionUtils.toDoctorDTO(userRepository.save(newDoctor));
-    }
-
-    @Override
     public Page<DoctorViewDTO> getAllDoctors(Pageable pageable) {
         Page<User> pageDoctors = userRepository.findAllByRolesName(RoleType.DOCTOR, pageable);
 
@@ -58,7 +39,6 @@ public class DoctorServiceImpl implements DoctorService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(doctors);
-
     }
 
     @Override
@@ -87,10 +67,21 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     @Transactional
-    public boolean deleteDoctor(int doctorId) {
-        userRepository.deleteById(doctorId);
+    public CreateDoctorDTO createDoctor(CreateDoctorDTO doctorDTO) {
+        Role roleDoctor = roleRepository.findRoleByName(RoleType.DOCTOR)
+                .orElseThrow(() -> new ServiceException("Failed to create doctor no such role"));
+        User newDoctor = User.builder()
+                .firstName(doctorDTO.getFirstName())
+                .lastName(doctorDTO.getLastName())
+                .age(doctorDTO.getAge())
+                .email(doctorDTO.getEmail())
+                .password(doctorDTO.getPassword())
+                .gender(doctorDTO.getGender())
+                .phoneNum(doctorDTO.getPhoneNum())
+                .roles(Set.of(roleDoctor))
+                .build();
 
-        return userRepository.findById(doctorId).isEmpty();
+        return UserConversionUtils.toDoctorDTO(userRepository.save(newDoctor));
     }
 
     @Override
@@ -113,6 +104,14 @@ public class DoctorServiceImpl implements DoctorService {
         userRepository.save(doctor);
 
         return UserConversionUtils.toDoctorDTO(doctor);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteDoctor(int doctorId) {
+        userRepository.deleteById(doctorId);
+
+        return userRepository.findById(doctorId).isEmpty();
     }
 
     private boolean isValidDoctorDTO(CreateDoctorDTO doctorDTO) {

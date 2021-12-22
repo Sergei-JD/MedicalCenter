@@ -24,18 +24,6 @@ public class TimeslotServiceImpl implements TimeslotService {
     private final TimeslotRepository timeslotRepository;
 
     @Override
-    @Transactional
-    public TimeslotDTO createTimeslot(CreateTimeslotDTO timeslotDTO) {
-        Timeslot newTimeslot = Timeslot.builder()
-                .startTime(timeslotDTO.getStartTime())
-                .date(timeslotDTO.getDate())
-                .office(timeslotDTO.getOffice())
-                .build();
-
-        return TimeslotConversionUtils.toTimeslotDTO(timeslotRepository.save(newTimeslot));
-    }
-
-    @Override
     public Page<CreateTimeslotDTO> getAllTimeslot(Pageable pageable) {
         Page<Timeslot> pageTimeslots = timeslotRepository.findAll(pageable);
 
@@ -60,10 +48,14 @@ public class TimeslotServiceImpl implements TimeslotService {
 
     @Override
     @Transactional
-    public boolean deleteTimeslot(int timeslotId) {
-        timeslotRepository.deleteById(timeslotId);
+    public TimeslotDTO createTimeslot(CreateTimeslotDTO timeslotDTO) {
+        Timeslot newTimeslot = Timeslot.builder()
+                .startTime(timeslotDTO.getStartTime())
+                .date(timeslotDTO.getDate())
+                .office(timeslotDTO.getOffice())
+                .build();
 
-        return timeslotRepository.findById(timeslotId).isEmpty();
+        return TimeslotConversionUtils.toTimeslotDTO(timeslotRepository.save(newTimeslot));
     }
 
     @Override
@@ -82,6 +74,14 @@ public class TimeslotServiceImpl implements TimeslotService {
         timeslotRepository.save(timeslot);
 
         return TimeslotConversionUtils.toTimeslotDTO(timeslot);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteTimeslot(int timeslotId) {
+        timeslotRepository.deleteById(timeslotId);
+
+        return timeslotRepository.findById(timeslotId).isEmpty();
     }
 
     private boolean isValidTimeslotDTO(CreateTimeslotDTO timeslotDTO) {

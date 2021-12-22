@@ -1,19 +1,17 @@
 package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
-import com.itrex.java.lab.dto.DoctorDTO;
-import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.dto.TimeslotDTO;
-import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitViewDTO;
+import com.itrex.java.lab.dto.*;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.exception.ServiceException;
+import com.itrex.java.lab.persistence.dataimpl.RoleRepository;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
 import com.itrex.java.lab.persistence.dataimpl.VisitRepository;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Visit;
+import com.itrex.java.lab.util.UserConversionUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -64,61 +62,112 @@ class VisitServiceImplTest {
     @InjectMocks
     private VisitServiceImpl visitService;
 
+    @InjectMocks
+    private DoctorServiceImpl doctorService;
+
+    @InjectMocks
+    private PatientServiceImpl patientService;
+
     @Mock
     private VisitRepository visitRepository;
+
+    @Mock
+    private UserRepository userRepository;
+
+    @Mock
+    private RoleRepository roleRepository;
+
+//    @Test
+//    void createVisit_validData_shouldCreateVisit() {
+//        //given
+//        CreateDoctorDTO doctorDTO = CreateDoctorDTO.builder()
+//                .firstName(TEST_USER_FIRST_NAME)
+//                .lastName(TEST_USER_LAST_NAME)
+//                .age(TEST_USER_AGE)
+//                .email(TEST_USER_EMAIL)
+//                .password(TEST_USER_PASSWORD)
+//                .gender(TEST_USER_GENDER)
+//                .phoneNum(TEST_USER_NUMBER_PHONE)
+//                .build();
+//
+//        Role roleDoctor = Role.builder()
+//                .name(RoleType.DOCTOR)
+//                .build();
+//
+//        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
+//        when(doctorService.createDoctor(doctorDTO)).thenReturn(doctorDTO);
+//
+//        CreatePatientDTO patientDTO = CreatePatientDTO.builder()
+//                .firstName(TEST_USER_FIRST_NAME)
+//                .lastName(TEST_USER_LAST_NAME)
+//                .age(TEST_USER_AGE)
+//                .email(TEST_USER_EMAIL)
+//                .password(TEST_USER_PASSWORD)
+//                .gender(TEST_USER_GENDER)
+//                .phoneNum(TEST_USER_NUMBER_PHONE)
+//                .build();
+//
+//        Role rolePatient = Role.builder()
+//                .name(RoleType.PATIENT)
+//                .build();
+//
+//        when(roleRepository.findRoleByName(eq(RoleType.PATIENT))).thenReturn(Optional.of(rolePatient));
+//        when(patientService.createPatient(patientDTO)).thenReturn(patientDTO);
+
+
+//        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
+//                .doctorId(userRepository.findById(1).get().getUserId())
+//                .patientId(userRepository.findById(2).get().getUserId())
+//                .timeslotId(1)
+//                .build();
+
+//        //when
+//        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
+//
+//        Optional<VisitViewDTO> result = visitService.getVisitById(1);
+//
+//        //then
+//        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
+//                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
+//                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
+//        ));
+//    }
 
     @Test
     void createVisit_validData_shouldCreateVisit() {
         //given
+        User doctor = initDoctor(1);
+        DoctorDTO doctorDTO = UserConversionUtils.toDoctorDTO(doctor);
+        Role roleDoctor = Role.builder()
+                .name(RoleType.DOCTOR)
+                .build();
+        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
+        doctorService.createDoctor(doctorDTO);
+
+        User patient = initPatient(2);
+        PatientDTO patientDTO = UserConversionUtils.toPatientDTO(patient);
+        Role rolePatient = Role.builder()
+                .name(RoleType.PATIENT)
+                .build();
+        when(roleRepository.findRoleByName(eq(RoleType.PATIENT))).thenReturn(Optional.of(rolePatient));
+        patientService.createPatient(patientDTO);
+
         CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-                .doctorId(1)
-                .patientId(1)
+                .doctorId(userRepository.findById(1).get().getUserId())
+                .patientId(userRepository.findById(2).get().getUserId())
                 .timeslotId(1)
                 .build();
-        Visit visit = initVisit(1);
 
         //when
-        when(visitRepository.save(visit)).thenReturn(visit);
         CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
 
-        //then
-        assertAll(
-                () -> assertEquals(visit.getDoctor().getUserId(), actualVisitDTO.getDoctorId()),
-                () -> assertEquals(visit.getPatient().getUserId(), actualVisitDTO.getPatientId()),
-                () -> assertEquals(visit.getTimeslot().getTimeslotId(), actualVisitDTO.getTimeslotId())
-        );
-    }
-
-    @Test
-    void createVisit_repositoryThrowError_shouldThrowServiceException() {
-        //given
-        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-                .doctorId(DoctorDTO.builder()
-                        .firstName("M")
-                        .lastName("M")
-                        .age(25)
-                        .gender("M")
-                        .build()
-                        .getUserId())
-                .patientId(PatientDTO.builder()
-                        .firstName("F")
-                        .lastName("F")
-                        .age(28)
-                        .gender("M")
-                        .build().getUserId())
-                .timeslotId(TimeslotDTO.builder()
-                        .startTime(Instant.now())
-                        .date(Instant.now())
-                        .office(505)
-                        .build()
-                        .getTimeslotId())
-                .build();
-
-        //when
-        when(visitService.createVisit(visitDTO)).thenThrow(new RepositoryException("some msg"));
+        Optional<VisitViewDTO> result = visitService.getVisitById(1);
 
         //then
-        assertThrows(ServiceException.class, () -> visitService.createVisit(visitDTO));
+        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
+                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
+                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
+        ));
     }
 
     @Test
@@ -262,19 +311,6 @@ class VisitServiceImplTest {
     }
 
     @Test
-    void deleteVisitById_existVisit_shouldDeleteVisit() {
-        //given
-        Integer visitId = 1;
-
-        //when
-        boolean result = visitService.deleteVisit(visitId);
-
-        //then
-        assertTrue(result);
-        verify(visitRepository, times(visitId)).deleteById(eq(1));
-    }
-
-    @Test
     void getVisitById_validData_shouldReturnTheVisitById() {
         //given
         Visit addedVisit = initVisit(1);
@@ -324,6 +360,19 @@ class VisitServiceImplTest {
         assertThrows(ServiceException.class, () -> visitService.updateVisitHistory(visitDTO)) ;
     }
 
+    @Test
+    void deleteVisitById_existVisit_shouldDeleteVisit() {
+        //given
+        Integer visitId = 1;
+
+        //when
+        boolean result = visitService.deleteVisit(visitId);
+
+        //then
+        assertTrue(result);
+        verify(visitRepository, times(visitId)).deleteById(eq(1));
+    }
+
     private Visit initVisit(Integer id) {
     return Visit.builder()
         .visitId(id)
@@ -352,6 +401,34 @@ class VisitServiceImplTest {
                 .date(TEST_DATE)
                 .office(TEST_OFFICE).build())
         .build();
+    }
+
+    private User initDoctor(Integer id) {
+        return User.builder()
+                .userId(id)
+                .firstName(TEST_USER_FIRST_NAME)
+                .lastName(TEST_USER_LAST_NAME)
+                .age(TEST_USER_AGE)
+                .email(TEST_USER_EMAIL)
+                .password(TEST_USER_PASSWORD)
+                .gender(TEST_USER_GENDER)
+                .phoneNum(TEST_USER_NUMBER_PHONE)
+                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
+                .build();
+    }
+
+    private User initPatient(Integer id) {
+        return User.builder()
+                .userId(id)
+                .firstName(TEST_USER_FIRST_NAME)
+                .lastName(TEST_USER_LAST_NAME)
+                .age(TEST_USER_AGE)
+                .email(TEST_USER_EMAIL)
+                .password(TEST_USER_PASSWORD)
+                .gender(TEST_USER_GENDER)
+                .phoneNum(TEST_USER_NUMBER_PHONE)
+                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
+                .build();
     }
 
 }

@@ -28,29 +28,9 @@ public class TimeslotController {
 
     private final TimeslotService timeslotService;
 
-    @PostMapping("/add")
-    @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<CreateTimeslotDTO> createTimeslot(@RequestBody CreateTimeslotDTO createTimeslotDTO) throws ServiceException {
-        CreateTimeslotDTO addTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
-
-        return (addTimeslot != null)
-                ? new ResponseEntity<>(addTimeslot, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-    }
-
-    @DeleteMapping("/{id}")
-    @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<Boolean> deleteTimeslot(@PathVariable(name = "id") int id) throws ServiceException {
-        boolean result = timeslotService.deleteTimeslot(id);
-
-        return result
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
-
     @GetMapping
     @RolesAllowed({"admin", "doctor", "patient"})
-    public ResponseEntity<Page<CreateTimeslotDTO>> getAllTimeslot(Pageable pageable) throws ServiceException {
+    public ResponseEntity<Page<CreateTimeslotDTO>> getAllTimeslot(Pageable pageable) {
         Page<CreateTimeslotDTO> timeslots = timeslotService.getAllTimeslot(pageable);
 
         return timeslots != null && !timeslots.isEmpty()
@@ -60,20 +40,40 @@ public class TimeslotController {
 
     @GetMapping("/{id}")
     @RolesAllowed({"admin", "doctor", "patient"})
-    public ResponseEntity<CreateTimeslotDTO> getTimeslotById(@PathVariable(name = "id") int id) throws ServiceException {
+    public ResponseEntity<CreateTimeslotDTO> getTimeslotById(@PathVariable(name = "id") int id) {
         Optional<CreateTimeslotDTO> timeslotDTO = timeslotService.getTimeslotById(id);
 
         return timeslotDTO.map(createTimeslotDTO -> new ResponseEntity<>(createTimeslotDTO, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @PostMapping
+    @RolesAllowed({"admin", "doctor"})
+    public ResponseEntity<CreateTimeslotDTO> createTimeslot(@RequestBody CreateTimeslotDTO createTimeslotDTO) {
+        CreateTimeslotDTO addTimeslot = timeslotService.createTimeslot(createTimeslotDTO);
+
+        return (addTimeslot != null)
+                ? new ResponseEntity<>(addTimeslot, HttpStatus.CREATED)
+                : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+
     @PutMapping
     @RolesAllowed({"admin", "doctor"})
-    public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) throws ServiceException {
+    public ResponseEntity<TimeslotDTO> updateTimeslot(@RequestBody TimeslotDTO timeslotDTO) {
         TimeslotDTO updatedTimeslot = timeslotService.updateTimeslot(timeslotDTO);
 
         return updatedTimeslot != null
                 ? new ResponseEntity<>(updatedTimeslot, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    }
+
+    @DeleteMapping("/{id}")
+    @RolesAllowed({"admin", "doctor"})
+    public ResponseEntity<Boolean> deleteTimeslot(@PathVariable(name = "id") int id) {
+        boolean result = timeslotService.deleteTimeslot(id);
+
+        return result
+                ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 

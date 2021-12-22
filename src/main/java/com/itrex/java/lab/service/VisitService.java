@@ -11,11 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface VisitService {
-
-    VisitDTO createVisit(CreateVisitDTO visitDTO);
-
-    boolean deleteVisit(int visitId);
-
     Page<VisitViewDTO> getAllVisit(Pageable pageable);
 
     Page<VisitViewDTO>getAllFreeVisits(Pageable pageable);
@@ -26,8 +21,12 @@ public interface VisitService {
 
     Optional<VisitViewDTO> getVisitById(int visitId);
 
+    VisitDTO createVisit(CreateVisitDTO visitDTO);
+
     VisitDTO updateVisit(VisitDTO visitDTO);
 
     VisitHistoryDTO updateVisitHistory(VisitDTO visitDTO);
+
+    boolean deleteVisit(int visitId);
 
 }

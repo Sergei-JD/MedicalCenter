@@ -1,19 +1,18 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import java.util.List;
+import java.util.Set;
+import java.util.Optional;
+import org.hibernate.Session;
+import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
+import org.springframework.util.CollectionUtils;
+import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.Session;
-import org.springframework.util.CollectionUtils;
-import org.springframework.stereotype.Repository;
-import java.util.List;
-import java.util.Set;
-import java.util.Optional;
-import javax.persistence.EntityManager;
-
 
 @Deprecated
 @Repository
@@ -81,26 +80,6 @@ public class HibernateUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean deleteUserById(Integer userId) {
-        boolean isDeleted = false;
-        try {
-            Session session = entityManager.unwrap(Session.class);
-            session.createSQLQuery(DELETE_USER_ID_FROM_USER_ROLE_QUERY)
-              .setParameter(1, userId).executeUpdate();
-
-            User user = session.find(User.class, userId);
-            if (user != null) {
-                session.delete(user);
-                isDeleted = true;
-            }
-        } catch (Exception ex) {
-            throw new RepositoryException("Failed to delete user by id! " + userId, ex);
-        }
-
-        return isDeleted;
-    }
-
-    @Override
     public User add(User user) {
         try {
             Session session = entityManager.unwrap(Session.class);
@@ -141,6 +120,26 @@ public class HibernateUserRepositoryImpl implements UserRepository {
         } catch (Exception ex) {
             throw new RepositoryException("Failed to update user", ex);
         }
+    }
+
+    @Override
+    public boolean deleteUserById(Integer userId) {
+        boolean isDeleted = false;
+        try {
+            Session session = entityManager.unwrap(Session.class);
+            session.createSQLQuery(DELETE_USER_ID_FROM_USER_ROLE_QUERY)
+              .setParameter(1, userId).executeUpdate();
+
+            User user = session.find(User.class, userId);
+            if (user != null) {
+                session.delete(user);
+                isDeleted = true;
+            }
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to delete user by id! " + userId, ex);
+        }
+
+        return isDeleted;
     }
 
 }

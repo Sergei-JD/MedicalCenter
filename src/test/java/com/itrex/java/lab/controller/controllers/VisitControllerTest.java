@@ -61,10 +61,10 @@ class VisitControllerTest extends BaseControllerTest {
         when(visitService.createVisit(requestBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/visits/add")
+        MvcResult mvcResult = mockMvc.perform(post("/med/visits")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(requestBody)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 

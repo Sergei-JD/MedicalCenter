@@ -43,17 +43,16 @@ class DoctorControllerTest extends BaseControllerTest {
                 .lastName("test lsat name")
                 .age(25)
                 .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
                 .build();
 
         //when
         when(doctorService.createDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/doctors/add")
+        MvcResult mvcResult = mockMvc.perform(post("/med/doctors")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
 
         String actualResponseBody = mvcResult.getResponse().getContentAsString();

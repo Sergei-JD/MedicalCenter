@@ -1,14 +1,14 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
-import com.itrex.java.lab.persistence.entity.Timeslot;
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.repository.TimeslotRepository;
+import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import lombok.RequiredArgsConstructor;
 import javax.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
-import java.util.List;
-import java.util.Optional;
+import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.repository.TimeslotRepository;
 
 @Deprecated
 @Repository

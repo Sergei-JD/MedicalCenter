@@ -34,26 +34,6 @@ public class VisitServiceImpl implements VisitService {
     private final TimeslotRepository timeslotRepository;
 
     @Override
-    @Transactional
-    public VisitDTO createVisit(CreateVisitDTO visitDTO) {
-        User doctor = userRepository.findById(visitDTO.getDoctorId())
-                .orElseThrow(() -> new ServiceException("Failed to update visit. No such doctor"));
-        User patient = userRepository.findById(visitDTO.getPatientId())
-                .orElseThrow(() -> new ServiceException("Failed to update visit. No such patient"));
-        Timeslot timeslot = timeslotRepository.findById(visitDTO.getTimeslotId())
-                .orElseThrow(() -> new ServiceException("Failed to update visit. No such timeslot"));
-
-        Visit newVisit = Visit.builder()
-                .doctor(doctor)
-                .patient(patient)
-                .timeslot(timeslot)
-                .comment(visitDTO.getComment())
-                .build();
-
-        return VisitConversionUtils.toVisitDTO(visitRepository.save(newVisit));
-    }
-
-    @Override
     public Page<VisitViewDTO> getAllVisit(Pageable pageable) {
         Page<Visit> pageVisits = visitRepository.findAll(pageable);
 
@@ -74,7 +54,6 @@ public class VisitServiceImpl implements VisitService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(visits);
-
     }
 
     @Override
@@ -114,11 +93,22 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     @Transactional
-    public boolean deleteVisit(int visitId) {
-        visitRepository.deleteById(visitId);
+    public VisitDTO createVisit(CreateVisitDTO visitDTO) {
+        User doctor = userRepository.findById(visitDTO.getDoctorId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such doctor"));
+        User patient = userRepository.findById(visitDTO.getPatientId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such patient"));
+        Timeslot timeslot = timeslotRepository.findById(visitDTO.getTimeslotId())
+                .orElseThrow(() -> new ServiceException("Failed to update visit. No such timeslot"));
 
-        return visitRepository.findById(visitId).isEmpty();
+        Visit newVisit = Visit.builder()
+                .doctor(doctor)
+                .patient(patient)
+                .timeslot(timeslot)
+                .comment(visitDTO.getComment())
+                .build();
 
+        return VisitConversionUtils.toVisitDTO(visitRepository.save(newVisit));
     }
 
     @Override
@@ -163,6 +153,14 @@ public class VisitServiceImpl implements VisitService {
         visitRepository.save(visit);
 
         return VisitConversionUtils.toVisitHistoryDTO(visit);
+    }
+
+    @Override
+    @Transactional
+    public boolean deleteVisit(int visitId) {
+        visitRepository.deleteById(visitId);
+
+        return visitRepository.findById(visitId).isEmpty();
     }
 
     private boolean isValidVisitDTO(CreateVisitDTO visitDTO) {

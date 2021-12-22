@@ -1,15 +1,17 @@
 package com.itrex.java.lab.persistence.dataimpl;
 
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.persistence.BaseRepositoryTest;
+import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
-import org.junit.jupiter.api.Test;
+import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.transaction.annotation.Transactional;
+import com.itrex.java.lab.persistence.repository.RoleRepository;
+
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 

@@ -48,10 +48,10 @@ class TimeslotControllerTest extends BaseControllerTest {
         when(timeslotService.createTimeslot(expectedResponseBody)).thenReturn(expectedResponseBody);
 
         //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/timeslots/add")
+        MvcResult mvcResult = mockMvc.perform(post("/med/timeslots")
                         .contentType("application/json")
                         .content(objectMapper.writeValueAsString(expectedResponseBody)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andReturn();
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 

@@ -10,16 +10,16 @@ import java.util.Optional;
 
 public interface PatientService {
 
-    CreatePatientDTO createPatient(CreatePatientDTO patientDTO);
-
-    boolean deletePatient(int patientId);
-
     Page<PatientViewDTO> getAllPatients(Pageable pageable);
 
     Optional<PatientViewDTO> getPatientById(int patientId);
 
     Optional<PatientDTO> getPatientByEmail(String email);
 
+    CreatePatientDTO createPatient(CreatePatientDTO patientDTO);
+
     PatientDTO updatePatient(PatientDTO patientDTO);
+
+    boolean deletePatient(int patientId);
 
 }

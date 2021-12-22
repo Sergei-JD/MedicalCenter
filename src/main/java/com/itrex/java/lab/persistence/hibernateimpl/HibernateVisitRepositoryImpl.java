@@ -1,15 +1,14 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import java.util.List;
+import java.util.Optional;
+import org.hibernate.Session;
+import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
+import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Visit;
 import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.repository.VisitRepository;
-import org.hibernate.Session;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.EntityManager;
-
 
 @Deprecated
 @Repository
@@ -54,6 +53,18 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
     }
 
     @Override
+    public Visit update(Visit visit) {
+        Visit updateVisit;
+        try {
+            updateVisit = entityManager.merge(visit);
+
+            return updateVisit;
+        } catch (Exception ex) {
+            throw new RepositoryException("Failed to update visit!", ex);
+        }
+    }
+
+    @Override
     public boolean deleteVisitById(Integer visitId) {
         boolean isDeleted = false;
         try {
@@ -68,18 +79,6 @@ public class HibernateVisitRepositoryImpl implements VisitRepository {
         }
 
         return isDeleted;
-    }
-
-    @Override
-    public Visit update(Visit visit) {
-        Visit updateVisit;
-        try {
-            updateVisit = entityManager.merge(visit);
-
-            return updateVisit;
-        } catch (Exception ex) {
-            throw new RepositoryException("Failed to update visit!", ex);
-        }
     }
 
 }
