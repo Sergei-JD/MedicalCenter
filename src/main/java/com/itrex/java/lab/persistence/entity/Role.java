@@ -1,8 +1,20 @@
 package com.itrex.java.lab.persistence.entity;
 
-import javax.persistence.*;
+import lombok.Data;
+import lombok.Builder;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
 
-import lombok.*;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GenerationType;
+import javax.persistence.GeneratedValue;
 
 @Data
 @Entity
@@ -10,7 +22,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Table(name = "role")
-public class Role {
+public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +32,10 @@ public class Role {
     @Column(name = "name")
     @Enumerated(EnumType.STRING)
     private RoleType name;
+
+    @Override
+    public String getAuthority() {
+        return name.name();
+    }
 
 }

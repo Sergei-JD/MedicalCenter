@@ -1,28 +1,26 @@
 package com.itrex.java.lab.persistence.hibernateimpl;
 
+import java.util.List;
+import java.util.Optional;
 import org.hibernate.Session;
 import lombok.RequiredArgsConstructor;
+import javax.persistence.EntityManager;
 import org.springframework.util.CollectionUtils;
 import org.springframework.stereotype.Repository;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.exception.RepositoryException;
-import org.springframework.transaction.annotation.Transactional;
 import com.itrex.java.lab.persistence.repository.RoleRepository;
 
-import java.util.List;
-import java.util.Optional;
-import javax.persistence.EntityManager;
-
+@Deprecated
 @Repository
 @RequiredArgsConstructor
-@Transactional
 public class HibernateRoleRepositoryImpl implements RoleRepository {
 
     private final EntityManager entityManager;
 
-    private static final String FIND_ALL_ROLES_QUERY = "select r from Role r ";
-    private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r where r.name = :name";
+    private static final String FIND_ALL_ROLES_QUERY = "SELECT r FROM Role r";
+    private static final String FIND_ROLE_BY_NAME_QUERY = "FROM Role r WHERE r.name = :name";
 
 
     @Override
@@ -31,7 +29,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
         try {
             roles = entityManager.createQuery(FIND_ALL_ROLES_QUERY, Role.class).getResultList();
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get all roles.\n" + ex);
+            throw new RepositoryException("Failed to get all roles!", ex);
         }
 
         return roles;
@@ -48,7 +46,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
                 role = roles.get(0);
             }
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to get role named " + roleType.name() + ".\n" + ex);
+            throw new RepositoryException(String.format("Failed to get role named: %s!", roleType.name()), ex);
         }
         return Optional.ofNullable(role);
     }
@@ -61,7 +59,7 @@ public class HibernateRoleRepositoryImpl implements RoleRepository {
 
             return session.find(Role.class, newRoleId);
         } catch (Exception ex) {
-            throw new RepositoryException("Failed to add role.\n" + ex);
+            throw new RepositoryException("Failed to add role!", ex);
         }
     }
 

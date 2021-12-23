@@ -1,14 +1,13 @@
 package com.itrex.java.lab.dto;
 
-import java.time.Instant;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
+import java.time.Instant;
+
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor

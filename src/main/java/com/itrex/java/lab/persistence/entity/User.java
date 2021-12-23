@@ -1,9 +1,23 @@
 package com.itrex.java.lab.persistence.entity;
 
-import javax.persistence.*;
-
-import lombok.*;
-
+import lombok.Data;
+import lombok.Builder;
+import lombok.ToString;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.Set;
 
 @Data
@@ -40,7 +54,7 @@ public class User {
     @Column(name = "phone_num")
     private Integer phoneNum;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST,
             CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "user_role",

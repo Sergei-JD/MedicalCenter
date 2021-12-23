@@ -1,0 +1,870 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /med/visits:
+    get:
+      tags:
+        - visit-controller
+      operationId: getAllVisits
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageVisitViewDTO'
+    put:
+      tags:
+        - visit-controller
+      operationId: updateVisit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitDTO'
+  /med/visits/history:
+    put:
+      tags:
+        - visit-controller
+      operationId: updateVisitHistory
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitHistoryDTO'
+  /med/timeslots:
+    get:
+      tags:
+        - timeslot-controller
+      operationId: getAllTimeslot
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageCreateTimeslotDTO'
+    put:
+      tags:
+        - timeslot-controller
+      operationId: updateTimeslot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeslotDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/TimeslotDTO'
+  /med/patients:
+    get:
+      tags:
+        - patient-controller
+      operationId: getAllPatients
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PagePatientViewDTO'
+    put:
+      tags:
+        - patient-controller
+      operationId: updatePatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatientDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientDTO'
+  /med/doctors:
+    get:
+      tags:
+        - doctor-controller
+      operationId: getAllDoctors
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageDoctorViewDTO'
+    put:
+      tags:
+        - doctor-controller
+      operationId: updateDoctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DoctorDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DoctorDTO'
+  /med/visits/add:
+    post:
+      tags:
+        - visit-controller
+      operationId: createVisit
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVisitDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitDTO'
+  /med/timeslots/add:
+    post:
+      tags:
+        - timeslot-controller
+      operationId: createTimeslot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTimeslotDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CreateTimeslotDTO'
+  /med/patients/add:
+    post:
+      tags:
+        - patient-controller
+      operationId: createPatient
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePatientDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CreatePatientDTO'
+  /med/doctors/add:
+    post:
+      tags:
+        - doctor-controller
+      operationId: createDoctor
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDoctorDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CreateDoctorDTO'
+  /logout:
+    post:
+      tags:
+        - auth-controller
+      operationId: logout
+      responses:
+        "200":
+          description: OK
+  /login:
+    post:
+      tags:
+        - auth-controller
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequestDTO'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: object
+  /med/visits/{id}:
+    get:
+      tags:
+        - visit-controller
+      operationId: getVisitById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/VisitViewDTO'
+    delete:
+      tags:
+        - visit-controller
+      operationId: deleteVisit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /med/visits/patients/{id}:
+    get:
+      tags:
+        - visit-controller
+      operationId: getAllVisitsForPatientDyId
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VisitViewDTO'
+  /med/visits/free:
+    get:
+      tags:
+        - visit-controller
+      operationId: getAllFreeVisits
+      parameters:
+        - name: pageable
+          in: query
+          required: true
+          schema:
+            $ref: '#/components/schemas/Pageable'
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PageVisitViewDTO'
+  /med/visits/doctors/free/{id}:
+    get:
+      tags:
+        - visit-controller
+      operationId: getAllFreeVisitsForDoctorById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VisitViewDTO'
+  /med/timeslots/{id}:
+    get:
+      tags:
+        - timeslot-controller
+      operationId: getTimeslotById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/CreateTimeslotDTO'
+    delete:
+      tags:
+        - timeslot-controller
+      operationId: deleteTimeslot
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /med/patients/{id}:
+    get:
+      tags:
+        - patient-controller
+      operationId: getPatientById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientViewDTO'
+    delete:
+      tags:
+        - patient-controller
+      operationId: deletePatient
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /med/patients/email:
+    get:
+      tags:
+        - patient-controller
+      operationId: getPatientByEmail
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/PatientDTO'
+  /med/doctors/{id}:
+    get:
+      tags:
+        - doctor-controller
+      operationId: getDoctorById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DoctorViewDTO'
+    delete:
+      tags:
+        - doctor-controller
+      operationId: deleteDoctor
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: boolean
+  /med/doctors/email:
+    get:
+      tags:
+        - doctor-controller
+      operationId: getDoctorByEmail
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/DoctorDTO'
+components:
+  schemas:
+    VisitDTO:
+      type: object
+      properties:
+        doctorId:
+          type: integer
+          format: int32
+        patientId:
+          type: integer
+          format: int32
+        timeslotId:
+          type: integer
+          format: int32
+        comment:
+          type: string
+        visitId:
+          type: integer
+          format: int32
+    VisitHistoryDTO:
+      type: object
+      properties:
+        visitId:
+          type: integer
+          format: int32
+        comment:
+          type: string
+    TimeslotDTO:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        date:
+          type: string
+          format: date-time
+        office:
+          type: integer
+          format: int32
+        timeslotId:
+          type: integer
+          format: int32
+    PatientDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+          format: int32
+        email:
+          type: string
+        password:
+          type: string
+        gender:
+          type: string
+        phoneNum:
+          type: integer
+          format: int32
+        userId:
+          type: integer
+          format: int32
+        roles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+              - patient
+              - doctor
+              - admin
+    DoctorDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+          format: int32
+        email:
+          type: string
+        password:
+          type: string
+        gender:
+          type: string
+        phoneNum:
+          type: integer
+          format: int32
+        userId:
+          type: integer
+          format: int32
+        roles:
+          uniqueItems: true
+          type: array
+          items:
+            type: string
+            enum:
+              - patient
+              - doctor
+              - admin
+    CreateVisitDTO:
+      type: object
+      properties:
+        doctorId:
+          type: integer
+          format: int32
+        patientId:
+          type: integer
+          format: int32
+        timeslotId:
+          type: integer
+          format: int32
+        comment:
+          type: string
+    CreateTimeslotDTO:
+      type: object
+      properties:
+        startTime:
+          type: string
+          format: date-time
+        date:
+          type: string
+          format: date-time
+        office:
+          type: integer
+          format: int32
+    CreatePatientDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+          format: int32
+        email:
+          type: string
+        password:
+          type: string
+        gender:
+          type: string
+        phoneNum:
+          type: integer
+          format: int32
+    CreateDoctorDTO:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        age:
+          type: integer
+          format: int32
+        email:
+          type: string
+        password:
+          type: string
+        gender:
+          type: string
+        phoneNum:
+          type: integer
+          format: int32
+    AuthenticationRequestDTO:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    Pageable:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: '#/components/schemas/Sort'
+        pageSize:
+          type: integer
+          format: int32
+        pageNumber:
+          type: integer
+          format: int32
+        paged:
+          type: boolean
+        unpaged:
+          type: boolean
+    Sort:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    DoctorViewDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+    PageVisitViewDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/VisitViewDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        empty:
+          type: boolean
+    PatientViewDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int32
+        firstName:
+          type: string
+        lastName:
+          type: string
+    VisitViewDTO:
+      type: object
+      properties:
+        visitId:
+          type: integer
+          format: int32
+        doctor:
+          $ref: '#/components/schemas/DoctorViewDTO'
+        patient:
+          $ref: '#/components/schemas/PatientViewDTO'
+        timeslot:
+          $ref: '#/components/schemas/TimeslotDTO'
+    PageCreateTimeslotDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateTimeslotDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        empty:
+          type: boolean
+    PagePatientViewDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/PatientViewDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        empty:
+          type: boolean
+    PageDoctorViewDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/DoctorViewDTO'
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: '#/components/schemas/Sort'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        empty:
+          type: boolean

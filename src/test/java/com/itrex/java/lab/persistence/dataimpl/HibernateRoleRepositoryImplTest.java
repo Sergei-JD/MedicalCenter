@@ -1,4 +1,4 @@
-package com.itrex.java.lab.persistence.hibernateimpl;
+package com.itrex.java.lab.persistence.dataimpl;
 
 import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.persistence.entity.Role;
@@ -7,12 +7,13 @@ import com.itrex.java.lab.exception.RepositoryException;
 import com.itrex.java.lab.persistence.BaseRepositoryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import com.itrex.java.lab.persistence.repository.RoleRepository;
 import org.springframework.transaction.annotation.Transactional;
+import com.itrex.java.lab.persistence.repository.RoleRepository;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Transactional
 class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
@@ -24,53 +25,54 @@ class HibernateRoleRepositoryImplTest extends BaseRepositoryTest {
     @Test
     void getAllRole_shouldReturnTheRolesByName() {
         //given
-        Role newRole1 = Role.builder().name(RoleType.DOCTOR).build();
-        Role newRole2 = Role.builder().name(RoleType.PATIENT).build();
+        int expectedRoleListSize = 2;
+        Role firstRole = Role.builder().name(RoleType.DOCTOR).build();
+        Role secondRole = Role.builder().name(RoleType.PATIENT).build();
 
-        roleRepository.add(newRole1);
-        roleRepository.add(newRole2);
+        roleRepository.add(firstRole);
+        roleRepository.add(secondRole);
 
         //when && then
-        assertEquals( 2, roleRepository.getAllRoles().size());
+        assertEquals( expectedRoleListSize, roleRepository.getAllRoles().size());
     }
 
         @Test
     void getRoleByName_shouldReturnTheRoleByName() {
         //given
-        Role newRole = Role.builder()
+        Role addRole = Role.builder()
                 .name(RoleType.DOCTOR)
                 .build();
 
-        roleRepository.add(newRole);
+        roleRepository.add(addRole);
 
         //when
         Optional<Role> result = roleRepository.getRoleByType(RoleType.DOCTOR);
 
         //then
-        result.ifPresent(role -> assertEquals(newRole.getName(), result.get().getName()));
+        result.ifPresent(role -> assertEquals(addRole.getName(), result.get().getName()));
     }
 
     @Test
     void addRole_notValidData_NameNull_shouldThrowRepositoryException() {
         //given
-        Role newRole = Role.builder().build();
+        Role addRole = Role.builder().build();
 
         //when && then
-        assertThrows(RepositoryException.class, () -> roleRepository.add(newRole));
+        assertThrows(RepositoryException.class, () -> roleRepository.add(addRole));
     }
 
     @Test
     void addRole_ValidData_should() {
         //given
-        Role newRole = Role.builder()
+        Role addRole = Role.builder()
                 .name(RoleType.DOCTOR)
                 .build();
 
         //when
-        Role result = roleRepository.add(newRole);
+        Role result = roleRepository.add(addRole);
 
         //then
-        assertEquals(newRole.getName(), result.getName());
-
+        assertEquals(addRole.getName(), result.getName());
     }
+
 }

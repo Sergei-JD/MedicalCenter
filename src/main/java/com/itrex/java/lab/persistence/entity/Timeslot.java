@@ -2,14 +2,14 @@ package com.itrex.java.lab.persistence.entity;
 
 import lombok.Data;
 import lombok.Builder;
-import java.time.Instant;
 import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.time.Instant;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 

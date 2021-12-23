@@ -1,10 +1,8 @@
 package com.itrex.java.lab.dto;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.entity.Timeslot;
+import lombok.Builder;
 
 @Getter
 @Setter
@@ -12,8 +10,8 @@ import com.itrex.java.lab.persistence.entity.Timeslot;
 public class VisitViewDTO {
 
     private Integer visitId;
-    private User doctor;
-    private User patient;
-    private Timeslot timeslot;
+    private DoctorViewDTO doctor;
+    private PatientViewDTO patient;
+    private TimeslotDTO timeslot;
 
 }

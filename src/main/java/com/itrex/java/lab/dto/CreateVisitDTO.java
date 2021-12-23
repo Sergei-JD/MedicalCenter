@@ -1,20 +1,19 @@
 package com.itrex.java.lab.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.persistence.entity.Timeslot;
 
-@Getter
-@Setter
+@Data
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateVisitDTO {
 
-    private User patientId;
-    private User doctorId;
-    private Timeslot timeslotId;
+    private Integer doctorId;
+    private Integer patientId;
+    private Integer timeslotId;
     private String comment;
 
 }
