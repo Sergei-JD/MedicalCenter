@@ -1,7 +1,5 @@
 package com.itrex.java.lab.persistence.entity;
 
-
-
 import lombok.Data;
 import lombok.Builder;
 import lombok.ToString;
