@@ -94,7 +94,6 @@ class TimeslotServiceImplTest {
         assertTrue(result.stream().allMatch(timeslot -> timeslot.getStartTime().equals(TEST_START_TIME)
                 && timeslot.getDate().equals(TEST_DATE)
                 && timeslot.getOffice().equals(TEST_OFFICE)));
-
     }
 
     @Test

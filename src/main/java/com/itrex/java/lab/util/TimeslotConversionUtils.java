@@ -1,8 +1,8 @@
 package com.itrex.java.lab.util;
 
+import java.util.Optional;
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.persistence.entity.Timeslot;
-import java.util.Optional;
 
 public class TimeslotConversionUtils {
 

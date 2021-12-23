@@ -1,6 +1,5 @@
 package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.util.UserConversionUtils;
 import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.junit.jupiter.api.Test;
@@ -28,8 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import java.util.Set;
 import java.util.Arrays;
 import java.util.Optional;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.junit.jupiter.api.Assertions.assertTrue;

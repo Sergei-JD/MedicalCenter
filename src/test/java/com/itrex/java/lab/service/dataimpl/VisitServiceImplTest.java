@@ -1,45 +1,47 @@
 package com.itrex.java.lab.service.dataimpl;
 
-import com.itrex.java.lab.dto.*;
-import com.itrex.java.lab.exception.RepositoryException;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.persistence.dataimpl.RoleRepository;
-import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
-import com.itrex.java.lab.persistence.dataimpl.UserRepository;
-import com.itrex.java.lab.persistence.dataimpl.VisitRepository;
+import org.mockito.Mock;
+import org.mockito.InjectMocks;
+import org.junit.jupiter.api.Test;
+import org.mockito.quality.Strictness;
+import com.itrex.java.lab.dto.VisitDTO;
+import com.itrex.java.lab.dto.VisitViewDTO;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.mockito.junit.jupiter.MockitoSettings;
 import com.itrex.java.lab.persistence.entity.Role;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.entity.Timeslot;
+import com.itrex.java.lab.exception.RepositoryException;
+import com.itrex.java.lab.persistence.dataimpl.RoleRepository;
+import com.itrex.java.lab.persistence.dataimpl.UserRepository;
+import com.itrex.java.lab.persistence.dataimpl.VisitRepository;
+import com.itrex.java.lab.persistence.dataimpl.TimeslotRepository;
+
 import com.itrex.java.lab.persistence.entity.User;
 import com.itrex.java.lab.persistence.entity.Visit;
-import com.itrex.java.lab.util.UserConversionUtils;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
+import java.time.Instant;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
@@ -63,12 +65,6 @@ class VisitServiceImplTest {
     @InjectMocks
     private VisitServiceImpl visitService;
 
-    @InjectMocks
-    private DoctorServiceImpl doctorService;
-
-    @InjectMocks
-    private PatientServiceImpl patientService;
-
     @Mock
     private VisitRepository visitRepository;
 
@@ -80,285 +76,6 @@ class VisitServiceImplTest {
 
     @Mock
     private TimeslotRepository timeslotRepository;
-
-//    @Test
-//    void createVisit_validData_shouldCreateVisit() {
-//        //given
-//        CreateDoctorDTO doctorDTO = CreateDoctorDTO.builder()
-//                .firstName(TEST_USER_FIRST_NAME)
-//                .lastName(TEST_USER_LAST_NAME)
-//                .age(TEST_USER_AGE)
-//                .email(TEST_USER_EMAIL)
-//                .password(TEST_USER_PASSWORD)
-//                .gender(TEST_USER_GENDER)
-//                .phoneNum(TEST_USER_NUMBER_PHONE)
-//                .build();
-//
-//        Role roleDoctor = Role.builder()
-//                .name(RoleType.DOCTOR)
-//                .build();
-//
-//        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
-//        when(doctorService.createDoctor(doctorDTO)).thenReturn(doctorDTO);
-//
-//        CreatePatientDTO patientDTO = CreatePatientDTO.builder()
-//                .firstName(TEST_USER_FIRST_NAME)
-//                .lastName(TEST_USER_LAST_NAME)
-//                .age(TEST_USER_AGE)
-//                .email(TEST_USER_EMAIL)
-//                .password(TEST_USER_PASSWORD)
-//                .gender(TEST_USER_GENDER)
-//                .phoneNum(TEST_USER_NUMBER_PHONE)
-//                .build();
-//
-//        Role rolePatient = Role.builder()
-//                .name(RoleType.PATIENT)
-//                .build();
-//
-//        when(roleRepository.findRoleByName(eq(RoleType.PATIENT))).thenReturn(Optional.of(rolePatient));
-//        when(patientService.createPatient(patientDTO)).thenReturn(patientDTO);
-
-
-//        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-//                .doctorId(userRepository.findById(1).get().getUserId())
-//                .patientId(userRepository.findById(2).get().getUserId())
-//                .timeslotId(1)
-//                .build();
-
-//        //when
-//        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
-//
-//        Optional<VisitViewDTO> result = visitService.getVisitById(1);
-//
-//        //then
-//        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
-//                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
-//                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
-//        ));
-//    }
-
-//    @Test
-//    void createVisit_validData_shouldCreateVisit() {
-//        //given
-//        User doctor = initDoctor(1);
-//        DoctorDTO doctorDTO = UserConversionUtils.toDoctorDTO(doctor);
-//        Role roleDoctor = Role.builder()
-//                .name(RoleType.DOCTOR)
-//                .build();
-//        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
-//        doctorService.createDoctor(doctorDTO);
-//
-//        User patient = initPatient(2);
-//        PatientDTO patientDTO = UserConversionUtils.toPatientDTO(patient);
-//        Role rolePatient = Role.builder()
-//                .name(RoleType.PATIENT)
-//                .build();
-//        when(roleRepository.findRoleByName(eq(RoleType.PATIENT))).thenReturn(Optional.of(rolePatient));
-//        patientService.createPatient(patientDTO);
-//
-//        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-//                .doctorId(1)
-//                .patientId(2)
-//                .timeslotId(1)
-//                .build();
-//
-//        //when
-//        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
-//
-//        Optional<VisitViewDTO> result = visitService.getVisitById(1);
-//
-//        //then
-//        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
-//                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
-//                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
-//        ));
-//    }
-
-//    @Test
-//    void createVisit_validData_shouldCreateVisit() {
-//        //given
-//
-//        User doctor = initDoctor(1);
-//
-//        userRepository.save(doctor);
-//
-//        User patient = initPatient(2);
-//
-//        userRepository.save(patient);
-//
-//        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-//                .doctorId(1)
-//                .patientId(2)
-//                .timeslotId(1)
-//                .build();
-//
-//        //when
-//        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
-//
-//        Optional<VisitViewDTO> result = visitService.getVisitById(1);
-//
-//        //then
-//        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
-//                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
-//                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
-//        ));
-//    }
-
-    @Test
-    void createVisit_validData_shouldCreateVisit() {
-        //given
-        Role roleDoctor = Role.builder()
-                .name(RoleType.DOCTOR)
-                .build();
-
-        roleRepository.save(roleDoctor);
-
-        Role rolePatient = Role.builder()
-                .name(RoleType.PATIENT)
-                .build();
-
-        roleRepository.save(rolePatient);
-
-        User doctor = User.builder()
-                .userId(1)
-                .firstName(TEST_USER_FIRST_NAME)
-                .lastName(TEST_USER_LAST_NAME)
-                .age(TEST_USER_AGE)
-                .email(TEST_USER_EMAIL)
-                .password(TEST_USER_PASSWORD)
-                .gender(TEST_USER_GENDER)
-                .phoneNum(TEST_USER_NUMBER_PHONE)
-                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
-                .build();
-
-        userRepository.save(doctor);
-
-        userRepository.getById(1);
-
-        User patient = User.builder()
-                .userId(2)
-                .firstName(TEST_USER_FIRST_NAME)
-                .lastName(TEST_USER_LAST_NAME)
-                .age(TEST_USER_AGE)
-                .email(TEST_USER_EMAIL)
-                .password(TEST_USER_PASSWORD)
-                .gender(TEST_USER_GENDER)
-                .phoneNum(TEST_USER_NUMBER_PHONE)
-                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
-                .build();
-
-        userRepository.save(patient);
-
-        userRepository.getById(2);
-
-        Timeslot timeslot = Timeslot.builder()
-                .timeslotId(1)
-                .startTime(TEST_START_TIME)
-                .date(TEST_DATE)
-                .office(TEST_OFFICE)
-                .build();
-
-        timeslotRepository.save(timeslot);
-
-        timeslotRepository.getById(1);
-
-
-
-        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-                .doctorId(userRepository.findById(1).get().getUserId())
-                .patientId(userRepository.findById(2).get().getUserId())
-                .timeslotId(timeslotRepository.findById(1).get().getTimeslotId())
-                .build();
-
-        //when
-        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
-
-        Optional<VisitViewDTO> result = visitService.getVisitById(1);
-
-        //then
-        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
-                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
-                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
-        ));
-    }
-
-//    @Test
-//    void createVisit_validData_shouldCreateVisit() {
-//        //given
-//        Role roleDoctor = Role.builder()
-//                .name(RoleType.DOCTOR)
-//                .build();
-//
-//        roleRepository.save(roleDoctor);
-//
-//        Role rolePatient = Role.builder()
-//                .name(RoleType.PATIENT)
-//                .build();
-//
-//        roleRepository.save(rolePatient);
-//
-//        User doctor = User.builder()
-//                .userId(1)
-//                .firstName(TEST_USER_FIRST_NAME)
-//                .lastName(TEST_USER_LAST_NAME)
-//                .age(TEST_USER_AGE)
-//                .email(TEST_USER_EMAIL)
-//                .password(TEST_USER_PASSWORD)
-//                .gender(TEST_USER_GENDER)
-//                .phoneNum(TEST_USER_NUMBER_PHONE)
-//                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
-//                .build();
-//
-//        userRepository.save(doctor);
-//
-//        userRepository.getById(1);
-//
-//        User patient = User.builder()
-//                .userId(2)
-//                .firstName(TEST_USER_FIRST_NAME)
-//                .lastName(TEST_USER_LAST_NAME)
-//                .age(TEST_USER_AGE)
-//                .email(TEST_USER_EMAIL)
-//                .password(TEST_USER_PASSWORD)
-//                .gender(TEST_USER_GENDER)
-//                .phoneNum(TEST_USER_NUMBER_PHONE)
-//                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
-//                .build();
-//
-//        userRepository.save(patient);
-//
-//        userRepository.getById(2);
-//
-//        Timeslot timeslot = Timeslot.builder()
-//                .timeslotId(1)
-//                .startTime(TEST_START_TIME)
-//                .date(TEST_DATE)
-//                .office(TEST_OFFICE)
-//                .build();
-//
-//        timeslotRepository.save(timeslot);
-//
-//        timeslotRepository.getById(1);
-//
-//
-//
-//        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
-//                .doctorId(userRepository.findById(1).get().getUserId())
-//                .patientId(userRepository.findById(2).get().getUserId())
-//                .timeslotId(timeslotRepository.findById(1).get().getTimeslotId())
-//                .build();
-//
-//        //when
-//        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
-//
-//        Optional<VisitViewDTO> result = visitService.getVisitById(1);
-//
-//        //then
-//        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
-//                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
-//                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
-//        ));
-//    }
 
     @Test
     void getAllVisits_validData_shouldReturnVisitsList() {
@@ -531,6 +248,39 @@ class VisitServiceImplTest {
     }
 
     @Test
+    void createVisit_validData_shouldCreateVisit() {
+        //given
+        Role roleDoctor = Role.builder().name(RoleType.DOCTOR).build();
+        Role rolePatient = Role.builder().name(RoleType.PATIENT).build();
+        User doctor = initDoctor(1);
+        User patient = initPatient(2);
+        Timeslot timeslot = initTimeslot(1);
+
+        //when
+        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
+        when(roleRepository.findRoleByName(eq(RoleType.PATIENT))).thenReturn(Optional.of(rolePatient));
+        when(userRepository.findById(doctor.getUserId())).thenReturn(Optional.of(doctor));
+        when(userRepository.findById(patient.getUserId())).thenReturn(Optional.of(patient));
+        when(timeslotRepository.findById(timeslot.getTimeslotId())).thenReturn(Optional.of(timeslot));
+
+        CreateVisitDTO visitDTO = CreateVisitDTO.builder()
+                .doctorId(1)
+                .patientId(2)
+                .timeslotId(1)
+                .build();
+
+        CreateVisitDTO actualVisitDTO = visitService.createVisit(visitDTO);
+
+        Optional<VisitViewDTO> result = visitService.getVisitById(1);
+
+        //then
+        assertTrue(result.stream().allMatch(visit -> visit.getDoctor().getUserId().equals(actualVisitDTO.getDoctorId())
+                && visit.getPatient().getUserId().equals(actualVisitDTO.getPatientId())
+                && visit.getTimeslot().getTimeslotId().equals(actualVisitDTO.getTimeslotId())
+        ));
+    }
+
+    @Test
     void updateVisitById_repositoryThrowError_shouldThrowServiceException() {
         //given
         VisitDTO visitDTO = VisitDTO.builder().build();
@@ -618,6 +368,15 @@ class VisitServiceImplTest {
                 .gender(TEST_USER_GENDER)
                 .phoneNum(TEST_USER_NUMBER_PHONE)
                 .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
+                .build();
+    }
+
+    private Timeslot initTimeslot(Integer id) {
+        return Timeslot.builder()
+                .timeslotId(id)
+                .startTime(TEST_START_TIME)
+                .date(TEST_DATE)
+                .office(TEST_OFFICE)
                 .build();
     }
 
