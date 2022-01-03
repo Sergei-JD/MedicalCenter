@@ -4,19 +4,20 @@ import java.util.Arrays;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.dto.DoctorDTO;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.CreateDoctorDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.test.context.support.WithMockUser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.itrex.java.lab.controller.BaseControllerTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
+
 
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,59 +34,6 @@ class DoctorControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin"})
-    void createDoctor_validData_shouldReturnNewDoctorDTO() throws Exception {
-        //given
-        CreateDoctorDTO expectedResponseBody = CreateDoctorDTO.builder()
-                .firstName("test first name")
-                .lastName("test lsat name")
-                .age(25)
-                .gender("M")
-                .build();
-
-        //when
-        when(doctorService.createDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
-
-        //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/doctors")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-                .andExpect(status().isCreated())
-                .andReturn();
-
-        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin"})
-    void deleteDoctor_validDate_shouldReturnTrue() throws Exception {
-        //given
-        Integer doctorId = 1;
-        // when
-        when(doctorService.deleteDoctor(doctorId)).thenReturn(true);
-        //then
-        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
-                        .contentType("application/json"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin"})
-    void deleteDoctor_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer doctorId = 1;
-
-        // when
-        when(doctorService.deleteDoctor(doctorId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
-    }
 
     @Test
     @WithMockUser(username = "user", roles = {"admin", "doctor", "patient"})
@@ -165,6 +113,31 @@ class DoctorControllerTest extends BaseControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = {"admin"})
+    void createDoctor_validData_shouldReturnNewDoctorDTO() throws Exception {
+        //given
+        CreateDoctorDTO expectedResponseBody = CreateDoctorDTO.builder()
+                .firstName("test first name")
+                .lastName("test lsat name")
+                .age(25)
+                .gender("M")
+                .build();
+
+        //when
+        when(doctorService.createDoctor(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/med/doctors")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isCreated())
+                .andReturn();
+
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin"})
     void updateDoctor_validData_shouldReturnUpdatedDoctorDTO() throws Exception {
         //given
         Integer doctorId = 1;
@@ -174,7 +147,6 @@ class DoctorControllerTest extends BaseControllerTest {
                 .lastName("test lsat name")
                 .age(25)
                 .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.DOCTOR).build()))
                 .build();
 
         //when
@@ -189,6 +161,34 @@ class DoctorControllerTest extends BaseControllerTest {
 
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin"})
+    void deleteDoctor_validDate_shouldReturnTrue() throws Exception {
+        //given
+        Integer doctorId = 1;
+        // when
+        when(doctorService.deleteDoctor(doctorId)).thenReturn(true);
+        //then
+        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin"})
+    void deleteDoctor_notValidDate_shouldReturnFalse() throws Exception {
+        //given
+        Integer doctorId = 1;
+
+        // when
+        when(doctorService.deleteDoctor(doctorId)).thenReturn(false);
+
+        //then
+        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
+                        .contentType("application/json"))
+                .andExpect(status().isNotModified());
     }
 
 }

@@ -2,22 +2,21 @@ package com.itrex.java.lab.controller.controllers;
 
 import java.util.Arrays;
 import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import com.itrex.java.lab.dto.PatientDTO;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.CreatePatientDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.data.domain.PageImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.itrex.java.lab.controller.BaseControllerTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,61 +34,6 @@ class PatientControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void createPatient_validData_shouldReturnNewPatientDTO() throws Exception {
-        //given
-        CreatePatientDTO expectedResponseBody = CreatePatientDTO.builder()
-                .firstName("test first name")
-                .lastName("test lsat name")
-                .age(25)
-                .gender("M")
-                .build();
-
-        //when
-        when(patientService.createPatient(expectedResponseBody)).thenReturn(expectedResponseBody);
-
-        //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/patients")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
-                .andExpect(status().isCreated())
-                .andReturn();
-        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-
-        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deletePatient_validDate_shouldReturnTrue() throws Exception {
-        //given
-        Integer patientId = 1;
-
-        // when
-        when(patientService.deletePatient(patientId)).thenReturn(true);
-
-        //then
-        mockMvc.perform(delete("/med/patients/{id}", patientId)
-                        .contentType("application/json"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deletePatient_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer patientId = 1;
-
-        // when
-        when(patientService.deletePatient(patientId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/patients/{id}", patientId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
-    }
 
     @Test
     @WithMockUser(username = "user", roles = {"admin", "doctor"})
@@ -130,6 +74,7 @@ class PatientControllerTest extends BaseControllerTest {
 
         // when
         when(patientService.getPatientById(patientId)).thenReturn(Optional.of(expectedResponseBody));
+
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/patients/{id}", patientId)
                         .contentType("application/json"))
@@ -156,6 +101,7 @@ class PatientControllerTest extends BaseControllerTest {
 
         // when
         when(patientService.getPatientByEmail(patientEmail)).thenReturn(Optional.of(expectedResponseBody));
+
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/patients/email", patientEmail)
                         .contentType("application/json")
@@ -163,6 +109,31 @@ class PatientControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
+    void createPatient_validData_shouldReturnNewPatientDTO() throws Exception {
+        //given
+        CreatePatientDTO expectedResponseBody = CreatePatientDTO.builder()
+                .firstName("test first name")
+                .lastName("test lsat name")
+                .age(25)
+                .gender("M")
+                .build();
+
+        //when
+        when(patientService.createPatient(expectedResponseBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/med/patients")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(expectedResponseBody)))
+                .andExpect(status().isCreated())
+                .andReturn();
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
@@ -179,7 +150,6 @@ class PatientControllerTest extends BaseControllerTest {
                 .lastName("test lsat name")
                 .age(25)
                 .gender("M")
-//                .roles(Set.of(Role.builder().name(RoleType.PATIENT).build()))
                 .build();
 
         //when
@@ -195,6 +165,36 @@ class PatientControllerTest extends BaseControllerTest {
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
+    void deletePatient_validDate_shouldReturnTrue() throws Exception {
+        //given
+        Integer patientId = 1;
+
+        // when
+        when(patientService.deletePatient(patientId)).thenReturn(true);
+
+        //then
+        mockMvc.perform(delete("/med/patients/{id}", patientId)
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
+    void deletePatient_notValidDate_shouldReturnFalse() throws Exception {
+        //given
+        Integer patientId = 1;
+
+        // when
+        when(patientService.deletePatient(patientId)).thenReturn(false);
+
+        //then
+        mockMvc.perform(delete("/med/patients/{id}", patientId)
+                        .contentType("application/json"))
+                .andExpect(status().isNotModified());
     }
 
 }

@@ -1,28 +1,27 @@
 package com.itrex.java.lab.controller;
 
-import com.itrex.java.lab.dto.CreateVisitDTO;
 import com.itrex.java.lab.dto.VisitDTO;
-import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
-import com.itrex.java.lab.exception.ServiceException;
-import com.itrex.java.lab.service.VisitService;
+import com.itrex.java.lab.dto.CreateVisitDTO;
+import com.itrex.java.lab.dto.VisitHistoryDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import com.itrex.java.lab.service.VisitService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.security.RolesAllowed;
 
 @RestController
 @RequiredArgsConstructor

@@ -7,9 +7,12 @@ import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.persistence.entity.Visit;
+import lombok.NoArgsConstructor;
+
 import java.util.Optional;
 
-public class VisitConversionUtils {
+@NoArgsConstructor
+public final class VisitConversionUtils {
 
     public static VisitViewDTO toVisitViewDTO(Visit visit) {
         DoctorViewDTO doctor = Optional.ofNullable(visit.getDoctor()).map(UserConversionUtils::toDoctorViewDTO).orElse(null);

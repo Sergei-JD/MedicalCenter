@@ -3,8 +3,10 @@ package com.itrex.java.lab.util;
 import java.util.Optional;
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.persistence.entity.Timeslot;
+import lombok.NoArgsConstructor;
 
-public class TimeslotConversionUtils {
+@NoArgsConstructor
+public final class TimeslotConversionUtils {
 
     public static TimeslotDTO toTimeslotDTO(Timeslot timeslot) {
         return Optional.ofNullable(timeslot)

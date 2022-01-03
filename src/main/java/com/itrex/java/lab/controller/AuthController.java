@@ -1,12 +1,12 @@
 package com.itrex.java.lab.controller;
 
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Optional;
 import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.PatientDTO;
-import com.itrex.java.lab.security.dto.AuthenticationRequestDTO;
 import com.itrex.java.lab.security.jwt.JwtTokenProvider;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.itrex.java.lab.security.dto.AuthenticationRequestDTO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,13 +15,13 @@ import com.itrex.java.lab.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
 @RestController
 @RequiredArgsConstructor
