@@ -18,7 +18,6 @@ import com.itrex.java.lab.controller.BaseControllerTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.test.context.support.WithMockUser;
 
-
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -174,21 +173,6 @@ class DoctorControllerTest extends BaseControllerTest {
         mockMvc.perform(delete("/med/doctors/{id}", doctorId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin"})
-    void deleteDoctor_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer doctorId = 1;
-
-        // when
-        when(doctorService.deleteDoctor(doctorId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/doctors/{id}", doctorId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
     }
 
 }

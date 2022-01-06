@@ -158,19 +158,4 @@ class TimeslotControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deleteTimeslot_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer timeslotId = 1;
-
-        // when
-        when(timeslotService.deleteTimeslot(timeslotId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/timeslots/{id}", timeslotId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
-    }
-
 }

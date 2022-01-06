@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 
-
 class PatientControllerTest extends BaseControllerTest {
 
     @Autowired
@@ -180,21 +179,6 @@ class PatientControllerTest extends BaseControllerTest {
         mockMvc.perform(delete("/med/patients/{id}", patientId)
                         .contentType("application/json"))
                 .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deletePatient_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer patientId = 1;
-
-        // when
-        when(patientService.deletePatient(patientId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/patients/{id}", patientId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
     }
 
 }

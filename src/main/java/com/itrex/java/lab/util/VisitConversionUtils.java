@@ -7,11 +7,12 @@ import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.VisitHistoryDTO;
 import com.itrex.java.lab.persistence.entity.Visit;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.util.Optional;
 
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class VisitConversionUtils {
 
     public static VisitViewDTO toVisitViewDTO(Visit visit) {

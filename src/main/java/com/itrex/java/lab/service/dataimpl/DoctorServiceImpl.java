@@ -3,12 +3,12 @@ package com.itrex.java.lab.service.dataimpl;
 import com.itrex.java.lab.dto.DoctorDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.CreateDoctorDTO;
-import com.itrex.java.lab.persistence.dataimpl.RoleRepository;
 import com.itrex.java.lab.persistence.entity.Role;
 import com.itrex.java.lab.persistence.entity.User;
-import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.persistence.dataimpl.UserRepository;
+import com.itrex.java.lab.persistence.dataimpl.RoleRepository;
+import com.itrex.java.lab.exception.ServiceException;
 import com.itrex.java.lab.service.DoctorService;
 import com.itrex.java.lab.util.UserConversionUtils;
 import lombok.RequiredArgsConstructor;
@@ -17,9 +17,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Set;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -87,7 +87,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     @Transactional
     public DoctorDTO updateDoctor(DoctorDTO doctorDTO) {
-        if (!isValidDoctorDTO(doctorDTO) || doctorDTO.getUserId() == null) {
+        if (doctorDTO.getUserId() == null) {
             throw new ServiceException("Failed to update doctor. Not valid doctorDTO.");
         }
         User doctor = userRepository.findById(doctorDTO.getUserId())
@@ -112,14 +112,6 @@ public class DoctorServiceImpl implements DoctorService {
         userRepository.deleteById(doctorId);
 
         return userRepository.findById(doctorId).isEmpty();
-    }
-
-    private boolean isValidDoctorDTO(CreateDoctorDTO doctorDTO) {
-        return doctorDTO != null &&
-                doctorDTO.getFirstName() != null &&
-                doctorDTO.getLastName() != null &&
-                doctorDTO.getAge() != null &&
-                doctorDTO.getGender() != null;
     }
 
 }

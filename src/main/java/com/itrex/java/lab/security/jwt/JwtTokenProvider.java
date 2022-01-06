@@ -2,25 +2,25 @@ package com.itrex.java.lab.security.jwt;
 
 import com.itrex.java.lab.persistence.entity.RoleType;
 import com.itrex.java.lab.security.exeption.JwtAuthenticationException;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Base64;
-import java.util.Date;
 import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
+import javax.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 @Slf4j
 @Component

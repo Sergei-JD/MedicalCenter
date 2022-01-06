@@ -243,19 +243,4 @@ class VisitControllerTest extends BaseControllerTest {
                 .andExpect(status().isOk());
     }
 
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deleteVisit_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer visitId = 1;
-
-        // when
-        when(visitService.deleteVisit(visitId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/visits/{id}", visitId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
-    }
-
 }

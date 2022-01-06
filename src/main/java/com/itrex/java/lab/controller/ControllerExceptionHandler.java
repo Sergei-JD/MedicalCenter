@@ -13,9 +13,9 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.NotAcceptableStatusException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.server.NotAcceptableStatusException;
 
 import io.jsonwebtoken.JwtException;
 import org.webjars.NotFoundException;
@@ -23,7 +23,11 @@ import org.webjars.NotFoundException;
 @RestControllerAdvice
 public class ControllerExceptionHandler {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private static final Logger LOG;
+
+    static {
+        LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    }
 
     private final HttpServletRequest request;
 
@@ -36,59 +40,59 @@ public class ControllerExceptionHandler {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ExceptionDTO maxUploadSizeExceededExceptionHandler(MaxUploadSizeExceededException e) {
         ControllerExceptionHandler.LOG.error("Bad Request ", e.getCause());
-        return this.initExceptionDTO(e, "Max Upload Size Exceeded", 400, "Bad Request");
+        return this.initExceptionDTO("Max Upload Size Exceeded", 400, "Bad Request");
     }
 
     @ExceptionHandler(CustomAuthenticationException.class)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ExceptionDTO customExceptionHandler(CustomAuthenticationException e) {
         ControllerExceptionHandler.LOG.error(e.getMessage());
-        return this.initExceptionDTO(e, e.getMessage(), 401, "Bad Request");
+        return this.initExceptionDTO(e.getMessage(), 401, "Bad Request");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
     public ExceptionDTO accessDeniedException(AccessDeniedException e) {
         ControllerExceptionHandler.LOG.error("Unauthorized ", e);
-        return this.initExceptionDTO(e, e.getMessage(), 401, "Unauthorized");
+        return this.initExceptionDTO(e.getMessage(), 401, "Unauthorized");
     }
 
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ExceptionDTO authenticationException(AuthenticationException e) {
         ControllerExceptionHandler.LOG.error("Forbidden ", e);
-        return this.initExceptionDTO(e, e.getMessage(), 403, "Forbidden");
+        return this.initExceptionDTO(e.getMessage(), 403, "Forbidden");
     }
 
     @ExceptionHandler(JwtException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ExceptionDTO jwtException(JwtException e) {
         ControllerExceptionHandler.LOG.error("Forbidden ", e);
-        return this.initExceptionDTO(e, e.getMessage(), 403, "Forbidden");
+        return this.initExceptionDTO(e.getMessage(), 403, "Forbidden");
     }
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(code = HttpStatus.NOT_FOUND)
     public ExceptionDTO notFoundException(NotFoundException e) {
         ControllerExceptionHandler.LOG.error("Not Found ", e);
-        return this.initExceptionDTO(e, e.getMessage(), 404, "Not Found");
+        return this.initExceptionDTO(e.getMessage(), 404, "Not Found");
     }
 
     @ExceptionHandler(NotAcceptableStatusException.class)
     @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE)
     public ExceptionDTO notAcceptableStatusException(NotAcceptableStatusException e) {
         ControllerExceptionHandler.LOG.error("Not Acceptable ", e);
-        return this.initExceptionDTO(e, e.getMessage(), 406, "Not Acceptable");
+        return this.initExceptionDTO(e.getMessage(), 406, "Not Acceptable");
     }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
     public ExceptionDTO exception(Exception e) {
         ControllerExceptionHandler.LOG.error("Internal Server error ", e);
-        return this.initExceptionDTO(e, "Internal Error", 500, "Internal Server error");
+        return this.initExceptionDTO("Internal Error", 500, "Internal Server error");
     }
 
-    private ExceptionDTO initExceptionDTO(Exception e, String message, int status, String error) {
+    private ExceptionDTO initExceptionDTO(String message, int status, String error) {
         ExceptionDTO exceptionDTO = new ExceptionDTO();
         exceptionDTO.setTimestamp(LocalDateTime.now().toString());
         exceptionDTO.setStatus(status);

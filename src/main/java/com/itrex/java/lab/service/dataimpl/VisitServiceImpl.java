@@ -114,7 +114,7 @@ public class VisitServiceImpl implements VisitService {
     @Override
     @Transactional
     public VisitDTO updateVisit(VisitDTO visitDTO) {
-        if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
+        if (visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit. Not valid visitDTO.");
         }
 
@@ -141,7 +141,7 @@ public class VisitServiceImpl implements VisitService {
     @Override
     @Transactional
     public VisitHistoryDTO updateVisitHistory(VisitDTO visitDTO) {
-        if (!isValidVisitDTO(visitDTO) || visitDTO.getTimeslotId() == null) {
+        if (visitDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update visit history. Not valid visitDTO.");
         }
 
@@ -161,12 +161,6 @@ public class VisitServiceImpl implements VisitService {
         visitRepository.deleteById(visitId);
 
         return visitRepository.findById(visitId).isEmpty();
-    }
-
-    private boolean isValidVisitDTO(CreateVisitDTO visitDTO) {
-        return visitDTO != null &&
-                visitDTO.getDoctorId() != null &&
-                visitDTO.getPatientId() != null;
     }
 
 }

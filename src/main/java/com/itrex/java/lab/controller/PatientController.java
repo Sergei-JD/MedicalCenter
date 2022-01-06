@@ -4,6 +4,7 @@ import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.CreatePatientDTO;
 import com.itrex.java.lab.service.PatientService;
+import com.itrex.java.lab.exception.CustomAuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.data.domain.Page;
@@ -33,58 +34,47 @@ public class PatientController {
     @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Page<PatientViewDTO>> getAllPatients(Pageable pageable) {
         Page<PatientViewDTO> patients = patientService.getAllPatients(pageable);
-
-        return patients != null && !patients.isEmpty()
-                ? new ResponseEntity<>(patients, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(patients, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<PatientViewDTO> getPatientById(@PathVariable(name = "id") int id) {
         Optional<PatientViewDTO> patientViewDTO = patientService.getPatientById(id);
-
         return patientViewDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomAuthenticationException(
+                        "Patient with this id: " + id + " does not exist")
+                );
     }
 
     @GetMapping("/email")
     @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<PatientDTO> getPatientByEmail(@RequestParam(name = "email") String email) {
         Optional<PatientDTO> patientDTO = patientService.getPatientByEmail(email);
-
         return patientDTO.map(viewDTO -> new ResponseEntity<>(viewDTO, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new CustomAuthenticationException(
+                        "Patient with this email: " + email + " does not exist")
+                );
     }
 
     @PostMapping
     @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<CreatePatientDTO> createPatient(@RequestBody CreatePatientDTO createPatientDTO) {
         CreatePatientDTO addPatient = patientService.createPatient(createPatientDTO);
-
-        return (addPatient != null)
-                ? new ResponseEntity<>(addPatient, HttpStatus.CREATED)
-                : new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(addPatient, HttpStatus.CREATED);
     }
 
     @PutMapping
     @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<PatientDTO> updatePatient(@RequestBody PatientDTO patientDTO) {
         PatientDTO updatedPatient = patientService.updatePatient(patientDTO);
-
-        return updatedPatient != null
-                ? new ResponseEntity<>(updatedPatient, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return new ResponseEntity<>(updatedPatient, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     @RolesAllowed({"admin", "doctor"})
     public ResponseEntity<Boolean> deletePatient(@PathVariable(name = "id") int id) {
-        boolean result = patientService.deletePatient(id);
-
-        return result
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        return new ResponseEntity<>(patientService.deletePatient(id), HttpStatus.OK);
     }
 
 }
