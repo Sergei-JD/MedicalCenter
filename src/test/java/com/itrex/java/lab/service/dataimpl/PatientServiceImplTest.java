@@ -36,7 +36,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
 class PatientServiceImplTest {
@@ -179,7 +178,15 @@ class PatientServiceImplTest {
     @Test
     void updatePatientById_repositoryThrowError_shouldThrowServiceException() {
         //given
-        PatientDTO patientDTO = PatientDTO.builder().build();
+        PatientDTO patientDTO = PatientDTO.builder()
+                .firstName(TEST_USER_FIRST_NAME)
+                .lastName(TEST_USER_LAST_NAME)
+                .age(TEST_USER_AGE)
+                .email(TEST_USER_EMAIL)
+                .password(TEST_USER_PASSWORD)
+                .gender(TEST_USER_GENDER)
+                .phoneNum(TEST_USER_NUMBER_PHONE)
+                .build();
         when(userRepository.findById(1)).thenThrow(new RepositoryException("some msg"));
 
         //when && then

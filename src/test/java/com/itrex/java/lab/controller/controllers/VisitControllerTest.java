@@ -9,21 +9,21 @@ import com.itrex.java.lab.dto.VisitDTO;
 import com.itrex.java.lab.dto.TimeslotDTO;
 import com.itrex.java.lab.dto.VisitViewDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.dto.CreateVisitDTO;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import com.itrex.java.lab.persistence.entity.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import com.itrex.java.lab.persistence.entity.Timeslot;
 import com.itrex.java.lab.controller.BaseControllerTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -40,64 +40,6 @@ class VisitControllerTest extends BaseControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void createVisit_validData_shouldReturnNewVisitDTO() throws Exception {
-        //given
-        VisitDTO expectedResponseBody = VisitDTO.builder()
-                .doctorId(User.builder().userId(1).build().getUserId())
-                .patientId(User.builder().userId(2).build().getUserId())
-                .timeslotId(Timeslot.builder().timeslotId(1).build().getTimeslotId())
-                .build();
-
-        CreateVisitDTO requestBody = CreateVisitDTO.builder()
-                .doctorId(User.builder().userId(1).build().getUserId())
-                .patientId(User.builder().userId(2).build().getUserId())
-                .timeslotId(Timeslot.builder().timeslotId(1).build().getTimeslotId())
-                .build();
-
-        //when
-        when(visitService.createVisit(requestBody)).thenReturn(expectedResponseBody);
-
-        //then
-        MvcResult mvcResult = mockMvc.perform(post("/med/visits")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(requestBody)))
-                .andExpect(status().isCreated())
-                .andReturn();
-        String actualResponseBody = mvcResult.getResponse().getContentAsString();
-
-        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deleteVisit_validDate_shouldReturnTrue() throws Exception {
-        //given
-        Integer visitId = 1;
-        // when
-        when(visitService.deleteVisit(visitId)).thenReturn(true);
-        //then
-        mockMvc.perform(delete("/med/visits/{id}", visitId)
-                        .contentType("application/json"))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @WithMockUser(username = "user", roles = {"admin", "doctor"})
-    void deleteVisit_notValidDate_shouldReturnFalse() throws Exception {
-        //given
-        Integer visitId = 1;
-
-        // when
-        when(visitService.deleteVisit(visitId)).thenReturn(false);
-
-        //then
-        mockMvc.perform(delete("/med/visits/{id}", visitId)
-                        .contentType("application/json"))
-                .andExpect(status().isNotModified());
-    }
 
     @Test
     @WithMockUser(username = "user", roles = {"admin", "doctor"})
@@ -195,6 +137,7 @@ class VisitControllerTest extends BaseControllerTest {
 
         // when
         when(visitService.getVisitById(visitId)).thenReturn(Optional.of(expectedResponseBody));
+
         //then
         MvcResult mvcResult = mockMvc.perform(get("/med/visits/{id}", visitId)
                         .contentType("application/json"))
@@ -230,6 +173,36 @@ class VisitControllerTest extends BaseControllerTest {
 
     @Test
     @WithMockUser(username = "user", roles = {"admin", "doctor"})
+    void createVisit_validData_shouldReturnNewVisitDTO() throws Exception {
+        //given
+        VisitDTO expectedResponseBody = VisitDTO.builder()
+                .doctorId(User.builder().userId(1).build().getUserId())
+                .patientId(User.builder().userId(2).build().getUserId())
+                .timeslotId(Timeslot.builder().timeslotId(1).build().getTimeslotId())
+                .build();
+
+        CreateVisitDTO requestBody = CreateVisitDTO.builder()
+                .doctorId(User.builder().userId(1).build().getUserId())
+                .patientId(User.builder().userId(2).build().getUserId())
+                .timeslotId(Timeslot.builder().timeslotId(1).build().getTimeslotId())
+                .build();
+
+        //when
+        when(visitService.createVisit(requestBody)).thenReturn(expectedResponseBody);
+
+        //then
+        MvcResult mvcResult = mockMvc.perform(post("/med/visits")
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(requestBody)))
+                .andExpect(status().isCreated())
+                .andReturn();
+        String actualResponseBody = mvcResult.getResponse().getContentAsString();
+
+        assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
     void updateVisit_validData_shouldReturnUpdatedVisitDTO() throws Exception {
         //given
         Integer visitId = 1;
@@ -253,6 +226,21 @@ class VisitControllerTest extends BaseControllerTest {
         String actualResponseBody = mvcResult.getResponse().getContentAsString();
 
         assertEquals(objectMapper.writeValueAsString(expectedResponseBody), actualResponseBody);
+    }
+
+    @Test
+    @WithMockUser(username = "user", roles = {"admin", "doctor"})
+    void deleteVisit_validDate_shouldReturnTrue() throws Exception {
+        //given
+        Integer visitId = 1;
+
+        // when
+        when(visitService.deleteVisit(visitId)).thenReturn(true);
+
+        //then
+        mockMvc.perform(delete("/med/visits/{id}", visitId)
+                        .contentType("application/json"))
+                .andExpect(status().isOk());
     }
 
 }

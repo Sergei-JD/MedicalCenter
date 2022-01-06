@@ -1,14 +1,14 @@
 package com.itrex.java.lab.security;
 
 import com.itrex.java.lab.persistence.entity.User;
-import lombok.Builder;
 import lombok.Data;
+import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collection;
 import java.util.List;
+import java.util.Collection;
 import java.util.stream.Collectors;
 
 @Data

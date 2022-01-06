@@ -5,10 +5,13 @@ import com.itrex.java.lab.dto.PatientDTO;
 import com.itrex.java.lab.dto.DoctorViewDTO;
 import com.itrex.java.lab.dto.PatientViewDTO;
 import com.itrex.java.lab.persistence.entity.User;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 import java.util.Optional;
 
-
-public class UserConversionUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class UserConversionUtils {
 
     public static DoctorDTO toDoctorDTO(User doctor) {
         return Optional.ofNullable(doctor)

@@ -61,7 +61,7 @@ public class TimeslotServiceImpl implements TimeslotService {
     @Override
     @Transactional
     public TimeslotDTO updateTimeslot(TimeslotDTO timeslotDTO) {
-        if (!isValidTimeslotDTO(timeslotDTO) || timeslotDTO.getTimeslotId() == null) {
+        if (timeslotDTO.getTimeslotId() == null) {
             throw new ServiceException("Failed to update timeslot. Not valid timeslotDTO.");
         }
         Timeslot timeslot = timeslotRepository.findById(timeslotDTO.getTimeslotId())
@@ -82,13 +82,6 @@ public class TimeslotServiceImpl implements TimeslotService {
         timeslotRepository.deleteById(timeslotId);
 
         return timeslotRepository.findById(timeslotId).isEmpty();
-    }
-
-    private boolean isValidTimeslotDTO(CreateTimeslotDTO timeslotDTO) {
-        return timeslotDTO != null &&
-                timeslotDTO.getDate() != null &&
-                timeslotDTO.getStartTime() != null &&
-                timeslotDTO.getOffice() != null;
     }
 
 }

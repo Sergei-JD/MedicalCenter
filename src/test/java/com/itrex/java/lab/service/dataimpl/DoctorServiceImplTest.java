@@ -35,7 +35,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.WARN)
 class DoctorServiceImplTest {
@@ -176,49 +175,18 @@ class DoctorServiceImplTest {
         ));
     }
 
-//    @Test
-//    void updateDoctorById_validData_shouldUpdateDoctor() {
-//        //given
-//        Integer doctorId = 1;
-//        String doctorFirstName = "otherName";
-//
-//        CreateDoctorDTO doctorDTO = CreateDoctorDTO.builder()
-//                .firstName(TEST_USER_FIRST_NAME)
-//                .lastName(TEST_USER_LAST_NAME)
-//                .age(TEST_USER_AGE)
-//                .email(TEST_USER_EMAIL)
-//                .password(TEST_USER_PASSWORD)
-//                .gender(TEST_USER_GENDER)
-//                .phoneNum(TEST_USER_NUMBER_PHONE)
-//                .build();
-//
-//        Role roleDoctor = Role.builder()
-//                .name(RoleType.DOCTOR)
-//                .build();
-//
-//        User user = initUser()
-//
-//        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
-//        CreateDoctorDTO actualDoctorDTO = doctorService.createDoctor(doctorDTO);
-//
-//        when(doctorService.createDoctor(doctorDTO)).thenReturn(doctorDTO);
-//
-//        //when
-//        when(userRepository.findById(doctorId)).thenReturn(Optional.of())
-//
-//
-////
-////        when(roleRepository.findRoleByName(eq(RoleType.DOCTOR))).thenReturn(Optional.of(roleDoctor));
-////        CreateDoctorDTO actualDoctorDTO = doctorService.createDoctor(doctorDTO);
-//
-//
-//        //when && then
-//    }
-
     @Test
     void updateDoctorById_repositoryThrowError_shouldThrowServiceException() {
         //given
-        DoctorDTO doctorDTO = DoctorDTO.builder().build();
+        DoctorDTO doctorDTO = DoctorDTO.builder()
+                .firstName(TEST_USER_FIRST_NAME)
+                .lastName(TEST_USER_LAST_NAME)
+                .age(TEST_USER_AGE)
+                .email(TEST_USER_EMAIL)
+                .password(TEST_USER_PASSWORD)
+                .gender(TEST_USER_GENDER)
+                .phoneNum(TEST_USER_NUMBER_PHONE)
+                .build();
         when(userRepository.findById(1)).thenThrow(new RepositoryException("some msg"));
 
         //when && then

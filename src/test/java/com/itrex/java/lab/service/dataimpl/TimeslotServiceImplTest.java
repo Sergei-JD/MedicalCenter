@@ -134,7 +134,11 @@ class TimeslotServiceImplTest {
     @Test
     void createTimeslot_repositoryThrowError_shouldThrowServiceException() {
         //given
-        CreateTimeslotDTO timeslotDTO = CreateTimeslotDTO.builder().build();
+        CreateTimeslotDTO timeslotDTO = CreateTimeslotDTO.builder()
+                .startTime(TEST_START_TIME)
+                .date(TEST_DATE)
+                .office(TEST_OFFICE)
+                .build();
 
         //when
         when(timeslotService.createTimeslot(timeslotDTO)).thenThrow(new RepositoryException("some msg"));
@@ -146,7 +150,11 @@ class TimeslotServiceImplTest {
     @Test
     void updateTimeslotById_repositoryThrowError_shouldThrowServiceException() {
         //given
-        TimeslotDTO timeslotDTO = TimeslotDTO.builder().build();
+        TimeslotDTO timeslotDTO = TimeslotDTO.builder()
+                .startTime(TEST_START_TIME)
+                .date(TEST_DATE)
+                .office(TEST_OFFICE)
+                .build();
         when(timeslotRepository.findById(1)).thenThrow(new RepositoryException("some msg"));
 
         //when && then

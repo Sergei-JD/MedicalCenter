@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS user
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS role
 (
-    role_id INT          NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    role_id INT         NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name    VARCHAR(64) NOT NULL
 );
 
